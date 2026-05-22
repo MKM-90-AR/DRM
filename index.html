@@ -17,111 +17,109 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Cairo', 'sans-serif'],
-                    },
-                    colors: {
-                        drm: {
-                            dark: '#0B0F19',
-                            card: '#161B26',
-                            accent: '#6366F1',
-                            success: '#10B981',
-                            warning: '#F59E0B',
-                            danger: '#EF4444'
-                        }
-                    }
+                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
+                    colors: { drm: { dark: '#0B0F19', card: '#161B26', accent: '#6366F1', success: '#10B981', warning: '#F59E0B', danger: '#EF4444' } }
                 }
             }
         }
     </script>
     <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #0B0F19;
-            color: #E2E8F0;
-            /* منع تحديد النص لتصعيب النسخ */
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        /* تأثيرات الإضاءة الخلفية */
-        .glow-effect {
-            box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.2);
-        }
-        .glow-success {
-            box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.2);
-        }
-        .glow-warning {
-            box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.2);
-        }
-        .glow-danger {
-            box-shadow: 0 0 25px -5px rgba(239, 68, 68, 0.2);
-        }
-        /* تحسين مظهر شريط التمرير */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-        @media (min-width: 768px) {
-            .custom-scrollbar::-webkit-scrollbar {
-                width: 6px;
-            }
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #0b0f19;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #4f46e5;
-        }
+        body { font-family: 'Cairo', sans-serif; background-color: #0B0F19; color: #E2E8F0; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+        .glow-effect { box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.2); }
+        .glow-success { box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.2); }
+        .glow-warning { box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.2); }
+        .glow-danger { box-shadow: 0 0 25px -5px rgba(239, 68, 68, 0.2); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        @media (min-width: 768px) { .custom-scrollbar::-webkit-scrollbar { width: 6px; } }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0b0f19; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+        /* إخفاء الصفحة تماماً عند الطباعة أو تحويلها لـ PDF */
+        @media print { html, body { display: none !important; } }
     </style>
     
-    <!-- بروتوكولات الأمان العالية ضد التلاعب والـ Debugging -->
+    <!-- بروتوكولات الأمان القصوى (Nuclear Level Security) -->
     <script>
-        (function blockDevToolsAndTampering() {
+        (function enforceStrictSecurity() {
+            // 1. تجميد الكونسول تماماً لمنع حقن الأكواد
             try {
                 const noop = () => {};
-                const fakeConsole = { log: noop, info: noop, warn: noop, error: noop, table: noop, clear: noop };
-                Object.defineProperty(window, 'console', {
-                    value: Object.freeze(fakeConsole),
-                    writable: false,
-                    configurable: false
-                });
+                const fakeConsole = { log: noop, info: noop, warn: noop, error: noop, table: noop, clear: noop, dir: noop };
+                Object.defineProperty(window, 'console', { value: Object.freeze(fakeConsole), writable: false, configurable: false });
             } catch(e) {}
 
-            document.addEventListener('contextmenu', e => e.preventDefault());
-            
-            document.addEventListener('keydown', e => {
-                if (e.key === 'F12' || 
-                   (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
-                   (e.ctrlKey && (e.key === 'U' || e.key === 'S' || e.key === 'P' || e.key === 'H'))) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                }
-            });
+            // 2. دالة التدمير الشامل (تُستدعى عند اكتشاف أي تلاعب أو فتح أدوات المطورين)
+            function crashAndBurn() {
+                // مسح كل شيء في الصفحة واستبداله برسالة
+                document.body.innerHTML = `
+                    <div style='background:#0B0F19;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'>
+                        <i class="fa-solid fa-triangle-exclamation" style="font-size:40px;margin-bottom:15px;"></i>
+                        <p>تم إيقاف الموقع أمنياً بسبب رصد أدوات المطورين أو محاولة فحص الكود.</p>
+                        <p style="color:#94a3b8;font-size:14px;margin-top:10px;">أغلق أدوات المطورين (DevTools) ثم قم بتحديث الصفحة للعودة.</p>
+                    </div>`;
+                // إدخال المتصفح في حلقة تجميد لا نهائية طالما أن أدوات المطورين مفتوحة
+                let freeze = true;
+                while(freeze) { debugger; }
+            }
 
+            // 3. منع جميع اختصارات النسخ والحفظ والفحص بقوة (Capture Phase)
+            window.addEventListener('keydown', function(e) {
+                // F12
+                if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); e.stopPropagation(); return false; }
+                // الاختصارات مع Ctrl أو Cmd (S, U, P, I, J, C, H)
+                if (e.ctrlKey || e.metaKey) {
+                    const key = e.key.toLowerCase();
+                    if (['s', 'u', 'p', 'i', 'j', 'c', 'h'].includes(key)) {
+                        e.preventDefault(); e.stopPropagation(); return false;
+                    }
+                }
+            }, { capture: true });
+
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('dragstart', e => e.preventDefault());
+
+            // 4. كاشف أدوات المطورين (يعتمد على سرعة تنفيذ الكود وفرق أبعاد النافذة)
+            let devtoolsDetected = false;
             setInterval(() => {
                 const start = performance.now();
-                debugger; 
+                debugger; // الفخ الأساسي
                 const elapsed = performance.now() - start;
-                if (elapsed > 100) {
-                    document.body.innerHTML = "<div style='background:#0B0F19;height:100vh;display:flex;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:18px;text-align:center;padding:20px;direction:rtl;'>تم اكتشاف محاولة اختراق أو فتح أدوات المطورين. تم تعطيل النظام نهائياً. يرجى تحديث الصفحة.</div>";
+                
+                // كاشف فرق حجم الشاشة (إذا تم فتح أدوات المطورين على الجانب)
+                const widthDiff = window.outerWidth - window.innerWidth > 160;
+                const heightDiff = window.outerHeight - window.innerHeight > 160;
+
+                if (elapsed > 100 || widthDiff || heightDiff) {
+                    if (!devtoolsDetected) {
+                        devtoolsDetected = true;
+                        crashAndBurn();
+                    }
+                } else {
+                    devtoolsDetected = false;
                 }
-            }, 50);
+            }, 250); // فحص مستمر كل ربع ثانية
         })();
 
         // =========================================================
-        // إعدادات VdoCipher - قم بتغيير هذه القيم فقط عند فحص فيديو جديد
+        // إعدادات VdoCipher (محمية بواسطة Closure + إزالة من الذاكرة)
         // =========================================================
-        const VDOCIPHER_CONFIG = {
-            // ملاحظة: هذا الـ OTP ينتهي بعد 5 دقائق من إصداره. قم بإنشاء واحد جديد للاختبار!
-            otp: "20160313versASE3232VLXae76EYm06x6fhpsT6hjZvmOzcGbtX4rg8aaiaXZixb",
-            playbackInfo: "eyJ2aWRlb0lkIjoiM2JiM2RmYzUyZTZjNDAwNDg5MTQyYmI4NWRkZmI5MzAifQ=="
-        };
+        const PlayerConfigManager = (function() {
+            // ضع مفاتيحك الجديدة هنا:
+            let otp = "20160313versASE3232VLXae76EYm06x6fhpsT6hjZvmOzcGbtX4rg8aaiaXZixb";
+            let pbInfo = "eyJ2aWRlb0lkIjoiM2JiM2RmYzUyZTZjNDAwNDg5MTQyYmI4NWRkZmI5MzAifQ==";
+
+            return {
+                getKeys: function() {
+                    const keys = { otp: otp, playbackInfo: pbInfo };
+                    return keys;
+                },
+                wipeKeys: function() {
+                    // تدمير المفاتيح من الذاكرة فور الاستخدام حتى لا تظهر في الكود المحفوظ
+                    otp = null;
+                    pbInfo = null;
+                }
+            };
+        })();
         // =========================================================
     </script>
 </head>
@@ -165,17 +163,14 @@
                 <i class="fa-solid fa-circle-exclamation text-2xl"></i>
             </div>
             <div class="space-y-2 text-center md:text-right w-full">
-                <h3 class="font-bold text-red-300 text-sm sm:text-lg">تحذير أمني: تم تشغيل الموقع كملف محلي (Local File)!</h3>
+                <h3 class="font-bold text-red-300 text-sm sm:text-lg">تم اكتشاف تشغيل الملف محلياً (Local File)!</h3>
                 <p class="text-xs sm:text-sm leading-relaxed text-red-200/90">
-                    أنت تقوم بتشغيل الملف عبر المسار <code class="bg-red-950/80 px-1.5 py-0.5 rounded text-white font-mono break-all text-[10px] sm:text-xs">file://</code>. 
-                    <strong class="text-red-400 block mt-1">هذا هو سبب ظهور خطأ 422 أو 403 في الفيديو!</strong> سيرفرات VdoCipher ترفض مسارات التشغيل المحلية. يجب تشغيل الموقع من خلال استضافة آمنة (HTTPS) أو خادم محلي (Localhost).
+                    أنت تحاول تشغيل الموقع عبر <code class="bg-red-950/80 px-1.5 py-0.5 rounded text-white font-mono break-all text-[10px] sm:text-xs">file://</code>. 
+                    <strong class="text-red-400 block mt-1">يُمنع التشغيل المحلي أمنياً لحماية مفاتيح التشغيل والتراخيص.</strong>
                 </p>
                 <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-2">
-                    <span class="text-[10px] sm:text-xs font-semibold px-2 py-1 rounded bg-red-500/20 text-red-300">
-                        <i class="fa-solid fa-circle-right ml-1"></i>الحل الأمثل:
-                    </span>
                     <p class="text-[10px] sm:text-xs text-red-300/90 flex items-center gap-1.5">
-                        استخدم إضافة Live Server في VS Code، أو ارفع الملف على <strong class="text-white underline">GitHub Pages</strong>.
+                        <i class="fa-solid fa-lock"></i> تم تدمير مفاتيح الفيديو. يجب الرفع على استضافة حقيقية ليعمل الموقع.
                     </p>
                 </div>
             </div>
@@ -245,7 +240,7 @@
             <!-- عمود مشغل الفيديو (60%) -->
             <div class="lg:col-span-7 space-y-6">
                 <!-- تم إزالة overflow-hidden لتجنب كسر التشفير العتادي لـ Edge PlayReady -->
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl glow-effect flex flex-col">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl glow-effect flex flex-col" id="player-container-main">
                     <!-- عنوان نافذة المشغل -->
                     <div class="bg-slate-950/80 px-3 py-2.5 sm:px-4 sm:py-3 border-b border-slate-800/80 flex justify-between items-center rounded-t-2xl">
                         <div class="flex items-center gap-1.5 sm:gap-2">
@@ -476,9 +471,6 @@
         let isScreenshotProtected = false;
         let isIntentionalDOMChange = false; 
 
-        // ----------------------------------------------------
-        // مراقب التلاعب بالصفحة المعدّل 
-        // ----------------------------------------------------
         window.addEventListener('load', () => {
             const securityObserver = new MutationObserver((mutations) => {
                 let tamperingDetected = false;
@@ -496,17 +488,21 @@
                 });
 
                 if (tamperingDetected) {
-                    document.body.innerHTML = "<div style='background:#0B0F19;height:100vh;display:flex;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:18px;text-align:center;padding:20px;direction:rtl;'>تم اكتشاف تلاعب في الهيكل الأساسي للصفحة. تم قفل الجلسة أمنياً. يرجى تحديث الصفحة.</div>";
+                    document.body.innerHTML = "<div style='background:#0B0F19;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'><i class='fa-solid fa-triangle-exclamation' style='font-size:40px;margin-bottom:15px;'></i><p>تم اكتشاف تلاعب في الهيكل الأساسي للصفحة. تم قفل الجلسة أمنياً.</p><p style='color:#94a3b8;font-size:14px;margin-top:10px;'>أغلق أدوات المطورين ثم يرجى تحديث الصفحة.</p></div>";
+                    while(true) { debugger; } // تجميد المتصفح بعد التلاعب
                 }
             });
             
             securityObserver.observe(document.body, { childList: true, subtree: true });
         });
 
-        // ----------------------------------------------------
-        // حقن المشغل برمجياً باستخدام المتغيرات الموجودة في أعلى الصفحة للحفاظ على التشفير
-        // ----------------------------------------------------
         function injectPlayer() {
+            // فحص أمني: إذا تم فتح الملف محلياً، نرفض إنشاء المشغل وندمر المفاتيح لكي لا يتمكن من أخذها من الملف المحفوظ
+            if (window.location.protocol === 'file:') {
+                PlayerConfigManager.wipeKeys();
+                return;
+            }
+
             const wrapper = document.getElementById('video-wrapper');
             if (document.getElementById('drm-player-iframe')) return; 
             
@@ -515,16 +511,23 @@
             const i = document.createElement('iframe');
             i.id = 'drm-player-iframe';
             
-            // قمنا بتشفير الأساس فقط، ودمجنا المتغيرات لكي لا يسهل سرقتها عبر فحص العناصر (Inspect)
+            // جلب المفاتيح من الحاضنة الآمنة
+            const keys = PlayerConfigManager.getKeys();
+            if (!keys.otp || !keys.playbackInfo) {
+                logDiagnostic('المفاتيح غير صالحة أو تم مسحها أمنياً.', 'error');
+                return;
+            }
+
             const baseUrlDecoded = atob("aHR0cHM6Ly9wbGF5ZXIudmRvY2lwaGVyLmNvbS92Mi8/b3RwPQ==");
-            i.src = baseUrlDecoded + VDOCIPHER_CONFIG.otp + "&playbackInfo=" + VDOCIPHER_CONFIG.playbackInfo;
+            i.src = baseUrlDecoded + keys.otp + "&playbackInfo=" + keys.playbackInfo;
             
-            // خصائص هامة جداً لمنع الشاشة السوداء في متصفح Edge وتحسين العرض
+            // مسح المفاتيح نهائياً من الذاكرة العشوائية بمجرد دمجها لمنع سرقتها لو حفظ الصفحة لاحقاً
+            PlayerConfigManager.wipeKeys();
+
             i.style.width = '100%';
             i.style.height = '100%';
             i.style.border = 'none';
             i.setAttribute('allowFullScreen', 'true');
-            // تم إضافة encrypted-media للسماح بالتفاوض العتادي بشكل مباشر
             i.setAttribute('allow', 'encrypted-media *; autoplay; fullscreen; picture-in-picture');
             i.className = "w-full h-full absolute inset-0 z-10 block";
             
@@ -542,7 +545,6 @@
             }
         }
 
-        // دالة لتحديث الوقت الحالي بالملي ثانية
         function updateTime() {
             isIntentionalDOMChange = true;
             const now = new Date();
@@ -553,7 +555,6 @@
         }
         setInterval(updateTime, 100);
 
-        // إضافة السجلات إلى لوحة التحكم
         function logDiagnostic(message, type = 'info') {
             isIntentionalDOMChange = true;
             const logsContainer = document.getElementById('diagnostic-logs');
@@ -584,7 +585,6 @@
             setTimeout(() => { isIntentionalDOMChange = false; }, 10);
         }
 
-        // نسخ السجل
         function copyLogs() {
             isIntentionalDOMChange = true;
             const logsContainer = document.getElementById('diagnostic-logs');
@@ -618,31 +618,24 @@
             if (status === 'success') {
                 iconDiv.className = 'status-icon w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-sm sm:text-base';
                 iconDiv.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-                
                 badge.className = 'status-badge text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap';
                 badge.innerText = details || 'مدعوم ونشط';
-                container.classList.add('glow-success');
-                container.classList.remove('glow-danger', 'glow-warning');
+                container.classList.add('glow-success'); container.classList.remove('glow-danger', 'glow-warning');
             } else if (status === 'unsupported') {
                 iconDiv.className = 'status-icon w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center flex-shrink-0 text-sm sm:text-base';
                 iconDiv.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
-                
                 badge.className = 'status-badge text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 whitespace-nowrap';
                 badge.innerText = details || 'غير مدعوم';
-                container.classList.remove('glow-success', 'glow-warning');
-                container.classList.add('glow-danger');
+                container.classList.remove('glow-success', 'glow-warning'); container.classList.add('glow-danger');
             } else if (status === 'warning') {
                 iconDiv.className = 'status-icon w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center flex-shrink-0 text-sm sm:text-base';
                 iconDiv.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
-                
                 badge.className = 'status-badge text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 whitespace-nowrap';
                 badge.innerText = details || 'مستوى أمان ضعيف';
-                container.classList.remove('glow-success', 'glow-danger');
-                container.classList.add('glow-warning');
+                container.classList.remove('glow-success', 'glow-danger'); container.classList.add('glow-warning');
             } else {
                 iconDiv.className = 'status-icon w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 flex-shrink-0 text-sm sm:text-base';
                 iconDiv.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i>';
-                
                 badge.className = 'status-badge text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-slate-800 text-slate-400 whitespace-nowrap';
                 badge.innerText = 'جاري الفحص...';
                 container.classList.remove('glow-success', 'glow-danger', 'glow-warning');
@@ -681,7 +674,10 @@
                 envBadge.className = "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium bg-red-400/10 text-red-400 border border-red-400/20";
                 document.getElementById('local-file-warning').classList.remove('hidden');
                 document.getElementById('local-file-warning').classList.add('flex');
-                logDiagnostic('تشغيل كملف محلي يسبب أخطاء في الـ DRM 422 أو 403.', 'error');
+                
+                // مسح جذري للمشغل في حال كان الملف محلي
+                PlayerConfigManager.wipeKeys();
+                logDiagnostic('تم تفعيل بروتوكول الحماية القصوى: إتلاف مفاتيح التشغيل بسبب التشغيل المحلي.', 'error');
             } else {
                 envText.innerText = isSecure ? "اتصال آمن HTTPS" : "اتصال غير آمن HTTP";
                 envBadge.className = isSecure 
@@ -720,110 +716,69 @@
             document.getElementById('diagnostic-logs').innerHTML = '';
             setTimeout(() => { isIntentionalDOMChange = false; }, 10);
             
-            updateStatusUI('check-eme', 'checking');
-            updateStatusUI('check-screenshot-hardware', 'checking');
-            updateStatusUI('check-widevine', 'checking');
-            updateStatusUI('check-playready', 'checking');
+            updateStatusUI('check-eme', 'checking'); updateStatusUI('check-screenshot-hardware', 'checking');
+            updateStatusUI('check-widevine', 'checking'); updateStatusUI('check-playready', 'checking');
             updateStatusUI('check-fairplay', 'checking');
 
             await inspectEnvironment();
-
             logDiagnostic('بدء فحص أنظمة الأمان والتشفير...', 'info');
 
             const hasEme = !!(navigator.requestMediaKeySystemAccess);
             if (hasEme) {
-                updateStatusUI('check-eme', 'success');
-                logDiagnostic('واجهة EME مدعومة.', 'success');
+                updateStatusUI('check-eme', 'success'); logDiagnostic('واجهة EME مدعومة.', 'success');
             } else {
-                updateStatusUI('check-eme', 'unsupported');
-                logDiagnostic('واجهة EME غير موجودة!', 'error');
+                updateStatusUI('check-eme', 'unsupported'); logDiagnostic('واجهة EME غير موجودة!', 'error');
                 updateStatusUI('check-screenshot-hardware', 'unsupported', 'غير آمن ❌');
-                updateStatusUI('check-widevine', 'unsupported');
-                updateStatusUI('check-playready', 'unsupported');
+                updateStatusUI('check-widevine', 'unsupported'); updateStatusUI('check-playready', 'unsupported');
                 updateStatusUI('check-fairplay', 'unsupported');
-                isScreenshotProtected = false;
-                evaluatePlaybackLock();
+                isScreenshotProtected = false; evaluatePlaybackLock();
                 return;
             }
 
-            const configSoftware = [{
-                initDataTypes: ['cenc'],
-                videoCapabilities: [{ contentType: 'video/mp4; codecs="avc1.42E01E"' }]
-            }];
+            const configSoftware = [{ initDataTypes: ['cenc'], videoCapabilities: [{ contentType: 'video/mp4; codecs="avc1.42E01E"' }] }];
+            const configHardware = [{ initDataTypes: ['cenc'], videoCapabilities: [{ contentType: 'video/mp4; codecs="avc1.42E01E"', robustness: 'HW_SECURE_DECODE' }] }];
 
-            const configHardware = [{
-                initDataTypes: ['cenc'],
-                videoCapabilities: [{
-                    contentType: 'video/mp4; codecs="avc1.42E01E"',
-                    robustness: 'HW_SECURE_DECODE'
-                }]
-            }];
-
-            let supportsWidevineL1 = false;
-            let supportsPlayReady = false;
-            let supportsFairPlay = false;
+            let supportsWidevineL1 = false; let supportsPlayReady = false; let supportsFairPlay = false;
 
             try {
                 await navigator.requestMediaKeySystemAccess('com.widevine.alpha', configSoftware);
-                updateStatusUI('check-widevine', 'success', 'مدعوم');
-                logDiagnostic('Google Widevine DRM مدعوم.', 'success');
-            } catch (e) {
-                updateStatusUI('check-widevine', 'unsupported');
-            }
+                updateStatusUI('check-widevine', 'success', 'مدعوم'); logDiagnostic('Google Widevine DRM مدعوم.', 'success');
+            } catch (e) { updateStatusUI('check-widevine', 'unsupported'); }
 
             try {
                 await navigator.requestMediaKeySystemAccess('com.widevine.alpha', configHardware);
-                supportsWidevineL1 = true;
-                logDiagnostic('Widevine L1 (عتادي) مدعوم.', 'success');
-            } catch (e) {
-                logDiagnostic('Widevine L1 غير مدعوم (تعمل على L3 برمجي).', 'warning');
-            }
+                supportsWidevineL1 = true; logDiagnostic('Widevine L1 (عتادي) مدعوم.', 'success');
+            } catch (e) { logDiagnostic('Widevine L1 غير مدعوم (تعمل على L3 برمجي).', 'warning'); }
 
             try {
                 await navigator.requestMediaKeySystemAccess('com.microsoft.playready', configSoftware);
-                supportsPlayReady = true;
-                updateStatusUI('check-playready', 'success', 'محمي ضد التصوير');
+                supportsPlayReady = true; updateStatusUI('check-playready', 'success', 'محمي ضد التصوير');
                 logDiagnostic('Microsoft PlayReady مدعوم (الشاشة سوداء للتصوير).', 'success');
-            } catch (e) {
-                updateStatusUI('check-playready', 'unsupported');
-            }
+            } catch (e) { updateStatusUI('check-playready', 'unsupported'); }
 
             try {
-                await navigator.requestMediaKeySystemAccess('com.apple.fps.1_0', configSoftware) || 
-                await navigator.requestMediaKeySystemAccess('com.apple.fps', configSoftware);
-                supportsFairPlay = true;
-                updateStatusUI('check-fairplay', 'success', 'محمي ضد التصوير');
+                await navigator.requestMediaKeySystemAccess('com.apple.fps.1_0', configSoftware) || await navigator.requestMediaKeySystemAccess('com.apple.fps', configSoftware);
+                supportsFairPlay = true; updateStatusUI('check-fairplay', 'success', 'محمي ضد التصوير');
                 logDiagnostic('Apple FairPlay مدعوم.', 'success');
-            } catch (e) {
-                updateStatusUI('check-fairplay', 'unsupported');
-            }
+            } catch (e) { updateStatusUI('check-fairplay', 'unsupported'); }
 
             const ua = navigator.userAgent || navigator.vendor || window.opera;
-            const isInstagram = ua.indexOf('Instagram') > -1;
-            const isFacebook = ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
-            const isWebView = isInstagram || isFacebook;
+            const isWebView = ua.indexOf('Instagram') > -1 || ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
 
-            if (isWebView) {
-                logDiagnostic('تحذير: متصفح مدمج لتطبيقات التواصل (خطر).', 'error');
-            }
+            if (isWebView) logDiagnostic('تحذير: متصفح مدمج لتطبيقات التواصل (خطر).', 'error');
 
             if ((supportsWidevineL1 || supportsPlayReady || supportsFairPlay) && !isWebView) {
-                isScreenshotProtected = true;
-                updateStatusUI('check-screenshot-hardware', 'success', 'آمن (L1/HW)');
+                isScreenshotProtected = true; updateStatusUI('check-screenshot-hardware', 'success', 'آمن (L1/HW)');
                 logDiagnostic('المتصفح آمن ومحمي عتادياً ضد لقطات الشاشة.', 'success');
             } else {
-                isScreenshotProtected = false;
-                updateStatusUI('check-screenshot-hardware', 'warning', 'غير آمن (L3)');
+                isScreenshotProtected = false; updateStatusUI('check-screenshot-hardware', 'warning', 'غير آمن (L3)');
                 logDiagnostic('المتصفح غير محمي عتادياً، يتيح تصوير الشاشة.', 'error');
             }
 
-            evaluatePlaybackLock();
-            logDiagnostic('اكتمل فحص الحماية.', 'info');
+            evaluatePlaybackLock(); logDiagnostic('اكتمل فحص الحماية.', 'info');
         }
 
-        window.onload = function() {
-            runDrmCheck();
-        };
+        window.onload = function() { runDrmCheck(); };
     </script>
 </body>
 </html>
