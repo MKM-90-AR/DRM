@@ -82,7 +82,6 @@
     <!-- بروتوكولات الأمان العالية ضد التلاعب والـ Debugging -->
     <script>
         (function blockDevToolsAndTampering() {
-            // 1. تجميد كائن console لمنع تنفيذ الأكواد أو عرض المخرجات
             try {
                 const noop = () => {};
                 const fakeConsole = { log: noop, info: noop, warn: noop, error: noop, table: noop, clear: noop };
@@ -93,10 +92,8 @@
                 });
             } catch(e) {}
 
-            // 2. منع النقر الأيمن
             document.addEventListener('contextmenu', e => e.preventDefault());
             
-            // 3. منع جميع اختصارات الكيبورد الخاصة بالمطورين
             document.addEventListener('keydown', e => {
                 if (e.key === 'F12' || 
                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
@@ -107,17 +104,25 @@
                 }
             });
 
-            // 4. فخ المتصفح (Debugger Trap) مع قياس الوقت لاكتشاف تجميد الشبكة/الكونسول
             setInterval(() => {
                 const start = performance.now();
-                debugger; // إذا فتح أدوات المطورين، سيتوقف هنا
+                debugger; 
                 const elapsed = performance.now() - start;
-                // إذا استغرق الأمر وقتاً (بسبب توقف debugger أو بطء مقصود) سيتم تدمير الموقع
                 if (elapsed > 100) {
                     document.body.innerHTML = "<div style='background:#0B0F19;height:100vh;display:flex;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:18px;text-align:center;padding:20px;direction:rtl;'>تم اكتشاف محاولة اختراق أو فتح أدوات المطورين. تم تعطيل النظام نهائياً. يرجى تحديث الصفحة.</div>";
                 }
             }, 50);
         })();
+
+        // =========================================================
+        // إعدادات VdoCipher - قم بتغيير هذه القيم فقط عند فحص فيديو جديد
+        // =========================================================
+        const VDOCIPHER_CONFIG = {
+            // ملاحظة: هذا الـ OTP ينتهي بعد 5 دقائق من إصداره. قم بإنشاء واحد جديد للاختبار!
+            otp: "20160313versASE3232VLXae76EYm06x6fhpsT6hjZvmOzcGbtX4rg8aaiaXZixb",
+            playbackInfo: "eyJ2aWRlb0lkIjoiM2JiM2RmYzUyZTZjNDAwNDg5MTQyYmI4NWRkZmI5MzAifQ=="
+        };
+        // =========================================================
     </script>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
@@ -154,7 +159,7 @@
     <!-- محتوى الصفحة الرئيسي -->
     <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 flex-grow w-full space-y-6">
 
-        <!-- 1. لوحة التنبيهات الذكية للبيئة المحلية ومتصفح Brave (تظهر ديناميكياً) -->
+        <!-- لوحة التنبيهات الذكية للبيئة المحلية ومتصفح Brave -->
         <div id="local-file-warning" class="hidden p-4 sm:p-5 bg-red-950/40 border border-red-500/30 rounded-2xl flex-col md:flex-row items-start gap-4 text-red-200 glow-danger transition-all duration-300">
             <div class="p-3 bg-red-500/10 rounded-xl text-red-400 flex-shrink-0 mx-auto md:mx-0">
                 <i class="fa-solid fa-circle-exclamation text-2xl"></i>
@@ -162,14 +167,15 @@
             <div class="space-y-2 text-center md:text-right w-full">
                 <h3 class="font-bold text-red-300 text-sm sm:text-lg">تحذير أمني: تم تشغيل الموقع كملف محلي (Local File)!</h3>
                 <p class="text-xs sm:text-sm leading-relaxed text-red-200/90">
-                    أنت تقوم بتشغيل الملف عبر المسار <code class="bg-red-950/80 px-1.5 py-0.5 rounded text-white font-mono break-all text-[10px] sm:text-xs">file://</code>. متصفحات الويب الحديثة تمنع تشغيل تراخيص الـ **DRM** بشكل مباشر بدون خادم ويب آمن.
+                    أنت تقوم بتشغيل الملف عبر المسار <code class="bg-red-950/80 px-1.5 py-0.5 rounded text-white font-mono break-all text-[10px] sm:text-xs">file://</code>. 
+                    <strong class="text-red-400 block mt-1">هذا هو سبب ظهور خطأ 422 أو 403 في الفيديو!</strong> سيرفرات VdoCipher ترفض مسارات التشغيل المحلية. يجب تشغيل الموقع من خلال استضافة آمنة (HTTPS) أو خادم محلي (Localhost).
                 </p>
                 <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-2">
                     <span class="text-[10px] sm:text-xs font-semibold px-2 py-1 rounded bg-red-500/20 text-red-300">
                         <i class="fa-solid fa-circle-right ml-1"></i>الحل الأمثل:
                     </span>
                     <p class="text-[10px] sm:text-xs text-red-300/90 flex items-center gap-1.5">
-                        الرفع إلى استضافة تدعم HTTPS مثل <strong class="text-white underline">GitHub Pages</strong>.
+                        استخدم إضافة Live Server في VS Code، أو ارفع الملف على <strong class="text-white underline">GitHub Pages</strong>.
                     </p>
                 </div>
             </div>
@@ -238,7 +244,7 @@
             
             <!-- عمود مشغل الفيديو (60%) -->
             <div class="lg:col-span-7 space-y-6">
-                <!-- تم إزالة overflow-hidden من هنا لتجنب كسر التشفير العتادي لـ Edge PlayReady -->
+                <!-- تم إزالة overflow-hidden لتجنب كسر التشفير العتادي لـ Edge PlayReady -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl glow-effect flex flex-col">
                     <!-- عنوان نافذة المشغل -->
                     <div class="bg-slate-950/80 px-3 py-2.5 sm:px-4 sm:py-3 border-b border-slate-800/80 flex justify-between items-center rounded-t-2xl">
@@ -256,7 +262,7 @@
                         
                         <!-- الإطار المحقون برمجياً سيظهر هنا -->
                         
-                        <!-- شاشة الحظر الصارم (تظهر عند عدم تلبيات متطلبات التشفير العتادي) -->
+                        <!-- شاشة الحظر الصارم (تظهر عند عدم تلبية متطلبات التشفير العتادي) -->
                         <div id="security-block-overlay" class="hidden absolute inset-0 bg-slate-950 flex-col items-center justify-center text-center p-4 sm:p-6 z-20">
                             <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4 animate-bounce">
                                 <i class="fa-solid fa-lock"></i>
@@ -471,17 +477,15 @@
         let isIntentionalDOMChange = false; 
 
         // ----------------------------------------------------
-        // مراقب التلاعب بالصفحة المعدّل (لمنع الإغلاق الخاطئ بسبب إضافات المتصفح)
+        // مراقب التلاعب بالصفحة المعدّل 
         // ----------------------------------------------------
         window.addEventListener('load', () => {
             const securityObserver = new MutationObserver((mutations) => {
                 let tamperingDetected = false;
                 mutations.forEach((mutation) => {
                     if (isIntentionalDOMChange) return;
-
                     if (mutation.removedNodes.length > 0) {
                         mutation.removedNodes.forEach(node => {
-                            // نقوم بإطلاق التحذير فقط إذا تم حذف عناصر رئيسية تخصنا لمنع تعارض إضافات (Extensions) متصفح Edge
                             if (node.nodeType === 1) { 
                                 if (node.id === 'video-wrapper' || node.id === 'drm-player-iframe' || node.classList.contains('glow-effect')) {
                                     tamperingDetected = true;
@@ -500,7 +504,7 @@
         });
 
         // ----------------------------------------------------
-        // حقن المشغل بطريقة تدعم Edge PlayReady عتادياً وبدون تعقيدات تعيق الـ Base64
+        // حقن المشغل برمجياً باستخدام المتغيرات الموجودة في أعلى الصفحة للحفاظ على التشفير
         // ----------------------------------------------------
         function injectPlayer() {
             const wrapper = document.getElementById('video-wrapper');
@@ -511,30 +515,16 @@
             const i = document.createElement('iframe');
             i.id = 'drm-player-iframe';
             
-            // الرابط الذي قدمته تم تشفيره وتقطيعه باستخدام Base64 لكي لا يظهر بوضوح في السورس كود
-            // URL: https://player.vdocipher.com/v2/?otp=20160313versASE3232VLXae76EYm06x6fhpsT6hjZvmOzcGbtX4rg8aaiaXZixb&playbackInfo=eyJ2aWRlb0lkIjoiM2JiM2RmYzUyZTZjNDAwNDg5MTQyYmI4NWRkZmI5MzAifQ==
-            const base64Chunks = [
-                "aHR0cHM6Ly9wbGF5ZXIudmRv",
-                "Y2lwaGVyLmNvbS92Mi8/b3Rw",
-                "PTIwMTYwMzEzdmVyc0FTRTMy",
-                "MzJWTFhhZTc2RVltMDZ4NmZo",
-                "cHNUNmhqWnZtT3pjR2J0WDRy",
-                "ZzhhYWlhWFppeGImcGxheWJh",
-                "Y2tJbmZvPWV5SjJkV1JsYjBs",
-                "a0lqb2lNMkppTTJSbVl6VXla",
-                "VFpqTkRBd05EZzVNVFF5WW1J",
-                "NE5XUmtaakl6TUNKOT09"
-            ];
-            
-            const finalURL = atob(base64Chunks.join(''));
-            i.src = finalURL;
+            // قمنا بتشفير الأساس فقط، ودمجنا المتغيرات لكي لا يسهل سرقتها عبر فحص العناصر (Inspect)
+            const baseUrlDecoded = atob("aHR0cHM6Ly9wbGF5ZXIudmRvY2lwaGVyLmNvbS92Mi8/b3RwPQ==");
+            i.src = baseUrlDecoded + VDOCIPHER_CONFIG.otp + "&playbackInfo=" + VDOCIPHER_CONFIG.playbackInfo;
             
             // خصائص هامة جداً لمنع الشاشة السوداء في متصفح Edge وتحسين العرض
             i.style.width = '100%';
             i.style.height = '100%';
             i.style.border = 'none';
             i.setAttribute('allowFullScreen', 'true');
-            // تم إضافة encrypted-media للسماح بالتفاوض العتادي بشكل مباشر كما في كودك المرفق
+            // تم إضافة encrypted-media للسماح بالتفاوض العتادي بشكل مباشر
             i.setAttribute('allow', 'encrypted-media *; autoplay; fullscreen; picture-in-picture');
             i.className = "w-full h-full absolute inset-0 z-10 block";
             
@@ -612,7 +602,6 @@
             setTimeout(() => { isIntentionalDOMChange = false; }, 50);
         }
 
-        // تحديث واجهة الفحص الفردي مع الحفاظ على الكلاسات الأساسية (إصلاح مشكلة null)
         function updateStatusUI(elementId, status, details = '') {
             isIntentionalDOMChange = true;
             const container = document.getElementById(elementId);
@@ -621,14 +610,12 @@
             const iconDiv = container.querySelector('.status-icon');
             const badge = container.querySelector('.status-badge');
 
-            // إذا لم يجد العنصر نخرج لتجنب الخطأ
             if (!iconDiv || !badge) {
                 setTimeout(() => { isIntentionalDOMChange = false; }, 20);
                 return;
             }
 
             if (status === 'success') {
-                // دمج كلاس 'status-icon' و 'status-badge' بشكل دائم لمنع اختفائها
                 iconDiv.className = 'status-icon w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-sm sm:text-base';
                 iconDiv.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
                 
@@ -694,7 +681,7 @@
                 envBadge.className = "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium bg-red-400/10 text-red-400 border border-red-400/20";
                 document.getElementById('local-file-warning').classList.remove('hidden');
                 document.getElementById('local-file-warning').classList.add('flex');
-                logDiagnostic('تشغيل كملف محلي يسبب أخطاء في الـ DRM.', 'error');
+                logDiagnostic('تشغيل كملف محلي يسبب أخطاء في الـ DRM 422 أو 403.', 'error');
             } else {
                 envText.innerText = isSecure ? "اتصال آمن HTTPS" : "اتصال غير آمن HTTP";
                 envBadge.className = isSecure 
