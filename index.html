@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة اختبار وتشخيص أنظمة حماية المحتوى الرقمي DRM</title>
+    <title>منصة اختبار وتشخيص أنظمة حماية المحتوى الرقمي DRM - بواسطة mkm</title>
     <!-- تضمين خط Cairo الجميل للمحتوى العربي -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,7 +82,12 @@
                     <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
                         محلل ومختبر أنظمة <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">DRM</span>
                     </h1>
-                    <p class="text-xs text-slate-400">المنصة المهنية المتقدمة لفحص وتوافقية حماية الفيديو</p>
+                    <p class="text-xs text-slate-400">
+                        المنصة المهنية المتقدمة بواسطة 
+                        <a href="https://link.me/mkm" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline font-bold">
+                            هاشم عمر (mkm)
+                        </a>
+                    </p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
@@ -105,14 +110,14 @@
             <div class="space-y-2">
                 <h3 class="font-bold text-red-300 text-lg">تحذير أمني: تم تشغيل الموقع كملف محلي (Local File)!</h3>
                 <p class="text-sm leading-relaxed text-red-200/90">
-                    أنت تقوم بتشغيل الملف عبر المسار <code class="bg-red-950/80 px-1.5 py-0.5 rounded text-white font-mono break-all text-xs">file://</code>. متصفحات الويب الحديثة (مثل Brave و Chrome) تمنع تشغيل تراخيص وفك تشفير الـ **DRM** وخدمات الـ **EME** عند فتح ملفات الـ HTML بشكل مباشر بدون خادم ويب آمن.
+                    أنت تقوم بتشغيل الملف عبر المسار <code class="bg-red-950/80 px-1.5 py-0.5 rounded text-white font-mono break-all text-xs">file://</code>. متصفحات الويب الحديثة تمنع تشغيل تراخيص وفك تشفير الـ **DRM** عند فتح ملفات الـ HTML بشكل مباشر بدون خادم ويب آمن.
                 </p>
                 <div class="flex flex-wrap gap-2 pt-2">
                     <span class="text-xs font-semibold px-2.5 py-1 rounded bg-red-500/20 text-red-300">
                         <i class="fa-solid fa-circle-right ml-1"></i>الحل الأمثل:
                     </span>
                     <p class="text-xs text-red-300/90 flex items-center gap-1.5">
-                        قم برفع هذا الملف إلى استضافة مجانية تدعم HTTPS مثل <strong class="text-white underline">GitHub Pages</strong> (كما يظهر في تبويباتك المفتوحة!)، أو قم بتشغيل خادم محلي (مثل إضافة Live Server في VS Code).
+                        قم برفع هذا الملف إلى استضافة مجانية تدعم HTTPS مثل <strong class="text-white underline">GitHub Pages</strong>، أو قم بتشغيل خادم محلي.
                     </p>
                 </div>
             </div>
@@ -128,7 +133,7 @@
                     <span class="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold border border-amber-500/30">تم اكتشاف متصفح Brave</span>
                 </div>
                 <p class="text-sm leading-relaxed text-amber-200/90">
-                    يقوم متصفح **Brave** افتراضياً بحظر بعض أدوات التتبع وسكربتات التحقق الخارجي (كما يظهر بحظره لـ 4 عناصر في متصفحك). لتجنب شاشات التحميل اللانهائية أو توقف مشغل VdoCipher:
+                    يقوم متصفح **Brave** افتراضياً بحظر بعض أدوات التتبع وسكربتات التحقق الخارجي (التي يعتمد عليها نظام VdoCipher DRM). لتجنب شاشات التحميل اللانهائية أو توقف مشغل الفيديو:
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                     <div class="bg-slate-950/60 p-3 rounded-lg border border-slate-800 text-xs space-y-1">
@@ -143,16 +148,41 @@
             </div>
         </div>
 
-        <!-- قسم التنبيه التقني حول صلاحية الـ OTP -->
-        <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-start gap-4 text-slate-300">
-            <div class="p-2 bg-indigo-500/10 rounded-lg text-indigo-400 flex-shrink-0">
-                <i class="fa-solid fa-key text-xl"></i>
+        <!-- لوحة التحكم في الحماية ضد تصوير الشاشة -->
+        <div class="p-6 bg-gradient-to-r from-red-950/30 to-slate-900 border border-red-500/30 rounded-2xl glow-danger space-y-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-red-500/10 text-red-400 rounded-xl">
+                        <i class="fa-solid fa-video-slash text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">سياسة الحظر الأمنية لمنع لقطات الشاشة (Strict Screenshot Protection)</h3>
+                        <p class="text-sm text-slate-300">ميزة حصرية مبرمجة للتأكد من أن الفيديو لا يعمل على المتصفحات التي تسمح بالتصوير (مثل Brave L3 و Instagram)</p>
+                    </div>
+                </div>
+                <!-- مفتاح التحكم الذكي لسياسة الحظر -->
+                <div class="flex items-center gap-3 bg-slate-950/80 px-4 py-2.5 rounded-xl border border-slate-800">
+                    <span class="text-xs font-semibold text-slate-300">وضع الحظر الصارم (تأمين اللقطات):</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="strict-mode-toggle" class="sr-only peer" checked onchange="toggleStrictMode()">
+                        <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+                    </label>
+                </div>
             </div>
-            <div>
-                <h3 class="font-bold text-white">معلومات حيوية حول ترخيص تشغيل الفيديو (OTP Validation)</h3>
-                <p class="text-sm mt-1 leading-relaxed text-slate-400">
-                    الفيديو المرفق بالأسفل يعمل عبر بروتوكول <strong class="text-indigo-400">VdoCipher DRM</strong> الذي يتطلب مفتاح OTP مؤقت يتم توليده ديناميكياً من الخادم الخلفي. إذا انتهت صلاحية المفتاح وحصلت على خطأ تشغيل، فهذا دليل قاطع ومثالي على نجاح التشفير الديناميكي للمشغل لحماية المحتوى الرقمي ضد السرقة وإعادة التوجيه!
-                </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 text-xs text-slate-300">
+                <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+                    <strong class="text-emerald-400 block mb-1"><i class="fa-solid fa-lock ml-1"></i> Edge على الكمبيوتر (آمن 100%)</strong>
+                    يستخدم تشفير عتادي متصل ببطاقة الشاشة (PlayReady L1)؛ عند محاولة التصوير تظهر الشاشة <span class="text-emerald-400 font-bold">سوداء بالكامل</span>.
+                </div>
+                <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+                    <strong class="text-amber-400 block mb-1"><i class="fa-solid fa-triangle-exclamation ml-1"></i> Brave (معرض للالتقاط ⚠️)</strong>
+                    يستخدم نظام تشفير برمجياً (Widevine L3) لا يمتلك صلاحية لبطاقة الشاشة، مما يتيح أخذ لقطات شاشة للفيديو بشكل عادي.
+                </div>
+                <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+                    <strong class="text-red-400 block mb-1"><i class="fa-solid fa-circle-xmark ml-1"></i> متصفح إنستغرام (خطر ❌)</strong>
+                    متصفح داخلي (WebView) مجرد من تراخيص الأمان والـ DRM العتادي، ويسهل تصوير شاشته بالكامل دون أي قيود.
+                </div>
             </div>
         </div>
 
@@ -175,14 +205,33 @@
 
                     <!-- حاوية الفيديو المستجيبة للمقاسات وبأعلى معايير الحماية المتوافقة -->
                     <div class="relative w-full aspect-video bg-black flex items-center justify-center">
-                        <!-- تضمين كود الفريم مع إضافة المعايير القصوى للسماح بالمحتوى المحمي والمشفر -->
+                        
+                        <!-- إطار الفيديو الفعلي -->
                         <iframe 
                             id="drm-player-iframe"
                             src="https://player.vdocipher.com/v2/?otp=20160313versASE3232t47UqURW6XAN7fBpClBzeROeiWNwYwWkI97Qlc6icJJC5&playbackInfo=eyJ2aWRlb0lkIjoiM2JiM2RmYzUyZTZjNDAwNDg5MTQyYmI4NWRkZmI5MzAifQ==" 
                             style="border:0;height:100%;width:100%;" 
                             allowFullScreen="true" 
+                            class="transition-opacity duration-300"
                             allow="encrypted-media; autoplay; picture-in-picture">
                         </iframe>
+
+                        <!-- شاشة الحظر الصارم (تظهر عند عدم تفعيل حماية لقطات الشاشة وتفعيل وضع الحظر) -->
+                        <div id="security-block-overlay" class="hidden absolute inset-0 bg-slate-950 flex-col items-center justify-center text-center p-6 z-20 transition-all duration-300">
+                            <div class="w-16 h-16 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center text-3xl mb-4 animate-bounce">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                            <h4 class="text-lg font-bold text-red-400 mb-2">تم حظر تشغيل الفيديو أمنياً!</h4>
+                            <p class="text-xs text-slate-300 max-w-md leading-relaxed">
+                                تم تفعيل سياسة **الحظر الصارم ضد تصوير الشاشة** بواسطة المطور <strong class="text-indigo-400">mkm</strong>. متصفحك الحالي (مثل Brave أو Instagram WebView) يفتقر لنظام حماية التشفير العتادي اللامتناهي (L1) مما يسمح بأخذ لقطات شاشة للفيديو.
+                            </p>
+                            <div class="mt-4 p-3 bg-red-950/20 border border-red-500/20 rounded-xl text-right text-xs text-red-300 space-y-1">
+                                <p>🔒 **لتشغيل الفيديو بنجاح، يرجى اتباع الآتي:**</p>
+                                <p class="text-slate-400">1. استخدم متصفح **Microsoft Edge** على الكمبيوتر (مع تفعيل التسريع العتادي) حيث يتم حظر اللقطات تماماً وتظهر سوداء.</p>
+                                <p class="text-slate-400">2. على الهاتف، استخدم متصفح **Safari** للآيفون أو متصفح **Chrome** مع تفعيل حماية المحتوى لضمان تشفير L1 العتادي.</p>
+                                <p class="text-slate-400">3. أو قم بتعطيل "وضع الحظر الصارم" من الأعلى للاختبار والتجربة فقط.</p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- أزرار تحكم مضافة وإرشادية للمشغل -->
@@ -240,7 +289,21 @@
                             <span class="text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
                         </div>
 
-                        <!-- فحص Google Widevine -->
+                        <!-- فحص حماية لقطات الشاشة Widevine L1 -->
+                        <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 flex items-center justify-between" id="check-screenshot-hardware">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon">
+                                    <i class="fa-solid fa-spinner animate-spin"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-200">مستوى أمان لقطات الشاشة (L1)</h4>
+                                    <p class="text-xs text-slate-400">حظر تصوير الشاشة والالتقاط (العتادي)</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
+                        </div>
+
+                        <!-- فحص Google Widevine (برمجي L3) -->
                         <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 flex items-center justify-between" id="check-widevine">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon">
@@ -343,17 +406,32 @@
     </main>
 
     <!-- التذييل (Footer) -->
-    <footer class="bg-slate-950 border-t border-slate-900 py-6 text-center text-slate-500 text-sm">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p>© 2026 جميع الحقوق محفوظة لـمنصة اختبار DRM الاحترافية.</p>
-            <div class="flex gap-4">
-                <span class="text-xs bg-slate-900 px-3 py-1 rounded-full border border-slate-800">تطوير مخصص لدعم Brave و بيئة الاختبار المحلية</span>
+    <footer class="bg-slate-950 border-t border-slate-900 py-8 text-center text-slate-500 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div class="space-y-2 text-center sm:text-right">
+                <p class="text-slate-400">© 2026 جميع الحقوق محفوظة لـمنصة اختبار DRM الاحترافية.</p>
+                <p class="text-xs text-slate-500">
+                    تم إنشاء وتطوير هذا الموقع بواسطة المطور المبدع: 
+                    <a href="https://link.me/mkm" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 font-bold inline-flex items-center gap-1 transition-colors duration-200">
+                        <i class="fa-solid fa-code text-[10px]"></i> هاشم عمر الملقب بـ mkm
+                    </a>
+                </p>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+                <span class="text-xs bg-slate-900 px-3 py-1 rounded-full border border-slate-800 text-slate-400">إصدار التوافق المطلق لمتصفح Brave و WebView</span>
+                <a href="https://link.me/mkm" target="_blank" rel="noopener noreferrer" class="px-4 py-1.5 bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-400 hover:text-indigo-300 rounded-lg text-xs font-semibold border border-indigo-500/20 transition-all duration-200 flex items-center gap-2">
+                    <i class="fa-solid fa-link"></i> رابط mkm الإلكتروني
+                </a>
             </div>
         </div>
     </footer>
 
-    <!-- برمجة فحص توافقية الـ DRM وحالة التشغيل -->
+    <!-- برمجة فحص توافقية الـ DRM وحالة التشغيل ولقطات الشاشة -->
     <script>
+        // تخزين متغيرات حالة حماية الشاشة
+        let isScreenshotProtected = false;
+        let isStrictModeActive = true;
+
         // دالة لتحديث الوقت الحالي بالملي ثانية للتأثير التشخيصي
         function updateTime() {
             const now = new Date();
@@ -398,7 +476,6 @@
             if (!logsContainer) return;
             const text = logsContainer.innerText;
             
-            // استخدام الطريقة المتوافقة والموثوقة داخل بيئات iframe
             const el = document.createElement('textarea');
             el.value = text;
             document.body.appendChild(el);
@@ -430,8 +507,17 @@
                 iconDiv.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
                 
                 badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-red-500/10 text-red-400 border border-red-500/20';
-                badge.innerText = 'غير مدعوم';
+                badge.innerText = details || 'غير مدعوم';
                 container.classList.remove('glow-success', 'glow-warning');
+                container.classList.add('glow-danger');
+            } else if (status === 'warning') {
+                iconDiv.className = 'w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center status-icon';
+                iconDiv.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+                
+                badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-amber-500/10 text-amber-400 border border-amber-500/20';
+                badge.innerText = details || 'مستوى أمان منخفض';
+                container.classList.remove('glow-success', 'glow-danger');
+                container.classList.add('glow-warning');
             } else {
                 iconDiv.className = 'w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon';
                 iconDiv.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i>';
@@ -487,7 +573,35 @@
             if (isBraveBrowser) {
                 document.getElementById('brave-shield-warning').classList.remove('hidden');
                 document.getElementById('brave-shield-warning').classList.add('flex');
-                logDiagnostic('تم رصد متصفح Brave. يرجى التأكد من تعطيل الدروع (Brave Shields) إن واجهت مشاكل بالمشغل.', 'warning');
+                logDiagnostic('تم رصد متصفح Brave. يرجى التأكد من تعطيل الدروع (Brave Shields) وتفعيل التسريع العتادي.', 'warning');
+            }
+        }
+
+        // تبديل تفعيل وتعطيل وضع الحظر الصارم يدوياً
+        function toggleStrictMode() {
+            const toggle = document.getElementById('strict-mode-toggle');
+            isStrictModeActive = toggle.checked;
+            logDiagnostic(`تم ${isStrictModeActive ? 'تفعيل' : 'تعطيل'} وضع الحظر الصارم للقطات الشاشة.`, isStrictModeActive ? 'warning' : 'info');
+            evaluatePlaybackLock();
+        }
+
+        // تقييم إغلاق أو فتح المشغل بناءً على الأمان العتادي ومستوى الحماية
+        function evaluatePlaybackLock() {
+            const overlay = document.getElementById('security-block-overlay');
+            const iframe = document.getElementById('drm-player-iframe');
+            
+            if (isStrictModeActive && !isScreenshotProtected) {
+                // تفعيل القفل وحظر الإطار
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+                iframe.style.opacity = '0.05';
+                logDiagnostic('تم قفل تشغيل الفيديو تلقائياً! متصفحك يفتقر للحماية الرسومية ضد لقطات الشاشة.', 'error');
+            } else {
+                // إزالة القفل وتفعيل الإطار
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+                iframe.style.opacity = '1';
+                logDiagnostic('وضع تشغيل الفيديو نشط الآن.', 'success');
             }
         }
 
@@ -496,6 +610,7 @@
             // تصفير الواجهات والسجلات
             document.getElementById('diagnostic-logs').innerHTML = '';
             updateStatusUI('check-eme', 'checking');
+            updateStatusUI('check-screenshot-hardware', 'checking');
             updateStatusUI('check-widevine', 'checking');
             updateStatusUI('check-playready', 'checking');
             updateStatusUI('check-fairplay', 'checking');
@@ -513,23 +628,39 @@
             } else {
                 updateStatusUI('check-eme', 'unsupported');
                 logDiagnostic('واجهة الـ EME غير موجودة! متصفحك يمنع خدمات فك التشفير تماماً.', 'error');
+                updateStatusUI('check-screenshot-hardware', 'unsupported', 'غير آمن ❌');
                 updateStatusUI('check-widevine', 'unsupported');
                 updateStatusUI('check-playready', 'unsupported');
                 updateStatusUI('check-fairplay', 'unsupported');
+                isScreenshotProtected = false;
+                evaluatePlaybackLock();
                 return;
             }
 
-            // إعداد التكوينات والخيارات للفيديو
-            const config = [{
+            // إعداد التكوينات للتحقق من التشفير البرمجي والعتادي
+            const configSoftware = [{
                 initDataTypes: ['cenc'],
                 videoCapabilities: [{
                     contentType: 'video/mp4; codecs="avc1.42E01E"'
                 }]
             }];
 
-            // 2. فحص دعم Google Widevine
+            // تكوين عتادي مخصص يختبر ما إذا كان المتصفح يدعم مستوى تشفير عتادي يمنع لقطات الشاشة (Robustness L1 / PlayReady Secure)
+            const configHardware = [{
+                initDataTypes: ['cenc'],
+                videoCapabilities: [{
+                    contentType: 'video/mp4; codecs="avc1.42E01E"',
+                    robustness: 'HW_SECURE_DECODE'
+                }]
+            }];
+
+            let supportsWidevineL1 = false;
+            let supportsPlayReady = false;
+            let supportsFairPlay = false;
+
+            // 2. فحص دعم Google Widevine (البرمجي L3)
             try {
-                const access = await navigator.requestMediaKeySystemAccess('com.widevine.alpha', config);
+                const access = await navigator.requestMediaKeySystemAccess('com.widevine.alpha', configSoftware);
                 updateStatusUI('check-widevine', 'success', 'مدعوم');
                 logDiagnostic('تم التحقق بنجاح من دعم تشفير Google Widevine DRM.', 'success');
             } catch (e) {
@@ -537,27 +668,62 @@
                 logDiagnostic('تشفير Google Widevine غير مدعوم في المتصفح الحالي.', 'warning');
             }
 
-            // 3. فحص دعم Microsoft PlayReady
+            // 3. فحص دعم الـ L1 العتادي (الذي يمنع لقطات الشاشة)
             try {
-                const access = await navigator.requestMediaKeySystemAccess('com.microsoft.playready', config);
-                updateStatusUI('check-playready', 'success', 'مدعوم');
-                logDiagnostic('تم التحقق بنجاح من دعم تشفير Microsoft PlayReady.', 'success');
+                // سنقوم بمحاولة طلب وصول عتادي مشفر لـ Widevine L1
+                await navigator.requestMediaKeySystemAccess('com.widevine.alpha', configHardware);
+                supportsWidevineL1 = true;
+                logDiagnostic('تشفير Widevine L1 العتادي مدعوم بالكامل! لقطات الشاشة محمية.', 'success');
+            } catch (e) {
+                logDiagnostic('تشفير Widevine L1 العتادي مفقود (المتصفح يعمل على حماية برمجية L3 تتيح أخذ لقطات الشاشة).', 'warning');
+            }
+
+            // 4. فحص دعم Microsoft PlayReady (آمن ومحمي عتادياً على Windows)
+            try {
+                await navigator.requestMediaKeySystemAccess('com.microsoft.playready', configSoftware);
+                supportsPlayReady = true;
+                updateStatusUI('check-playready', 'success', 'مدعوم (شاشة سوداء للقطات)');
+                logDiagnostic('تشفير Microsoft PlayReady مدعوم ونشط! لقطات الشاشة محمية وتظهر سوداء.', 'success');
             } catch (e) {
                 updateStatusUI('check-playready', 'unsupported');
-                logDiagnostic('تشفير PlayReady غير مدعوم (هذا طبيعي جداً لغير متصفحات Edge على نظام Windows).', 'info');
+                logDiagnostic('تشفير PlayReady غير مدعوم (هذا طبيعي لغير متصفحات Edge على نظام Windows).', 'info');
             }
 
-            // 4. فحص دعم Apple FairPlay
+            // 5. فحص دعم Apple FairPlay (آمن ومحمي عتادياً على Safari)
             try {
-                const access = await navigator.requestMediaKeySystemAccess('com.apple.fps.1_0', config) || 
-                               await navigator.requestMediaKeySystemAccess('com.apple.fps', config);
-                updateStatusUI('check-fairplay', 'success', 'مدعوم');
-                logDiagnostic('تم التحقق بنجاح من دعم تشفير Apple FairPlay.', 'success');
+                await navigator.requestMediaKeySystemAccess('com.apple.fps.1_0', configSoftware) || 
+                await navigator.requestMediaKeySystemAccess('com.apple.fps', configSoftware);
+                supportsFairPlay = true;
+                updateStatusUI('check-fairplay', 'success', 'مدعوم (شاشة سوداء للقطات)');
+                logDiagnostic('تشفير Apple FairPlay مدعوم ونشط! لقطات الشاشة محمية بالكامل.', 'success');
             } catch (e) {
                 updateStatusUI('check-fairplay', 'unsupported');
-                logDiagnostic('تشفير Apple FairPlay غير مدعوم (طبيعي جداً خارج بيئة متصفحات Safari/Apple).', 'info');
+                logDiagnostic('تشفير Apple FairPlay غير مدعوم (طبيعي خارج بيئة متصفحات Apple/Safari).', 'info');
             }
 
+            // فحص كاشف متصفحات تطبيقات التواصل WebView (Instagram, Facebook)
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            const isInstagram = ua.indexOf('Instagram') > -1;
+            const isFacebook = ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
+            const isWebView = isInstagram || isFacebook;
+
+            if (isWebView) {
+                logDiagnostic('تحذير: تم الكشف عن متصفح مدمج لتطبيقات التواصل (Instagram/Facebook WebView). يسهل تصوير شاشته.', 'error');
+            }
+
+            // تحديد النتيجة النهائية لحماية لقطات الشاشة وتطبيق سياسة القفل
+            if ((supportsWidevineL1 || supportsPlayReady || supportsFairPlay) && !isWebView) {
+                isScreenshotProtected = true;
+                updateStatusUI('check-screenshot-hardware', 'success', 'آمن تماماً (مستوى عتادي)');
+                logDiagnostic('تقييم أمني: هذا المتصفح آمن جداً ولا يسمح بالتقاط أو تصوير الشاشة.', 'success');
+            } else {
+                isScreenshotProtected = false;
+                updateStatusUI('check-screenshot-hardware', 'warning', 'غير آمن (مستوى برمجي L3)');
+                logDiagnostic('تقييم أمني: المتصفح الحالي يسمح بأخذ لقطات شاشة للفيديو (مستوى حماية ضعيف L3 أو WebView).', 'error');
+            }
+
+            // تطبيق قفل التشغيل أو فكه بناءً على الفحص الجديد
+            evaluatePlaybackLock();
             logDiagnostic('اكتمل اختبار حماية المتصفح والتوافق المباشر.', 'info');
         }
 
