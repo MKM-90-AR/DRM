@@ -50,30 +50,51 @@
 
             // 2. دالة التدمير الشامل (تُستدعى عند اكتشاف أي تلاعب أو فتح أدوات المطورين)
             function crashAndBurn() {
-                // مسح كل شيء في الصفحة واستبداله برسالة
-                document.body.innerHTML = `
-                    <div style='background:#0B0F19;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'>
-                        <i class="fa-solid fa-triangle-exclamation" style="font-size:40px;margin-bottom:15px;"></i>
+                // مسح كل شيء في الصفحة تماماً من الجذور حتى لو تم إغلاق أدوات المطورين لاحقاً
+                document.documentElement.innerHTML = `
+                    <head><title>حظر أمني</title></head>
+                    <body style='background:#0B0F19;height:100vh;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'>
+                        <i class="fa-solid fa-triangle-exclamation" style="font-size:50px;margin-bottom:15px;"></i>
                         <p>تم إيقاف الموقع أمنياً بسبب رصد أدوات المطورين أو محاولة فحص الكود.</p>
-                        <p style="color:#94a3b8;font-size:14px;margin-top:10px;">أغلق أدوات المطورين (DevTools) ثم قم بتحديث الصفحة للعودة.</p>
-                    </div>`;
-                // إدخال المتصفح في حلقة تجميد لا نهائية طالما أن أدوات المطورين مفتوحة
+                        <p style="color:#94a3b8;font-size:14px;margin-top:10px;">الجلسة الحالية دُمرت. أغلق أدوات المطورين (DevTools) ثم قم بتحديث الصفحة يدوياً للعودة.</p>
+                    </body>`;
+                
+                // مسح المفاتيح من الذاكرة لضمان عدم القدرة على سحبها
+                if (typeof PlayerConfigManager !== 'undefined') {
+                    PlayerConfigManager.wipeKeys();
+                }
+
+                // إدخال المتصفح في حلقة تجميد لا نهائية
                 let freeze = true;
+                setInterval(() => { debugger; }, 10);
                 while(freeze) { debugger; }
             }
 
             // 3. منع جميع اختصارات النسخ والحفظ والفحص بقوة (Capture Phase)
             window.addEventListener('keydown', function(e) {
+                const key = (e.key || '').toLowerCase();
+                const keyCode = e.keyCode;
+
                 // F12
-                if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); e.stopPropagation(); return false; }
-                // الاختصارات مع Ctrl أو Cmd (S, U, P, I, J, C, H)
+                if (key === 'f12' || keyCode === 123) { 
+                    e.preventDefault(); e.stopPropagation(); return false; 
+                }
+                
+                // الاختصارات مع Ctrl أو Cmd 
                 if (e.ctrlKey || e.metaKey) {
-                    const key = e.key.toLowerCase();
-                    if (['s', 'u', 'p', 'i', 'j', 'c', 'h'].includes(key)) {
+                    // منع Shift + I أو J أو C (DevTools)
+                    if (e.shiftKey) {
+                        if (['i', 'j', 'c'].includes(key) || [73, 74, 67].includes(keyCode)) {
+                            e.preventDefault(); e.stopPropagation(); crashAndBurn(); return false;
+                        }
+                    }
+                    
+                    // منع S (حفظ), U (سورس كود), P (طباعة), C (نسخ), H (سجل)
+                    if (['s', 'u', 'p', 'c', 'h'].includes(key) || [83, 85, 80, 67, 72].includes(keyCode)) {
                         e.preventDefault(); e.stopPropagation(); return false;
                     }
                 }
-            }, { capture: true });
+            }, { capture: true, passive: false });
 
             document.addEventListener('contextmenu', e => e.preventDefault());
             document.addEventListener('dragstart', e => e.preventDefault());
@@ -101,22 +122,42 @@
         })();
 
         // =========================================================
-        // إعدادات VdoCipher (محمية بواسطة Closure + إزالة من الذاكرة)
+        // إعدادات VdoCipher (تم إخفاء المفاتيح بتشفير محلي لمنع سحبها من سورس كود الصفحة)
         // =========================================================
         const PlayerConfigManager = (function() {
-            // ضع مفاتيحك الجديدة هنا:
-            let otp = "20160313versASE3232VLXae76EYm06x6fhpsT6hjZvmOzcGbtX4rg8aaiaXZixb";
-            let pbInfo = "eyJ2aWRlb0lkIjoiM2JiM2RmYzUyZTZjNDAwNDg5MTQyYmI4NWRkZmI5MzAifQ==";
+            // المفاتيح مقسمة ومعكوسة لمنع البحث عنها في الـ Source Code أو عند تنزيل الصفحة بـ Ctrl+S
+            let isWiped = false;
+            
+            // أجزاء OTP المشفرة والمعكوسة
+            let o1 = "3ESAbrev31306102"; 
+            let o2 = "x60mYE67eaXLV232";
+            let o3 = "GczOmvZjh6Tsphf6";
+            let o4 = "bxiZXaiaa8gr4Xtb";
+
+            // أجزاء PlaybackInfo المشفرة والمعكوسة
+            let p1 = "jIkl0blRia2Jye";
+            let p2 = "yUzYmR2MjMibMio";
+            let p3 = "TM5gD0wANDj6ZTZ";
+            let p4 = "5ImZkR5N4IbMyQ";
+            let p5 = "==QfiAzM";
+
+            const rev = (str) => str.split('').reverse().join('');
 
             return {
                 getKeys: function() {
-                    const keys = { otp: otp, playbackInfo: pbInfo };
-                    return keys;
+                    if (isWiped) return { otp: null, playbackInfo: null };
+                    
+                    // إعادة تجميع المفاتيح في اللحظة الأخيرة فقط
+                    const finalOtp = rev(o1) + rev(o2) + rev(o3) + rev(o4);
+                    const finalPb = rev(p1) + rev(p2) + rev(p3) + rev(p4) + rev(p5);
+                    
+                    return { otp: finalOtp, playbackInfo: finalPb };
                 },
                 wipeKeys: function() {
-                    // تدمير المفاتيح من الذاكرة فور الاستخدام حتى لا تظهر في الكود المحفوظ
-                    otp = null;
-                    pbInfo = null;
+                    // تدمير المفاتيح والمشفرات من الذاكرة فوراً 
+                    o1 = o2 = o3 = o4 = null;
+                    p1 = p2 = p3 = p4 = p5 = null;
+                    isWiped = true;
                 }
             };
         })();
@@ -488,7 +529,7 @@
                 });
 
                 if (tamperingDetected) {
-                    document.body.innerHTML = "<div style='background:#0B0F19;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'><i class='fa-solid fa-triangle-exclamation' style='font-size:40px;margin-bottom:15px;'></i><p>تم اكتشاف تلاعب في الهيكل الأساسي للصفحة. تم قفل الجلسة أمنياً.</p><p style='color:#94a3b8;font-size:14px;margin-top:10px;'>أغلق أدوات المطورين ثم يرجى تحديث الصفحة.</p></div>";
+                    document.documentElement.innerHTML = "<head><title>حظر أمني</title></head><body style='background:#0B0F19;height:100vh;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'><i class='fa-solid fa-triangle-exclamation' style='font-size:50px;margin-bottom:15px;'></i><p>تم اكتشاف تلاعب في الهيكل الأساسي للصفحة. تم قفل الجلسة أمنياً.</p><p style='color:#94a3b8;font-size:14px;margin-top:10px;'>يرجى تحديث الصفحة يدوياً.</p></body>";
                     while(true) { debugger; } // تجميد المتصفح بعد التلاعب
                 }
             });
@@ -497,7 +538,7 @@
         });
 
         function injectPlayer() {
-            // فحص أمني: إذا تم فتح الملف محلياً، نرفض إنشاء المشغل وندمر المفاتيح لكي لا يتمكن من أخذها من الملف المحفوظ
+            // فحص أمني: إذا تم فتح الملف محلياً، نرفض إنشاء المشغل وندمر المفاتيح
             if (window.location.protocol === 'file:') {
                 PlayerConfigManager.wipeKeys();
                 return;
@@ -521,7 +562,7 @@
             const baseUrlDecoded = atob("aHR0cHM6Ly9wbGF5ZXIudmRvY2lwaGVyLmNvbS92Mi8/b3RwPQ==");
             i.src = baseUrlDecoded + keys.otp + "&playbackInfo=" + keys.playbackInfo;
             
-            // مسح المفاتيح نهائياً من الذاكرة العشوائية بمجرد دمجها لمنع سرقتها لو حفظ الصفحة لاحقاً
+            // مسح المفاتيح نهائياً من الذاكرة العشوائية بمجرد دمجها لمنع سرقتها
             PlayerConfigManager.wipeKeys();
 
             i.style.width = '100%';
