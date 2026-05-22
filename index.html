@@ -47,6 +47,26 @@
         .glow-success {
             box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.2);
         }
+        .glow-warning {
+            box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.2);
+        }
+        .glow-danger {
+            box-shadow: 0 0 25px -5px rgba(239, 68, 68, 0.2);
+        }
+        /* تحسين مظهر شريط التمرير */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4f46e5;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
@@ -62,34 +82,83 @@
                     <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
                         محلل ومختبر أنظمة <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">DRM</span>
                     </h1>
-                    <p class="text-xs text-slate-400">المنصة المهنية لفحص توافقية حماية الفيديو الرقمي</p>
+                    <p class="text-xs text-slate-400">المنصة المهنية المتقدمة لفحص وتوافقية حماية الفيديو</p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-400/10 text-indigo-400 border border-indigo-400/20">
-                    <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-indigo-400 animate-ping inline-block ml-1"></span>
-                    جاهز للفحص
+                <span id="environment-badge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-400/10 text-indigo-400 border border-indigo-400/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping inline-block ml-1.5"></span>
+                    <span id="environment-text">جاري فحص البيئة...</span>
                 </span>
             </div>
         </div>
     </header>
 
     <!-- محتوى الصفحة الرئيسي -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
-        <!-- قسم التنبيه التقني المهم -->
-        <div class="mb-8 p-4 bg-amber-950/40 border border-amber-500/30 rounded-xl flex items-start gap-4 text-amber-200">
-            <div class="p-2 bg-amber-500/10 rounded-lg text-amber-400 flex-shrink-0">
-                <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-6">
+
+        <!-- 1. لوحة التنبيهات الذكية للبيئة المحلية ومتصفح Brave (تظهر ديناميكياً) -->
+        <div id="local-file-warning" class="hidden p-5 bg-red-950/40 border border-red-500/30 rounded-2xl flex-col md:flex-row items-start gap-4 text-red-200 glow-danger transition-all duration-300">
+            <div class="p-3 bg-red-500/10 rounded-xl text-red-400 flex-shrink-0">
+                <i class="fa-solid fa-circle-exclamation text-2xl"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="font-bold text-red-300 text-lg">تحذير أمني: تم تشغيل الموقع كملف محلي (Local File)!</h3>
+                <p class="text-sm leading-relaxed text-red-200/90">
+                    أنت تقوم بتشغيل الملف عبر المسار <code class="bg-red-950/80 px-1.5 py-0.5 rounded text-white font-mono break-all text-xs">file://</code>. متصفحات الويب الحديثة (مثل Brave و Chrome) تمنع تشغيل تراخيص وفك تشفير الـ **DRM** وخدمات الـ **EME** عند فتح ملفات الـ HTML بشكل مباشر بدون خادم ويب آمن.
+                </p>
+                <div class="flex flex-wrap gap-2 pt-2">
+                    <span class="text-xs font-semibold px-2.5 py-1 rounded bg-red-500/20 text-red-300">
+                        <i class="fa-solid fa-circle-right ml-1"></i>الحل الأمثل:
+                    </span>
+                    <p class="text-xs text-red-300/90 flex items-center gap-1.5">
+                        قم برفع هذا الملف إلى استضافة مجانية تدعم HTTPS مثل <strong class="text-white underline">GitHub Pages</strong> (كما يظهر في تبويباتك المفتوحة!)، أو قم بتشغيل خادم محلي (مثل إضافة Live Server في VS Code).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="brave-shield-warning" class="hidden p-5 bg-amber-950/40 border border-amber-500/30 rounded-2xl flex-col md:flex-row items-start gap-4 text-amber-200 glow-warning transition-all duration-300">
+            <div class="p-3 bg-amber-500/10 rounded-xl text-amber-400 flex-shrink-0">
+                <i class="fa-brands fa-brave text-2xl"></i>
+            </div>
+            <div class="space-y-2 w-full">
+                <div class="flex justify-between items-start flex-wrap gap-2">
+                    <h3 class="font-bold text-amber-300 text-lg">مستخدم متصفح Brave؟ يرجى مراجعة إعدادات الدروع (Shields)</h3>
+                    <span class="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold border border-amber-500/30">تم اكتشاف متصفح Brave</span>
+                </div>
+                <p class="text-sm leading-relaxed text-amber-200/90">
+                    يقوم متصفح **Brave** افتراضياً بحظر بعض أدوات التتبع وسكربتات التحقق الخارجي (كما يظهر بحظره لـ 4 عناصر في متصفحك). لتجنب شاشات التحميل اللانهائية أو توقف مشغل VdoCipher:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div class="bg-slate-950/60 p-3 rounded-lg border border-slate-800 text-xs space-y-1">
+                        <strong class="text-amber-400 block"><i class="fa-solid fa-toggle-off ml-1"></i> الخطوة 1: إيقاف دروع حماية Brave للموقع</strong>
+                        <p class="text-slate-300 leading-relaxed">اضغط على أيقونة الأسد البرتقالية بجانب شريط العنوان، وقم بإيقاف الدروع (Shields) لهذا الموقع مؤقتاً لتمرير مفتاح التشفير.</p>
+                    </div>
+                    <div class="bg-slate-950/60 p-3 rounded-lg border border-slate-800 text-xs space-y-1">
+                        <strong class="text-amber-400 block"><i class="fa-solid fa-user-shield ml-1"></i> الخطوة 2: السماح بالوصول للمحتوى المحمي</strong>
+                        <p class="text-slate-300 leading-relaxed">توجه إلى إعدادات Brave ← إعدادات المواقع ← المحتوى المحمي (Protected Content) ← وتأكد من تفعيل "السماح للموقع".</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- قسم التنبيه التقني حول صلاحية الـ OTP -->
+        <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-start gap-4 text-slate-300">
+            <div class="p-2 bg-indigo-500/10 rounded-lg text-indigo-400 flex-shrink-0">
+                <i class="fa-solid fa-key text-xl"></i>
             </div>
             <div>
-                <h3 class="font-bold text-amber-300">ملاحظة تقنية هامة حول الـ OTP (One-Time Password)</h3>
-                <p class="text-sm mt-1 leading-relaxed text-amber-200/90">
-                    رابط فيديو <strong class="text-white">VdoCipher</strong> المضمن أدناه يعتمد على آلية تشفير ديناميكية تستدعي رمز OTP و معلومات تشغيل مؤقتة تنتهي صلاحيتها خلال دقائق معدودة لمنع السرقة وإعادة البث. إذا ظهرت لك رسالة خطأ داخل مشغل الفيديو تفيد بانتهاء صلاحية الرمز، فهذا يثبت نجاح التشفير وقوة نظام الـ DRM في صد محاولات الوصول غير المصرح بها!
+                <h3 class="font-bold text-white">معلومات حيوية حول ترخيص تشغيل الفيديو (OTP Validation)</h3>
+                <p class="text-sm mt-1 leading-relaxed text-slate-400">
+                    الفيديو المرفق بالأسفل يعمل عبر بروتوكول <strong class="text-indigo-400">VdoCipher DRM</strong> الذي يتطلب مفتاح OTP مؤقت يتم توليده ديناميكياً من الخادم الخلفي. إذا انتهت صلاحية المفتاح وحصلت على خطأ تشغيل، فهذا دليل قاطع ومثالي على نجاح التشفير الديناميكي للمشغل لحماية المحتوى الرقمي ضد السرقة وإعادة التوجيه!
                 </p>
             </div>
         </div>
 
+        <!-- شبكة العرض والتشخيص -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
             <!-- عمود مشغل الفيديو (60%) -->
             <div class="lg:col-span-7 space-y-6">
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden glow-effect">
@@ -104,14 +173,15 @@
                         <span class="text-xs font-mono text-indigo-400 px-2 py-0.5 rounded bg-indigo-950/50 border border-indigo-900/30">Active DRM iFrame</span>
                     </div>
 
-                    <!-- حاوية الفيديو الجذابة والمستجيبة للمقاسات -->
+                    <!-- حاوية الفيديو المستجيبة للمقاسات وبأعلى معايير الحماية المتوافقة -->
                     <div class="relative w-full aspect-video bg-black flex items-center justify-center">
-                        <!-- الفيديو المطلوب من العميل -->
+                        <!-- تضمين كود الفريم مع إضافة المعايير القصوى للسماح بالمحتوى المحمي والمشفر -->
                         <iframe 
+                            id="drm-player-iframe"
                             src="https://player.vdocipher.com/v2/?otp=20160313versASE3232t47UqURW6XAN7fBpClBzeROeiWNwYwWkI97Qlc6icJJC5&playbackInfo=eyJ2aWRlb0lkIjoiM2JiM2RmYzUyZTZjNDAwNDg5MTQyYmI4NWRkZmI5MzAifQ==" 
                             style="border:0;height:100%;width:100%;" 
                             allowFullScreen="true" 
-                            allow="encrypted-media">
+                            allow="encrypted-media; autoplay; picture-in-picture">
                         </iframe>
                     </div>
 
@@ -119,10 +189,10 @@
                     <div class="p-4 bg-slate-900/60 border-t border-slate-800/80 flex flex-wrap gap-3 justify-between items-center">
                         <div class="flex items-center gap-2 text-xs text-slate-400">
                             <i class="fa-solid fa-circle-info text-indigo-400"></i>
-                            <span>تقنية التشفير المستخدمة: <strong>Widevine L1/L3 & FairPlay</strong></span>
+                            <span>تقنية التشفير المستخدمة: <strong class="text-indigo-300">Widevine L1/L3 & FairPlay</strong></span>
                         </div>
                         <button onclick="reloadPlayer()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs transition duration-200 flex items-center gap-1.5 border border-slate-700">
-                            <i class="fa-solid fa-arrows-rotate"></i>
+                            <i class="fa-solid fa-arrows-rotate animate-spin-slow"></i>
                             إعادة تحميل المشغل
                         </button>
                     </div>
@@ -178,7 +248,7 @@
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-bold text-slate-200">دعم تشفير Google Widevine</h4>
-                                    <p class="text-xs text-slate-400">مستخدم على Chrome, Firefox, Android</p>
+                                    <p class="text-xs text-slate-400">مستخدم على Chrome, Firefox, Android, Brave</p>
                                 </div>
                             </div>
                             <span class="text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
@@ -214,20 +284,25 @@
                     </div>
 
                     <!-- مخرجات الفحص التفصيلية -->
-                    <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 font-mono text-xs text-slate-300 space-y-2">
-                        <div class="flex justify-between border-b border-slate-800 pb-2">
-                            <span class="text-indigo-400 font-bold">تقرير تشخيص النظام المباشر:</span>
-                            <span id="system-time">--:--:--</span>
+                    <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 font-mono text-xs text-slate-300 space-y-3">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <span class="text-indigo-400 font-bold">سجلات التشخيص المباشرة:</span>
+                            <div class="flex gap-2 items-center">
+                                <button onclick="copyLogs()" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-400 px-2 py-0.5 rounded border border-slate-800 flex items-center gap-1 transition">
+                                    <i class="fa-solid fa-copy"></i> نسخ السجل
+                                </button>
+                                <span id="system-time">--:--:--</span>
+                            </div>
                         </div>
-                        <div id="diagnostic-logs" class="space-y-1 h-32 overflow-y-auto custom-scrollbar">
-                            <!-- سيتم حقن سجلات الفحص هنا -->
+                        <div id="diagnostic-logs" class="space-y-1 h-36 overflow-y-auto custom-scrollbar text-right" dir="ltr">
+                            <!-- سيتم حقن سجلات الفحص هنا بشكل منسق -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- قسم التعلم والمعلومات المفيدة حول DRM -->
+        <!-- قسم الدليل التعليمي -->
         <section class="mt-12 bg-slate-900/40 border border-slate-800/60 rounded-2xl p-8">
             <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                 <i class="fa-solid fa-graduation-cap text-indigo-400"></i>
@@ -240,7 +315,7 @@
                     </div>
                     <h3 class="font-bold text-white mb-2">طلب المفتاح والمصادقة</h3>
                     <p class="text-sm text-slate-300 leading-relaxed">
-                        عندما تطلب متصفحك تشغيل فيديو مشفر، يتواصل مع "خادم التراخيص". يقوم الخادم بالتحقق من صحة رمز الـ OTP و الـ PlaybackInfo للتأكد من أنك مستخدم حقيقي مخول للمشاهدة.
+                        عندما يطلب متصفحك تشغيل فيديو مشفر، يتواصل مع "خادم التراخيص". يقوم الخادم بالتحقق من صحة رمز الـ OTP و الـ PlaybackInfo للتأكد من أنك مستخدم حقيقي مخول للمشاهدة.
                     </p>
                 </div>
 
@@ -272,12 +347,12 @@
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <p>© 2026 جميع الحقوق محفوظة لـمنصة اختبار DRM الاحترافية.</p>
             <div class="flex gap-4">
-                <span class="text-xs bg-slate-900 px-3 py-1 rounded-full border border-slate-800">تطوير مخصص لفحص VdoCipher</span>
+                <span class="text-xs bg-slate-900 px-3 py-1 rounded-full border border-slate-800">تطوير مخصص لدعم Brave و بيئة الاختبار المحلية</span>
             </div>
         </div>
     </footer>
 
-    <!-- برمجة فحص توافقية الـ DRM في المتصفح -->
+    <!-- برمجة فحص توافقية الـ DRM وحالة التشغيل -->
     <script>
         // دالة لتحديث الوقت الحالي بالملي ثانية للتأثير التشخيصي
         function updateTime() {
@@ -295,26 +370,43 @@
             
             const logElement = document.createElement('div');
             let colorClass = 'text-slate-400';
-            let prefix = '[معلومة]';
+            let prefix = '[INFO]';
             
             if (type === 'success') {
                 colorClass = 'text-emerald-400';
-                prefix = '[ناجح]';
+                prefix = '[SUCCESS]';
             } else if (type === 'error') {
                 colorClass = 'text-red-400';
-                prefix = '[فشل]';
+                prefix = '[ERROR]';
             } else if (type === 'warning') {
                 colorClass = 'text-amber-400';
-                prefix = '[تحذير]';
+                prefix = '[WARN]';
             }
             
             const now = new Date();
             const timeStamp = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
             
-            logElement.className = `${colorClass} flex gap-1.5 py-0.5`;
-            logElement.innerHTML = `<span class="text-slate-600">[${timeStamp}]</span> <span class="font-bold">${prefix}</span> <span>${message}</span>`;
+            logElement.className = `${colorClass} flex flex-row-reverse justify-end gap-1.5 py-0.5 font-mono text-[11px]`;
+            logElement.innerHTML = `<span>${message}</span> <span class="font-bold">${prefix}</span> <span class="text-slate-600">[${timeStamp}]</span>`;
             logsContainer.appendChild(logElement);
             logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+
+        // دالة نسخ السجل
+        function copyLogs() {
+            const logsContainer = document.getElementById('diagnostic-logs');
+            if (!logsContainer) return;
+            const text = logsContainer.innerText;
+            
+            // استخدام الطريقة المتوافقة والموثوقة داخل بيئات iframe
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            logDiagnostic('تم نسخ سجلات التشخيص بنجاح إلى الحافظة!', 'success');
         }
 
         // دالة لتحديث واجهة عنصر الفحص الفردي
@@ -332,34 +424,70 @@
                 badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
                 badge.innerText = details || 'مدعوم ونشط';
                 container.classList.add('glow-success');
+                container.classList.remove('glow-danger', 'glow-warning');
             } else if (status === 'unsupported') {
                 iconDiv.className = 'w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center status-icon';
                 iconDiv.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
                 
                 badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-red-500/10 text-red-400 border border-red-500/20';
                 badge.innerText = 'غير مدعوم';
-                container.classList.remove('glow-success');
+                container.classList.remove('glow-success', 'glow-warning');
             } else {
                 iconDiv.className = 'w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon';
                 iconDiv.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i>';
                 
                 badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400';
                 badge.innerText = 'جاري الفحص...';
-                container.classList.remove('glow-success');
+                container.classList.remove('glow-success', 'glow-danger', 'glow-warning');
             }
         }
 
         // إعادة تشغيل الـ iframe للفيديو
         function reloadPlayer() {
-            const iframe = document.querySelector('iframe');
+            const iframe = document.getElementById('drm-player-iframe');
             if (iframe) {
                 const currentSrc = iframe.src;
                 iframe.src = '';
-                logDiagnostic('جاري إعادة تشغيل مشغل VdoCipher...', 'warning');
+                logDiagnostic('جاري إعادة تشغيل مشغل VdoCipher والتحقق من التراخيص...', 'warning');
                 setTimeout(() => {
                     iframe.src = currentSrc;
-                    logDiagnostic('تمت إعادة تحميل المشغل المشفر.', 'success');
+                    logDiagnostic('تم إعادة تشغيل الإطار الحامي للفيديو بنجاح.', 'success');
                 }, 400);
+            }
+        }
+
+        // دالة الفحص الذكي للبيئة (هل هو Brave؟ هل هو ملف محلي؟)
+        async function inspectEnvironment() {
+            const isLocalFile = window.location.protocol === 'file:';
+            const isSecure = window.isSecureContext;
+            
+            // التحقق من متصفح Brave
+            let isBraveBrowser = false;
+            if (navigator.brave && typeof navigator.brave.isBrave === 'function') {
+                isBraveBrowser = await navigator.brave.isBrave();
+            }
+
+            // تحديث شارة البيئة بالتوبار
+            const envText = document.getElementById('environment-text');
+            const envBadge = document.getElementById('environment-badge');
+            
+            if (isLocalFile) {
+                envText.innerText = "بيئة تشغيل محلية (تقييد DRM)";
+                envBadge.className = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-400/10 text-red-400 border border-red-400/20";
+                document.getElementById('local-file-warning').classList.remove('hidden');
+                document.getElementById('local-file-warning').classList.add('flex');
+                logDiagnostic('تم اكتشاف تشغيل الصفحة كملف محلي. هذا هو السبب الأساسي لبعض أخطاء فك التشفير.', 'error');
+            } else {
+                envText.innerText = isSecure ? "اتصال آمن ومثالي HTTPS" : "اتصال غير آمن HTTP";
+                envBadge.className = isSecure 
+                    ? "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-400/10 text-emerald-400 border border-emerald-400/20"
+                    : "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-400/10 text-amber-400 border border-amber-400/20";
+            }
+
+            if (isBraveBrowser) {
+                document.getElementById('brave-shield-warning').classList.remove('hidden');
+                document.getElementById('brave-shield-warning').classList.add('flex');
+                logDiagnostic('تم رصد متصفح Brave. يرجى التأكد من تعطيل الدروع (Brave Shields) إن واجهت مشاكل بالمشغل.', 'warning');
             }
         }
 
@@ -372,23 +500,26 @@
             updateStatusUI('check-playready', 'checking');
             updateStatusUI('check-fairplay', 'checking');
 
-            logDiagnostic('بدء عملية تشخيص توافق المتصفح مع معايير DRM المحمية...', 'info');
+            // تشغيل الفحص البيئي
+            await inspectEnvironment();
+
+            logDiagnostic('بدء عملية الفحص الفوري لأنظمة الأمان في جهازك الحالي...', 'info');
 
             // 1. فحص دعم الـ EME الأساسي
             const hasEme = !!(navigator.requestMediaKeySystemAccess);
             if (hasEme) {
                 updateStatusUI('check-eme', 'success');
-                logDiagnostic('واجهة برمجة تطبيقات Encrypted Media Extensions (EME) متوفرة بنجاح.', 'success');
+                logDiagnostic('واجهة الـ EME الأساسية مدعومة بالكامل بالمتصفح.', 'success');
             } else {
                 updateStatusUI('check-eme', 'unsupported');
-                logDiagnostic('المتصفح لا يدعم EME. قد تفشل معظم مقاطع الفيديو المحمية بنظام DRM.', 'error');
+                logDiagnostic('واجهة الـ EME غير موجودة! متصفحك يمنع خدمات فك التشفير تماماً.', 'error');
                 updateStatusUI('check-widevine', 'unsupported');
                 updateStatusUI('check-playready', 'unsupported');
                 updateStatusUI('check-fairplay', 'unsupported');
-                return; // لا داعي لإكمال الفحص إن لم تكن هناك بنية EME أساسية
+                return;
             }
 
-            // الكود المعياري لفحص التوافقية بنماذج فيديو MP4 قياسية
+            // إعداد التكوينات والخيارات للفيديو
             const config = [{
                 initDataTypes: ['cenc'],
                 videoCapabilities: [{
@@ -400,35 +531,34 @@
             try {
                 const access = await navigator.requestMediaKeySystemAccess('com.widevine.alpha', config);
                 updateStatusUI('check-widevine', 'success', 'مدعوم');
-                logDiagnostic('نظام تشفير Google Widevine مدعوم بنجاح في متصفحك.', 'success');
+                logDiagnostic('تم التحقق بنجاح من دعم تشفير Google Widevine DRM.', 'success');
             } catch (e) {
                 updateStatusUI('check-widevine', 'unsupported');
-                logDiagnostic('نظام Google Widevine غير مدعوم في هذا المتصفح (شائع في Safari/iOS).', 'warning');
+                logDiagnostic('تشفير Google Widevine غير مدعوم في المتصفح الحالي.', 'warning');
             }
 
             // 3. فحص دعم Microsoft PlayReady
             try {
                 const access = await navigator.requestMediaKeySystemAccess('com.microsoft.playready', config);
                 updateStatusUI('check-playready', 'success', 'مدعوم');
-                logDiagnostic('نظام تشفير Microsoft PlayReady مدعوم بنجاح.', 'success');
+                logDiagnostic('تم التحقق بنجاح من دعم تشفير Microsoft PlayReady.', 'success');
             } catch (e) {
                 updateStatusUI('check-playready', 'unsupported');
-                logDiagnostic('نظام PlayReady غير مدعوم (هذا طبيعي لغير متصفحات Edge على نظام Windows).', 'info');
+                logDiagnostic('تشفير PlayReady غير مدعوم (هذا طبيعي جداً لغير متصفحات Edge على نظام Windows).', 'info');
             }
 
             // 4. فحص دعم Apple FairPlay
             try {
-                // FairPlay عادة يستلزم واجهة ويب محددة للـ Safari أو معرّف تشفير خاص
                 const access = await navigator.requestMediaKeySystemAccess('com.apple.fps.1_0', config) || 
                                await navigator.requestMediaKeySystemAccess('com.apple.fps', config);
                 updateStatusUI('check-fairplay', 'success', 'مدعوم');
-                logDiagnostic('نظام تشفير Apple FairPlay مدعوم بنجاح في متصفحك.', 'success');
+                logDiagnostic('تم التحقق بنجاح من دعم تشفير Apple FairPlay.', 'success');
             } catch (e) {
                 updateStatusUI('check-fairplay', 'unsupported');
-                logDiagnostic('نظام Apple FairPlay غير مدعوم (هذا طبيعي لغير متصفحات Safari و بيئة Apple).', 'info');
+                logDiagnostic('تشفير Apple FairPlay غير مدعوم (طبيعي جداً خارج بيئة متصفحات Safari/Apple).', 'info');
             }
 
-            logDiagnostic('اكتمل تشخيص حالة بيئة الأمان والـ DRM.', 'info');
+            logDiagnostic('اكتمل اختبار حماية المتصفح والتوافق المباشر.', 'info');
         }
 
         // تشغيل الفحص فور تحميل الصفحة بالكامل
