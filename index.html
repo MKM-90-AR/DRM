@@ -39,6 +39,11 @@
             font-family: 'Cairo', sans-serif;
             background-color: #0B0F19;
             color: #E2E8F0;
+            /* منع تحديد النص لتصعيب النسخ */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         /* تأثيرات الإضاءة الخلفية */
         .glow-effect {
@@ -68,6 +73,47 @@
             background: #4f46e5;
         }
     </style>
+    
+    <!-- بروتوكولات الأمان العالية ضد التلاعب والـ Debugging -->
+    <script>
+        (function blockDevToolsAndTampering() {
+            // 1. تجميد كائن console لمنع تنفيذ الأكواد أو عرض المخرجات
+            try {
+                const noop = () => {};
+                const fakeConsole = { log: noop, info: noop, warn: noop, error: noop, table: noop, clear: noop };
+                Object.defineProperty(window, 'console', {
+                    value: Object.freeze(fakeConsole),
+                    writable: false,
+                    configurable: false
+                });
+            } catch(e) {}
+
+            // 2. منع النقر الأيمن
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            
+            // 3. منع جميع اختصارات الكيبورد الخاصة بالمطورين
+            document.addEventListener('keydown', e => {
+                if (e.key === 'F12' || 
+                   (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+                   (e.ctrlKey && (e.key === 'U' || e.key === 'S' || e.key === 'P' || e.key === 'H'))) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            });
+
+            // 4. فخ المتصفح (Debugger Trap) مع قياس الوقت لاكتشاف تجميد الشبكة/الكونسول
+            setInterval(() => {
+                const start = performance.now();
+                debugger; // إذا فتح أدوات المطورين، سيتوقف هنا
+                const elapsed = performance.now() - start;
+                // إذا استغرق الأمر وقتاً (بسبب توقف debugger أو بطء مقصود) سيتم تدمير الموقع
+                if (elapsed > 100) {
+                    document.body.innerHTML = "<div style='background:#0B0F19;height:100vh;display:flex;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:24px;direction:rtl;'>تم اكتشاف محاولة اختراق أو فتح أدوات المطورين. تم تعطيل النظام نهائياً. يرجى تحديث الصفحة.</div>";
+                }
+            }, 50);
+        })();
+    </script>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
@@ -83,7 +129,7 @@
                         محلل ومختبر أنظمة <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">DRM</span>
                     </h1>
                     <p class="text-xs text-slate-400">
-                        المنصة المهنية المتقدمة بواسطة 
+                        المنصة المهنية المتقدمة والمحمية بواسطة 
                         <a href="https://link.me/mkm" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline font-bold">
                             هاشم عمر (mkm)
                         </a>
@@ -157,16 +203,12 @@
                     </div>
                     <div>
                         <h3 class="text-lg font-bold text-white">سياسة الحظر الأمنية لمنع لقطات الشاشة (Strict Screenshot Protection)</h3>
-                        <p class="text-sm text-slate-300">ميزة حصرية مبرمجة للتأكد من أن الفيديو لا يعمل على المتصفحات التي تسمح بالتصوير (مثل Brave L3 و Instagram)</p>
+                        <p class="text-sm text-slate-300">هذه الميزة <strong class="text-red-400">إجبارية ودائمة</strong>. لا يمكن إيقافها، ولن يعمل الفيديو إلا على المتصفحات التي تمتلك أماناً عتادياً.</p>
                     </div>
                 </div>
-                <!-- مفتاح التحكم الذكي لسياسة الحظر -->
-                <div class="flex items-center gap-3 bg-slate-950/80 px-4 py-2.5 rounded-xl border border-slate-800">
-                    <span class="text-xs font-semibold text-slate-300">وضع الحظر الصارم (تأمين اللقطات):</span>
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="strict-mode-toggle" class="sr-only peer" checked onchange="toggleStrictMode()">
-                        <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
-                    </label>
+                <!-- تم إزالة زر الإيقاف والتشغيل تماماً بناءً على طلبك -->
+                <div class="flex items-center gap-2 bg-red-950/80 px-4 py-2.5 rounded-xl border border-red-800 text-red-400 text-xs font-bold">
+                    <i class="fa-solid fa-lock"></i> الحظر الصارم نشط إجبارياً
                 </div>
             </div>
             
@@ -177,11 +219,11 @@
                 </div>
                 <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
                     <strong class="text-amber-400 block mb-1"><i class="fa-solid fa-triangle-exclamation ml-1"></i> Brave (معرض للالتقاط ⚠️)</strong>
-                    يستخدم نظام تشفير برمجياً (Widevine L3) لا يمتلك صلاحية لبطاقة الشاشة، مما يتيح أخذ لقطات شاشة للفيديو بشكل عادي.
+                    يستخدم نظام تشفير برمجياً (Widevine L3) لا يمتلك صلاحية لبطاقة الشاشة، <span class="text-red-400">ولذلك سيتم حظر التشغيل عليه تماماً</span>.
                 </div>
                 <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
                     <strong class="text-red-400 block mb-1"><i class="fa-solid fa-circle-xmark ml-1"></i> متصفح إنستغرام (خطر ❌)</strong>
-                    متصفح داخلي (WebView) مجرد من تراخيص الأمان والـ DRM العتادي، ويسهل تصوير شاشته بالكامل دون أي قيود.
+                    متصفح داخلي (WebView) مجرد من تراخيص الأمان والـ DRM العتادي، <span class="text-red-400">محظور التشغيل عليه بشكل كامل</span>.
                 </div>
             </div>
         </div>
@@ -204,32 +246,23 @@
                     </div>
 
                     <!-- حاوية الفيديو المستجيبة للمقاسات وبأعلى معايير الحماية المتوافقة -->
-                    <div class="relative w-full aspect-video bg-black flex items-center justify-center">
+                    <div id="video-wrapper" class="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden">
                         
-                        <!-- إطار الفيديو الفعلي -->
-                        <iframe 
-                            id="drm-player-iframe"
-                            src="https://player.vdocipher.com/v2/?otp=20160313versASE3232t47UqURW6XAN7fBpClBzeROeiWNwYwWkI97Qlc6icJJC5&playbackInfo=eyJ2aWRlb0lkIjoiM2JiM2RmYzUyZTZjNDAwNDg5MTQyYmI4NWRkZmI5MzAifQ==" 
-                            style="border:0;height:100%;width:100%;" 
-                            allowFullScreen="true" 
-                            class="transition-opacity duration-300"
-                            allow="encrypted-media; autoplay; picture-in-picture">
-                        </iframe>
-
-                        <!-- شاشة الحظر الصارم (تظهر عند عدم تفعيل حماية لقطات الشاشة وتفعيل وضع الحظر) -->
+                        <!-- تم إزالة الـ iframe الثابت لتشفيره وبنائه برمجياً بالأسفل لحماية الرابط -->
+                        
+                        <!-- شاشة الحظر الصارم (تظهر عند عدم تلبيات متطلبات التشفير العتادي) -->
                         <div id="security-block-overlay" class="hidden absolute inset-0 bg-slate-950 flex-col items-center justify-center text-center p-6 z-20 transition-all duration-300">
                             <div class="w-16 h-16 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center text-3xl mb-4 animate-bounce">
                                 <i class="fa-solid fa-lock"></i>
                             </div>
                             <h4 class="text-lg font-bold text-red-400 mb-2">تم حظر تشغيل الفيديو أمنياً!</h4>
                             <p class="text-xs text-slate-300 max-w-md leading-relaxed">
-                                تم تفعيل سياسة **الحظر الصارم ضد تصوير الشاشة** بواسطة المطور <strong class="text-indigo-400">mkm</strong>. متصفحك الحالي (مثل Brave أو Instagram WebView) يفتقر لنظام حماية التشفير العتادي اللامتناهي (L1) مما يسمح بأخذ لقطات شاشة للفيديو.
+                                يتم تطبيق سياسة **الحظر الصارم ضد تصوير الشاشة الإجبارية** بواسطة المطور <strong class="text-indigo-400">mkm</strong>. متصفحك الحالي (مثل Brave أو Instagram WebView) يفتقر لنظام حماية التشفير العتادي اللامتناهي (L1) مما يسمح بأخذ لقطات شاشة للفيديو.
                             </p>
                             <div class="mt-4 p-3 bg-red-950/20 border border-red-500/20 rounded-xl text-right text-xs text-red-300 space-y-1">
                                 <p>🔒 **لتشغيل الفيديو بنجاح، يرجى اتباع الآتي:**</p>
-                                <p class="text-slate-400">1. استخدم متصفح **Microsoft Edge** على الكمبيوتر (مع تفعيل التسريع العتادي) حيث يتم حظر اللقطات تماماً وتظهر سوداء.</p>
-                                <p class="text-slate-400">2. على الهاتف، استخدم متصفح **Safari** للآيفون أو متصفح **Chrome** مع تفعيل حماية المحتوى لضمان تشفير L1 العتادي.</p>
-                                <p class="text-slate-400">3. أو قم بتعطيل "وضع الحظر الصارم" من الأعلى للاختبار والتجربة فقط.</p>
+                                <p class="text-slate-400">1. استخدم متصفح **Microsoft Edge** على الكمبيوتر (مع تفعيل التسريع العتادي) حيث يتم حظر اللقطات تماماً.</p>
+                                <p class="text-slate-400">2. على الهاتف، استخدم متصفح **Safari** للآيفون أو متصفح **Chrome** مع تفعيل حماية المحتوى.</p>
                             </div>
                         </div>
                     </div>
@@ -428,21 +461,92 @@
 
     <!-- برمجة فحص توافقية الـ DRM وحالة التشغيل ولقطات الشاشة -->
     <script>
-        // تخزين متغيرات حالة حماية الشاشة
+        // متغيرات للتحكم الأمني
         let isScreenshotProtected = false;
-        let isStrictModeActive = true;
+        let isIntentionalDOMChange = false; // لمنع تفجير الصفحة عند إجراء تعديل برمجي شرعي
+
+        // ----------------------------------------------------
+        // مراقب التلاعب بالصفحة (إذا فتح أدوات المطورين وحذف عنصر)
+        // ----------------------------------------------------
+        window.addEventListener('load', () => {
+            const securityObserver = new MutationObserver((mutations) => {
+                let tamperingDetected = false;
+                mutations.forEach((mutation) => {
+                    // إذا كان التغيير مسموحاً به داخلياً (عبر سكريبتاتنا)، يتم تجاهله
+                    if (isIntentionalDOMChange) return;
+
+                    // تجاهل عمليات الإضافة إلى سجل التشخيص
+                    if (mutation.target.id === 'diagnostic-logs' || mutation.target.closest('#diagnostic-logs')) return;
+
+                    // إذا قام بحذف عنصر (Element وليس مجرد نص) نعتبره تلاعباً ونقوم بالإغلاق
+                    if (mutation.removedNodes.length > 0) {
+                        mutation.removedNodes.forEach(node => {
+                            if (node.nodeType === 1 && !node.closest('#diagnostic-logs')) { // Node.ELEMENT_NODE
+                                tamperingDetected = true;
+                            }
+                        });
+                    }
+                });
+
+                if (tamperingDetected) {
+                    // تدمير الصفحة نهائياً لعدم السماح بالتصفح بعد العبث بأدوات المطورين
+                    document.body.innerHTML = "<div style='background:#0B0F19;height:100vh;display:flex;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:24px;direction:rtl;'>تم اكتشاف تلاعب في كود الصفحة (DOM). تم قفل الجلسة أمنياً. يرجى تحديث الصفحة.</div>";
+                }
+            });
+            
+            securityObserver.observe(document.body, { childList: true, subtree: true });
+        });
+
+        // تشفير الرابط (مقلوب ومحول Base64) لكي لا يظهر بوضوح في أدوات Network بسهولة
+        function injectPlayer() {
+            const wrapper = document.getElementById('video-wrapper');
+            if (document.getElementById('drm-player-iframe')) return; // موجود مسبقاً
+            
+            isIntentionalDOMChange = true; // السماح بالإضافة
+            
+            const i = document.createElement('iframe');
+            i.id = 'drm-player-iframe';
+            
+            // الكود المعكوس للرابط لتضليل القراءة السطحية للسكربت
+            const _0xUrl = "=0TQRfiAzM5ImZkRWN4ImYyQTM5gDNwADNkZTVyUzYmR2MiJpIkl0YlRWayJyeW5wbJckcJi6clQ79IkWwYwNWieORzeBlCpBf7NAX6WRUqU74t232ESAsrev31306102=ptob?/2v/moc.rehpicodv.reyalp//:sptth".split('').reverse().join('');
+            
+            i.src = atob(_0xUrl);
+            i.style.border = '0';
+            i.style.height = '100%';
+            i.style.width = '100%';
+            i.allowFullscreen = true;
+            i.allow = "encrypted-media; autoplay; picture-in-picture";
+            i.className = "absolute inset-0 z-10 transition-opacity duration-300";
+            
+            wrapper.appendChild(i);
+            
+            setTimeout(() => { isIntentionalDOMChange = false; }, 50);
+        }
+
+        function removePlayer() {
+            const iframe = document.getElementById('drm-player-iframe');
+            if (iframe) {
+                isIntentionalDOMChange = true; // السماح بالحذف الداخلي الآمن
+                iframe.remove();
+                setTimeout(() => { isIntentionalDOMChange = false; }, 50);
+            }
+        }
+
 
         // دالة لتحديث الوقت الحالي بالملي ثانية للتأثير التشخيصي
         function updateTime() {
+            isIntentionalDOMChange = true;
             const now = new Date();
             const timeString = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
             const timeElement = document.getElementById('system-time');
             if(timeElement) timeElement.innerText = timeString;
+            setTimeout(() => { isIntentionalDOMChange = false; }, 10);
         }
         setInterval(updateTime, 100);
 
         // دالة لإضافة السجلات إلى لوحة التحكم
         function logDiagnostic(message, type = 'info') {
+            isIntentionalDOMChange = true;
             const logsContainer = document.getElementById('diagnostic-logs');
             if (!logsContainer) return;
             
@@ -468,10 +572,12 @@
             logElement.innerHTML = `<span>${message}</span> <span class="font-bold">${prefix}</span> <span class="text-slate-600">[${timeStamp}]</span>`;
             logsContainer.appendChild(logElement);
             logsContainer.scrollTop = logsContainer.scrollHeight;
+            setTimeout(() => { isIntentionalDOMChange = false; }, 10);
         }
 
         // دالة نسخ السجل
         function copyLogs() {
+            isIntentionalDOMChange = true;
             const logsContainer = document.getElementById('diagnostic-logs');
             if (!logsContainer) return;
             const text = logsContainer.innerText;
@@ -484,10 +590,12 @@
             document.body.removeChild(el);
             
             logDiagnostic('تم نسخ سجلات التشخيص بنجاح إلى الحافظة!', 'success');
+            setTimeout(() => { isIntentionalDOMChange = false; }, 50);
         }
 
-        // دالة لتحديث واجهة عنصر الفحص الفردي
+        // دالة لتحديث واجهة عنصر الفحص الفردي (مغلفة أمنياً)
         function updateStatusUI(elementId, status, details = '') {
+            isIntentionalDOMChange = true;
             const container = document.getElementById(elementId);
             if (!container) return;
 
@@ -526,24 +634,26 @@
                 badge.innerText = 'جاري الفحص...';
                 container.classList.remove('glow-success', 'glow-danger', 'glow-warning');
             }
+            setTimeout(() => { isIntentionalDOMChange = false; }, 20);
         }
 
         // إعادة تشغيل الـ iframe للفيديو
         function reloadPlayer() {
-            const iframe = document.getElementById('drm-player-iframe');
-            if (iframe) {
-                const currentSrc = iframe.src;
-                iframe.src = '';
-                logDiagnostic('جاري إعادة تشغيل مشغل VdoCipher والتحقق من التراخيص...', 'warning');
-                setTimeout(() => {
-                    iframe.src = currentSrc;
+            removePlayer();
+            logDiagnostic('جاري إعادة تشغيل مشغل VdoCipher والتحقق من التراخيص...', 'warning');
+            setTimeout(() => {
+                if (isScreenshotProtected) {
+                    injectPlayer();
                     logDiagnostic('تم إعادة تشغيل الإطار الحامي للفيديو بنجاح.', 'success');
-                }, 400);
-            }
+                } else {
+                    logDiagnostic('لا يمكن إعادة التشغيل، بيئتك غير آمنة.', 'error');
+                }
+            }, 400);
         }
 
         // دالة الفحص الذكي للبيئة (هل هو Brave؟ هل هو ملف محلي؟)
         async function inspectEnvironment() {
+            isIntentionalDOMChange = true;
             const isLocalFile = window.location.protocol === 'file:';
             const isSecure = window.isSecureContext;
             
@@ -575,40 +685,37 @@
                 document.getElementById('brave-shield-warning').classList.add('flex');
                 logDiagnostic('تم رصد متصفح Brave. يرجى التأكد من تعطيل الدروع (Brave Shields) وتفعيل التسريع العتادي.', 'warning');
             }
+            setTimeout(() => { isIntentionalDOMChange = false; }, 20);
         }
 
-        // تبديل تفعيل وتعطيل وضع الحظر الصارم يدوياً
-        function toggleStrictMode() {
-            const toggle = document.getElementById('strict-mode-toggle');
-            isStrictModeActive = toggle.checked;
-            logDiagnostic(`تم ${isStrictModeActive ? 'تفعيل' : 'تعطيل'} وضع الحظر الصارم للقطات الشاشة.`, isStrictModeActive ? 'warning' : 'info');
-            evaluatePlaybackLock();
-        }
-
-        // تقييم إغلاق أو فتح المشغل بناءً على الأمان العتادي ومستوى الحماية
+        // تقييم إغلاق أو فتح المشغل بناءً على الأمان العتادي
         function evaluatePlaybackLock() {
+            isIntentionalDOMChange = true;
             const overlay = document.getElementById('security-block-overlay');
-            const iframe = document.getElementById('drm-player-iframe');
             
-            if (isStrictModeActive && !isScreenshotProtected) {
-                // تفعيل القفل وحظر الإطار
+            if (!isScreenshotProtected) {
+                // تفعيل القفل وحظر الإطار ومحوه بالكامل من الـ DOM لمنع استخراجه
+                removePlayer();
                 overlay.classList.remove('hidden');
                 overlay.classList.add('flex');
-                iframe.style.opacity = '0.05';
                 logDiagnostic('تم قفل تشغيل الفيديو تلقائياً! متصفحك يفتقر للحماية الرسومية ضد لقطات الشاشة.', 'error');
             } else {
-                // إزالة القفل وتفعيل الإطار
+                // إزالة القفل وحقن الإطار برمجياً
+                injectPlayer();
                 overlay.classList.add('hidden');
                 overlay.classList.remove('flex');
-                iframe.style.opacity = '1';
                 logDiagnostic('وضع تشغيل الفيديو نشط الآن.', 'success');
             }
+            setTimeout(() => { isIntentionalDOMChange = false; }, 20);
         }
 
         // دالة تشخيص الـ DRM باستخدام بروتوكول EME الحقيقي من المتصفح
         async function runDrmCheck() {
             // تصفير الواجهات والسجلات
+            isIntentionalDOMChange = true;
             document.getElementById('diagnostic-logs').innerHTML = '';
+            setTimeout(() => { isIntentionalDOMChange = false; }, 10);
+            
             updateStatusUI('check-eme', 'checking');
             updateStatusUI('check-screenshot-hardware', 'checking');
             updateStatusUI('check-widevine', 'checking');
@@ -711,7 +818,7 @@
                 logDiagnostic('تحذير: تم الكشف عن متصفح مدمج لتطبيقات التواصل (Instagram/Facebook WebView). يسهل تصوير شاشته.', 'error');
             }
 
-            // تحديد النتيجة النهائية لحماية لقطات الشاشة وتطبيق سياسة القفل
+            // تحديد النتيجة النهائية لحماية لقطات الشاشة وتطبيق سياسة القفل الإجبارية
             if ((supportsWidevineL1 || supportsPlayReady || supportsFairPlay) && !isWebView) {
                 isScreenshotProtected = true;
                 updateStatusUI('check-screenshot-hardware', 'success', 'آمن تماماً (مستوى عتادي)');
