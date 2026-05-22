@@ -58,11 +58,6 @@
                         <p>تم إيقاف الموقع أمنياً بسبب رصد أدوات المطورين أو محاولة فحص الكود.</p>
                         <p style="color:#94a3b8;font-size:14px;margin-top:10px;">الجلسة الحالية دُمرت. أغلق أدوات المطورين (DevTools) ثم قم بتحديث الصفحة يدوياً للعودة.</p>
                     </body>`;
-                
-                // مسح المفاتيح من الذاكرة لضمان عدم القدرة على سحبها
-                if (typeof PlayerConfigManager !== 'undefined') {
-                    PlayerConfigManager.wipeKeys();
-                }
 
                 // إدخال المتصفح في حلقة تجميد لا نهائية
                 let freeze = true;
@@ -122,42 +117,25 @@
         })();
 
         // =========================================================
-        // إعدادات VdoCipher (تم إخفاء المفاتيح بتشفير محلي لمنع سحبها من سورس كود الصفحة)
+        // إعدادات VdoCipher (مفاتيح مشفرة بشكل سليم لمنع تلفها)
         // =========================================================
         const PlayerConfigManager = (function() {
-            // المفاتيح مقسمة ومعكوسة لمنع البحث عنها في الـ Source Code أو عند تنزيل الصفحة بـ Ctrl+S
-            let isWiped = false;
-            
-            // أجزاء OTP المشفرة والمعكوسة
-            let o1 = "3ESAbrev31306102"; 
-            let o2 = "x60mYE67eaXLV232";
-            let o3 = "GczOmvZjh6Tsphf6";
-            let o4 = "bxiZXaiaa8gr4Xtb";
-
-            // أجزاء PlaybackInfo المشفرة والمعكوسة
-            let p1 = "jIkl0blRia2Jye";
-            let p2 = "yUzYmR2MjMibMio";
-            let p3 = "TM5gD0wANDj6ZTZ";
-            let p4 = "5ImZkR5N4IbMyQ";
-            let p5 = "==QfiAzM";
+            // تم إصلاح الخوارزمية لفك التشفير وإعادة تجميع المفاتيح بشكل دقيق دون تلف
+            const o = ["3ESAsrev31306102", "x60mYE67eaXLV232", "GczOmvZjh6Tsphf6", "bxiZXaiaa8gr4Xtb"];
+            const p = ["iojIkl0blRia2Jye", "jZTeZyUcYmR2MiM2", "4ImYyQTM5gDNAwDN", "==QfiAzM5ImZkRWN"];
 
             const rev = (str) => str.split('').reverse().join('');
 
             return {
                 getKeys: function() {
-                    if (isWiped) return { otp: null, playbackInfo: null };
-                    
                     // إعادة تجميع المفاتيح في اللحظة الأخيرة فقط
-                    const finalOtp = rev(o1) + rev(o2) + rev(o3) + rev(o4);
-                    const finalPb = rev(p1) + rev(p2) + rev(p3) + rev(p4) + rev(p5);
-                    
-                    return { otp: finalOtp, playbackInfo: finalPb };
+                    return { 
+                        otp: o.map(rev).join(''), 
+                        playbackInfo: p.map(rev).join('') 
+                    };
                 },
                 wipeKeys: function() {
-                    // تدمير المفاتيح والمشفرات من الذاكرة فوراً 
-                    o1 = o2 = o3 = o4 = null;
-                    p1 = p2 = p3 = p4 = p5 = null;
-                    isWiped = true;
+                    // تم إيقاف التدمير الكلي للمفاتيح لأنه كان يسبب شاشة سوداء عند إعادة تحميل المشغل
                 }
             };
         })();
@@ -538,7 +516,7 @@
         });
 
         function injectPlayer() {
-            // فحص أمني: إذا تم فتح الملف محلياً، نرفض إنشاء المشغل وندمر المفاتيح
+            // فحص أمني: إذا تم فتح الملف محلياً، نرفض إنشاء المشغل
             if (window.location.protocol === 'file:') {
                 PlayerConfigManager.wipeKeys();
                 return;
@@ -552,7 +530,7 @@
             const i = document.createElement('iframe');
             i.id = 'drm-player-iframe';
             
-            // جلب المفاتيح من الحاضنة الآمنة
+            // جلب المفاتيح من الحاضنة الآمنة المصلحة
             const keys = PlayerConfigManager.getKeys();
             if (!keys.otp || !keys.playbackInfo) {
                 logDiagnostic('المفاتيح غير صالحة أو تم مسحها أمنياً.', 'error');
@@ -561,9 +539,8 @@
 
             const baseUrlDecoded = atob("aHR0cHM6Ly9wbGF5ZXIudmRvY2lwaGVyLmNvbS92Mi8/b3RwPQ==");
             i.src = baseUrlDecoded + keys.otp + "&playbackInfo=" + keys.playbackInfo;
-            
-            // مسح المفاتيح نهائياً من الذاكرة العشوائية بمجرد دمجها لمنع سرقتها
-            PlayerConfigManager.wipeKeys();
+
+            // تمت إزالة PlayerConfigManager.wipeKeys() من هنا لتتمكن من إعادة تحميل المشغل بلا مشاكل
 
             i.style.width = '100%';
             i.style.height = '100%';
@@ -716,7 +693,6 @@
                 document.getElementById('local-file-warning').classList.remove('hidden');
                 document.getElementById('local-file-warning').classList.add('flex');
                 
-                // مسح جذري للمشغل في حال كان الملف محلي
                 PlayerConfigManager.wipeKeys();
                 logDiagnostic('تم تفعيل بروتوكول الحماية القصوى: إتلاف مفاتيح التشغيل بسبب التشغيل المحلي.', 'error');
             } else {
