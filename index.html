@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة اختبار وتشخيص أنظمة حماية المحتوى الرقمي DRM</title>
+    <!-- تضمين خط Cairo الجميل للمحتوى العربي -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- مكتبة Tailwind CSS للتنسيق العصري -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- مكتبة FontAwesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        drm: {
+                            dark: '#0B0F19',
+                            card: '#161B26',
+                            accent: '#6366F1',
+                            success: '#10B981',
+                            warning: '#F59E0B',
+                            danger: '#EF4444'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #0B0F19;
+            color: #E2E8F0;
+        }
+        /* تأثيرات الإضاءة الخلفية */
+        .glow-effect {
+            box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.2);
+        }
+        .glow-success {
+            box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- الترويسة (Header) -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="p-2 bg-indigo-600/20 text-indigo-400 rounded-lg border border-indigo-500/30">
+                    <i class="fa-solid fa-shield-halved text-2xl animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                        محلل ومختبر أنظمة <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">DRM</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">المنصة المهنية لفحص توافقية حماية الفيديو الرقمي</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-400/10 text-indigo-400 border border-indigo-400/20">
+                    <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-indigo-400 animate-ping inline-block ml-1"></span>
+                    جاهز للفحص
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- محتوى الصفحة الرئيسي -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <!-- قسم التنبيه التقني المهم -->
+        <div class="mb-8 p-4 bg-amber-950/40 border border-amber-500/30 rounded-xl flex items-start gap-4 text-amber-200">
+            <div class="p-2 bg-amber-500/10 rounded-lg text-amber-400 flex-shrink-0">
+                <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-amber-300">ملاحظة تقنية هامة حول الـ OTP (One-Time Password)</h3>
+                <p class="text-sm mt-1 leading-relaxed text-amber-200/90">
+                    رابط فيديو <strong class="text-white">VdoCipher</strong> المضمن أدناه يعتمد على آلية تشفير ديناميكية تستدعي رمز OTP و معلومات تشغيل مؤقتة تنتهي صلاحيتها خلال دقائق معدودة لمنع السرقة وإعادة البث. إذا ظهرت لك رسالة خطأ داخل مشغل الفيديو تفيد بانتهاء صلاحية الرمز، فهذا يثبت نجاح التشفير وقوة نظام الـ DRM في صد محاولات الوصول غير المصرح بها!
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- عمود مشغل الفيديو (60%) -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden glow-effect">
+                    <!-- عنوان نافذة المشغل -->
+                    <div class="bg-slate-950/80 px-4 py-3 border-b border-slate-800/80 flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                            <span class="text-xs text-slate-400 mr-2">مشغل الفيديو المشفر (VdoCipher DRM Player)</span>
+                        </div>
+                        <span class="text-xs font-mono text-indigo-400 px-2 py-0.5 rounded bg-indigo-950/50 border border-indigo-900/30">Active DRM iFrame</span>
+                    </div>
+
+                    <!-- حاوية الفيديو الجذابة والمستجيبة للمقاسات -->
+                    <div class="relative w-full aspect-video bg-black flex items-center justify-center">
+                        <!-- الفيديو المطلوب من العميل -->
+                        <iframe 
+                            src="https://player.vdocipher.com/v2/?otp=20160313versASE3232t47UqURW6XAN7fBpClBzeROeiWNwYwWkI97Qlc6icJJC5&playbackInfo=eyJ2aWRlb0lkIjoiM2JiM2RmYzUyZTZjNDAwNDg5MTQyYmI4NWRkZmI5MzAifQ==" 
+                            style="border:0;height:100%;width:100%;" 
+                            allowFullScreen="true" 
+                            allow="encrypted-media">
+                        </iframe>
+                    </div>
+
+                    <!-- أزرار تحكم مضافة وإرشادية للمشغل -->
+                    <div class="p-4 bg-slate-900/60 border-t border-slate-800/80 flex flex-wrap gap-3 justify-between items-center">
+                        <div class="flex items-center gap-2 text-xs text-slate-400">
+                            <i class="fa-solid fa-circle-info text-indigo-400"></i>
+                            <span>تقنية التشفير المستخدمة: <strong>Widevine L1/L3 & FairPlay</strong></span>
+                        </div>
+                        <button onclick="reloadPlayer()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs transition duration-200 flex items-center gap-1.5 border border-slate-700">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                            إعادة تحميل المشغل
+                        </button>
+                    </div>
+                </div>
+
+                <!-- معلومات تفصيلية عن نظام التشفير المستخدم -->
+                <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-circle-question text-indigo-400"></i>
+                        كيف يمنع هذا النظام تسجيل الشاشة والقرصنة؟
+                    </h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        عند تشغيل هذا الفيديو، يقوم نظام <strong class="text-indigo-400">VdoCipher</strong> بالتفاوض مباشرة مع بيئة التشفير في جهازك (مثل رقاقة الهاتف أو نظام الأمان بالمتصفح). إذا حاولت استخدام برامج تصوير الشاشة مثل OBS أو لقطات الشاشة العادية، ستتحول شاشة مشغل الفيديو تلقائياً إلى <strong class="text-red-400">اللون الأسود الكامل</strong>، وذلك لأن بطاقة الرسوميات تمنع فك تشفير الفيديو في المسار غير المحمي.
+                    </p>
+                </div>
+            </div>
+
+            <!-- عمود لوحة التشخيص الذكية (40%) -->
+            <div class="lg:col-span-5 space-y-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 glow-effect space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-vial-virus text-indigo-400"></i>
+                            فحص بيئة المتصفح الحالية
+                        </h2>
+                        <button onclick="runDrmCheck()" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition duration-200 flex items-center gap-1">
+                            <i class="fa-solid fa-play"></i>
+                            إعادة الفحص
+                        </button>
+                    </div>
+
+                    <!-- نظام الفحص البرمجي التفاعلي -->
+                    <div class="space-y-4">
+                        <!-- فحص الـ EME -->
+                        <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 flex items-center justify-between" id="check-eme">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon">
+                                    <i class="fa-solid fa-spinner animate-spin"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-200">دعم واجهة EME بالمتصفح</h4>
+                                    <p class="text-xs text-slate-400">Encrypted Media Extensions</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
+                        </div>
+
+                        <!-- فحص Google Widevine -->
+                        <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 flex items-center justify-between" id="check-widevine">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon">
+                                    <i class="fa-solid fa-spinner animate-spin"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-200">دعم تشفير Google Widevine</h4>
+                                    <p class="text-xs text-slate-400">مستخدم على Chrome, Firefox, Android</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
+                        </div>
+
+                        <!-- فحص Microsoft PlayReady -->
+                        <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 flex items-center justify-between" id="check-playready">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon">
+                                    <i class="fa-solid fa-spinner animate-spin"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-200">دعم تشفير MS PlayReady</h4>
+                                    <p class="text-xs text-slate-400">مستخدم على Windows & Edge</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
+                        </div>
+
+                        <!-- فحص Apple FairPlay -->
+                        <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 flex items-center justify-between" id="check-fairplay">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon">
+                                    <i class="fa-solid fa-spinner animate-spin"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-200">دعم تشفير Apple FairPlay</h4>
+                                    <p class="text-xs text-slate-400">مستخدم على Safari, iOS & macOS</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
+                        </div>
+                    </div>
+
+                    <!-- مخرجات الفحص التفصيلية -->
+                    <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 font-mono text-xs text-slate-300 space-y-2">
+                        <div class="flex justify-between border-b border-slate-800 pb-2">
+                            <span class="text-indigo-400 font-bold">تقرير تشخيص النظام المباشر:</span>
+                            <span id="system-time">--:--:--</span>
+                        </div>
+                        <div id="diagnostic-logs" class="space-y-1 h-32 overflow-y-auto custom-scrollbar">
+                            <!-- سيتم حقن سجلات الفحص هنا -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- قسم التعلم والمعلومات المفيدة حول DRM -->
+        <section class="mt-12 bg-slate-900/40 border border-slate-800/60 rounded-2xl p-8">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-graduation-cap text-indigo-400"></i>
+                الدليل المعرفي: ما هو الـ DRM وكيف يعمل مع VdoCipher؟
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800">
+                    <div class="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-key text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-2">طلب المفتاح والمصادقة</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        عندما تطلب متصفحك تشغيل فيديو مشفر، يتواصل مع "خادم التراخيص". يقوم الخادم بالتحقق من صحة رمز الـ OTP و الـ PlaybackInfo للتأكد من أنك مستخدم حقيقي مخول للمشاهدة.
+                    </p>
+                </div>
+
+                <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800">
+                    <div class="w-10 h-10 bg-emerald-500/10 text-emerald-400 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-lock text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-2">تشفير عتادي وبرمجي</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        تتنوع مستويات الحماية. على أندرويد وشاشات الذكية، يتم فرض حماية Widevine L1 (تشفير على مستوى العتاد ورقاقة المعالج) لمنع قرصنة الفيديوهات بدقة Full HD فأعلى.
+                    </p>
+                </div>
+
+                <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800">
+                    <div class="w-10 h-10 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-ban text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-2">منع برمجيات الالتقاط</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        يتكامل الـ DRM مع واجهة برمجة تطبيقات الوسائط بالمتصفح لمنع تحويل الإطارات إلى أي مستودع للذاكرة العشوائية يُمكن الوصول إليه عبر برامج تصوير وتسجيل الشاشة النشطة.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- التذييل (Footer) -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-6 text-center text-slate-500 text-sm">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>© 2026 جميع الحقوق محفوظة لـمنصة اختبار DRM الاحترافية.</p>
+            <div class="flex gap-4">
+                <span class="text-xs bg-slate-900 px-3 py-1 rounded-full border border-slate-800">تطوير مخصص لفحص VdoCipher</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- برمجة فحص توافقية الـ DRM في المتصفح -->
+    <script>
+        // دالة لتحديث الوقت الحالي بالملي ثانية للتأثير التشخيصي
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
+            const timeElement = document.getElementById('system-time');
+            if(timeElement) timeElement.innerText = timeString;
+        }
+        setInterval(updateTime, 100);
+
+        // دالة لإضافة السجلات إلى لوحة التحكم
+        function logDiagnostic(message, type = 'info') {
+            const logsContainer = document.getElementById('diagnostic-logs');
+            if (!logsContainer) return;
+            
+            const logElement = document.createElement('div');
+            let colorClass = 'text-slate-400';
+            let prefix = '[معلومة]';
+            
+            if (type === 'success') {
+                colorClass = 'text-emerald-400';
+                prefix = '[ناجح]';
+            } else if (type === 'error') {
+                colorClass = 'text-red-400';
+                prefix = '[فشل]';
+            } else if (type === 'warning') {
+                colorClass = 'text-amber-400';
+                prefix = '[تحذير]';
+            }
+            
+            const now = new Date();
+            const timeStamp = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            
+            logElement.className = `${colorClass} flex gap-1.5 py-0.5`;
+            logElement.innerHTML = `<span class="text-slate-600">[${timeStamp}]</span> <span class="font-bold">${prefix}</span> <span>${message}</span>`;
+            logsContainer.appendChild(logElement);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+
+        // دالة لتحديث واجهة عنصر الفحص الفردي
+        function updateStatusUI(elementId, status, details = '') {
+            const container = document.getElementById(elementId);
+            if (!container) return;
+
+            const iconDiv = container.querySelector('.status-icon');
+            const badge = container.querySelector('.status-badge');
+
+            if (status === 'success') {
+                iconDiv.className = 'w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center status-icon';
+                iconDiv.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+                
+                badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+                badge.innerText = details || 'مدعوم ونشط';
+                container.classList.add('glow-success');
+            } else if (status === 'unsupported') {
+                iconDiv.className = 'w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center status-icon';
+                iconDiv.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+                
+                badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-red-500/10 text-red-400 border border-red-500/20';
+                badge.innerText = 'غير مدعوم';
+                container.classList.remove('glow-success');
+            } else {
+                iconDiv.className = 'w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon';
+                iconDiv.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i>';
+                
+                badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400';
+                badge.innerText = 'جاري الفحص...';
+                container.classList.remove('glow-success');
+            }
+        }
+
+        // إعادة تشغيل الـ iframe للفيديو
+        function reloadPlayer() {
+            const iframe = document.querySelector('iframe');
+            if (iframe) {
+                const currentSrc = iframe.src;
+                iframe.src = '';
+                logDiagnostic('جاري إعادة تشغيل مشغل VdoCipher...', 'warning');
+                setTimeout(() => {
+                    iframe.src = currentSrc;
+                    logDiagnostic('تمت إعادة تحميل المشغل المشفر.', 'success');
+                }, 400);
+            }
+        }
+
+        // دالة تشخيص الـ DRM باستخدام بروتوكول EME الحقيقي من المتصفح
+        async function runDrmCheck() {
+            // تصفير الواجهات والسجلات
+            document.getElementById('diagnostic-logs').innerHTML = '';
+            updateStatusUI('check-eme', 'checking');
+            updateStatusUI('check-widevine', 'checking');
+            updateStatusUI('check-playready', 'checking');
+            updateStatusUI('check-fairplay', 'checking');
+
+            logDiagnostic('بدء عملية تشخيص توافق المتصفح مع معايير DRM المحمية...', 'info');
+
+            // 1. فحص دعم الـ EME الأساسي
+            const hasEme = !!(navigator.requestMediaKeySystemAccess);
+            if (hasEme) {
+                updateStatusUI('check-eme', 'success');
+                logDiagnostic('واجهة برمجة تطبيقات Encrypted Media Extensions (EME) متوفرة بنجاح.', 'success');
+            } else {
+                updateStatusUI('check-eme', 'unsupported');
+                logDiagnostic('المتصفح لا يدعم EME. قد تفشل معظم مقاطع الفيديو المحمية بنظام DRM.', 'error');
+                updateStatusUI('check-widevine', 'unsupported');
+                updateStatusUI('check-playready', 'unsupported');
+                updateStatusUI('check-fairplay', 'unsupported');
+                return; // لا داعي لإكمال الفحص إن لم تكن هناك بنية EME أساسية
+            }
+
+            // الكود المعياري لفحص التوافقية بنماذج فيديو MP4 قياسية
+            const config = [{
+                initDataTypes: ['cenc'],
+                videoCapabilities: [{
+                    contentType: 'video/mp4; codecs="avc1.42E01E"'
+                }]
+            }];
+
+            // 2. فحص دعم Google Widevine
+            try {
+                const access = await navigator.requestMediaKeySystemAccess('com.widevine.alpha', config);
+                updateStatusUI('check-widevine', 'success', 'مدعوم');
+                logDiagnostic('نظام تشفير Google Widevine مدعوم بنجاح في متصفحك.', 'success');
+            } catch (e) {
+                updateStatusUI('check-widevine', 'unsupported');
+                logDiagnostic('نظام Google Widevine غير مدعوم في هذا المتصفح (شائع في Safari/iOS).', 'warning');
+            }
+
+            // 3. فحص دعم Microsoft PlayReady
+            try {
+                const access = await navigator.requestMediaKeySystemAccess('com.microsoft.playready', config);
+                updateStatusUI('check-playready', 'success', 'مدعوم');
+                logDiagnostic('نظام تشفير Microsoft PlayReady مدعوم بنجاح.', 'success');
+            } catch (e) {
+                updateStatusUI('check-playready', 'unsupported');
+                logDiagnostic('نظام PlayReady غير مدعوم (هذا طبيعي لغير متصفحات Edge على نظام Windows).', 'info');
+            }
+
+            // 4. فحص دعم Apple FairPlay
+            try {
+                // FairPlay عادة يستلزم واجهة ويب محددة للـ Safari أو معرّف تشفير خاص
+                const access = await navigator.requestMediaKeySystemAccess('com.apple.fps.1_0', config) || 
+                               await navigator.requestMediaKeySystemAccess('com.apple.fps', config);
+                updateStatusUI('check-fairplay', 'success', 'مدعوم');
+                logDiagnostic('نظام تشفير Apple FairPlay مدعوم بنجاح في متصفحك.', 'success');
+            } catch (e) {
+                updateStatusUI('check-fairplay', 'unsupported');
+                logDiagnostic('نظام Apple FairPlay غير مدعوم (هذا طبيعي لغير متصفحات Safari و بيئة Apple).', 'info');
+            }
+
+            logDiagnostic('اكتمل تشخيص حالة بيئة الأمان والـ DRM.', 'info');
+        }
+
+        // تشغيل الفحص فور تحميل الصفحة بالكامل
+        window.onload = function() {
+            runDrmCheck();
+        };
+    </script>
+</body>
+</html>
