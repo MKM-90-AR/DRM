@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>منصة اختبار وتشخيص أنظمة حماية المحتوى الرقمي DRM - بواسطة mkm</title>
+    <!-- تضمين خط Cairo الجميل للمحتوى العربي -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- مكتبة Tailwind CSS للتنسيق العصري -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- مكتبة FontAwesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- مكتبة Cloudflare Turnstile للتحقق البشري -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     
     <script>
@@ -43,6 +47,7 @@
         @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
     </style>
     
+    <!-- بروتوكولات الأمان القصوى (Nuclear Level Security) -->
     <script>
         (function enforceStrictSecurity() {
             try {
@@ -59,13 +64,14 @@
                         <p>تم إيقاف الموقع أمنياً بسبب رصد أدوات المطورين أو محاولة فحص الكود.</p>
                         <p style="color:#94a3b8;font-size:14px;margin-top:10px;">أغلق أدوات المطورين، ثم قم بتحديث الصفحة يدوياً للعودة.</p>
                     </body>`;
-                throw new Error("Security Lock: DevTools Detected");
             }
 
             window.addEventListener('keydown', function(e) {
                 const key = (e.key || '').toLowerCase();
                 const keyCode = e.keyCode;
+
                 if (key === 'f12' || keyCode === 123) { e.preventDefault(); e.stopPropagation(); crashAndBurn(); return false; }
+                
                 if (e.ctrlKey || e.metaKey) {
                     if (e.shiftKey && (['i', 'j', 'c'].includes(key) || [73, 74, 67].includes(keyCode))) {
                         e.preventDefault(); e.stopPropagation(); crashAndBurn(); return false;
@@ -84,13 +90,17 @@
             try { isIframe = window.self !== window.top; } catch(e) { isIframe = true; }
 
             setInterval(() => {
-                const start = performance.now();
-                const elapsed = performance.now() - start;
                 const widthDiff = !isIframe && (window.outerWidth - window.innerWidth > 160);
                 const heightDiff = !isIframe && (window.outerHeight - window.innerHeight > 160);
-                if (elapsed > 100 || widthDiff || heightDiff) {
-                    if (!devtoolsDetected) { devtoolsDetected = true; crashAndBurn(); }
-                } else { devtoolsDetected = false; }
+
+                if (widthDiff || heightDiff) {
+                    if (!devtoolsDetected) {
+                        devtoolsDetected = true;
+                        crashAndBurn();
+                    }
+                } else {
+                    devtoolsDetected = false;
+                }
             }, 500); 
         })();
 
@@ -100,14 +110,17 @@
         const PlayerConfigManager = (function() {
             const o = ["20160313ver", "sASE3232VL", "Xae76EYm06", "x6fhpsT6hj", "ZvmOzcGbtX", "4rg8aaiaXZ", "ixb"];
             const p = ["eyJ2aWRlb0", "lkIjoiM2Ji", "M2RmYzUyZT", "ZjNDAwNDg5", "MTQyYmI4NW", "RkZmI5MzAi", "fQ=="];
+            
             let isDestroyed = false;
+
             return {
                 getKeys: function() {
                     if(isDestroyed) return { otp: null, playbackInfo: null };
                     return { otp: o.join(''), playbackInfo: p.join('') };
                 },
                 destroyForever: function() {
-                    isDestroyed = true; o.length = 0; p.length = 0;
+                    isDestroyed = true;
+                    o.length = 0; p.length = 0;
                 }
             };
         })();
@@ -366,6 +379,7 @@
         </div>
     </footer>
 
+    <!-- Modal: نموذج طلب فك حظر L3 -->
     <div id="exemption-modal" class="fixed inset-0 modal-overlay z-50 hidden flex-col items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden relative">
             <button onclick="closeExemptionModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -399,6 +413,9 @@
                 </div>
 
                 <form id="exemption-form" onsubmit="submitExemption(event)">
+                    <!-- رسالة خطأ للنموذج -->
+                    <div id="form-error-msg" class="hidden mb-4 p-3 bg-red-950/50 border border-red-500/50 rounded-lg text-red-400 text-xs font-bold text-center"></div>
+                    
                     <div id="step-1" class="space-y-4 block">
                         <div>
                             <label class="block text-xs font-bold text-slate-300 mb-1.5">الاسم الكامل (عربي أو إنجليزي فقط)</label>
@@ -442,7 +459,7 @@
                 <h2 class="text-lg font-bold text-white mb-1">إدخال مفتاح التجاوز</h2>
                 <p class="text-xs text-slate-400 mb-5">أدخل الكود المكون من 12 خانة (أحرف كبيرة وصغيرة وأرقام) لفك الحظر.</p>
                 
-                <input type="text" id="redeem-input" maxlength="12" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-center tracking-widest font-mono font-bold focus:outline-none focus:border-indigo-500 uppercase transition-all" placeholder="XXXXXXXXXXXX" dir="ltr">
+                <input type="text" id="redeem-input" maxlength="14" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-center tracking-widest font-mono font-bold focus:outline-none focus:border-indigo-500 transition-all" placeholder="XXXX-XXXX-XXXX" dir="ltr" oninput="formatRedeemInput(this)">
                 
                 <div id="ts-redeem-container" class="mt-4 flex justify-center"></div>
 
@@ -545,16 +562,25 @@
         });
 
         function goToStep2() {
-            if(!document.getElementById('req-name').checkValidity() || !document.getElementById('req-email').checkValidity()){
-                alert("يرجى إدخال اسم صحيح (بدون أرقام أو رموز) وبريد إلكتروني صالح."); return;
+            const nameEl = document.getElementById('req-name');
+            const emailEl = document.getElementById('req-email');
+            const errEl = document.getElementById('form-error-msg');
+
+            if(!nameEl.checkValidity() || !emailEl.checkValidity()){
+                errEl.textContent = "يرجى إدخال اسم صحيح (بدون أرقام أو رموز) وبريد إلكتروني صالح.";
+                errEl.classList.remove('hidden');
+                return;
             }
+            errEl.classList.add('hidden');
             document.getElementById('step-1').classList.replace('block', 'hidden');
             document.getElementById('step-2').classList.replace('hidden', 'block');
             setTimeout(renderFormTurnstile, 100);
         }
+        
         function goToStep1() {
             document.getElementById('step-2').classList.replace('block', 'hidden');
             document.getElementById('step-1').classList.replace('hidden', 'block');
+            document.getElementById('form-error-msg').classList.add('hidden');
         }
 
         function resetForm() {
@@ -571,6 +597,7 @@
             const name = document.getElementById('req-name').value;
             const email = document.getElementById('req-email').value;
             const reason = document.getElementById('req-reason').value;
+            const errEl = document.getElementById('form-error-msg');
 
             document.getElementById('form-loading').classList.replace('hidden', 'flex');
             try {
@@ -588,10 +615,20 @@
                 });
                 document.getElementById('form-loading').classList.replace('flex', 'hidden');
                 document.getElementById('form-success').classList.replace('hidden', 'flex');
+                errEl.classList.add('hidden');
             } catch(err) {
                 document.getElementById('form-loading').classList.replace('flex', 'hidden');
                 alert("حدث خطأ أثناء الإرسال. تأكد من اتصالك بالإنترنت.");
             }
+        }
+
+        // دالة تنسيق كود الإدخال بإضافة شريطات كل 4 خانات
+        function formatRedeemInput(input) {
+            // إزالة أي شيء غير الحروف والأرقام
+            let val = input.value.replace(/[^a-zA-Z0-9]/g, '');
+            // تقسيم النص إلى مجموعات من 4 ووضع شرطة بينهم
+            let formatted = val.match(/.{1,4}/g)?.join('-') || val;
+            input.value = formatted;
         }
 
         async function verifyRedeemCode() {
@@ -602,7 +639,8 @@
             const errorEl = document.getElementById('redeem-error');
             const timerEl = document.getElementById('penalty-timer');
             
-            const code = inputEl.value.trim();
+            // إزالة الشحطات من الكود قبل فحصه برمجياً
+            const code = inputEl.value.replace(/-/g, '').trim();
             
             // --- 1. التحقق الصارم والمحلي قبل إرسال أي طلب (بدون سيرفر) ---
             const isValidFormat = code.length === 12 && 
