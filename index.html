@@ -57,15 +57,16 @@
             } catch(e) {}
 
             function crashAndBurn() {
-                // تدمير الصفحة أمنياً بدون إدخال المتصفح في حلقة لا نهائية تؤدي لانهياره كلياً
-                if (document.body) {
-                    document.body.innerHTML = `
-                        <div style='background:#0B0F19;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'>
-                            <i class="fa-solid fa-triangle-exclamation" style="font-size:50px;margin-bottom:15px;"></i>
-                            <p>تم إيقاف الموقع أمنياً بسبب رصد أدوات المطورين أو محاولة فحص الكود.</p>
-                            <p style="color:#94a3b8;font-size:14px;margin-top:10px;">الجلسة الحالية دُمرت. أغلق أدوات المطورين ثم قم بتحديث الصفحة للعودة.</p>
-                        </div>`;
-                }
+                // تدمير الصفحة أمنياً وإجبار المستخدم على التحديث اليدوي
+                document.documentElement.innerHTML = `
+                    <head><title>حظر أمني</title></head>
+                    <body style='background:#0B0F19;height:100vh;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'>
+                        <i class="fa-solid fa-triangle-exclamation" style="font-size:50px;margin-bottom:15px;"></i>
+                        <p>تم إيقاف الموقع أمنياً بسبب رصد أدوات المطورين أو محاولة فحص الكود.</p>
+                        <p style="color:#94a3b8;font-size:14px;margin-top:10px;">أغلق أدوات المطورين، ثم قم بتحديث الصفحة يدوياً للعودة.</p>
+                    </body>`;
+                
+                // إيقاف جميع الأكواد البرمجية التالية
                 throw new Error("Security Lock: DevTools Detected");
             }
 
@@ -97,10 +98,8 @@
 
             setInterval(() => {
                 const start = performance.now();
-                // الفخ تم تخفيفه لكي لا يؤدي لانهيار المتصفح في حال الفحص العادي
                 const elapsed = performance.now() - start;
                 
-                // القياسات تعمل فقط إذا لم نكن داخل إطار (Iframe) لتجنب أخطاء Canvas
                 const widthDiff = !isIframe && (window.outerWidth - window.innerWidth > 160);
                 const heightDiff = !isIframe && (window.outerHeight - window.innerHeight > 160);
 
@@ -116,10 +115,10 @@
         })();
 
         // =========================================================
-        // إعدادات VdoCipher 
+        // إعدادات VdoCipher
         // =========================================================
         const PlayerConfigManager = (function() {
-            // استخدام تجميع نصوص مباشر آمن جداً لتجنب خطأ 422
+            // تنبيه: إذا استمر خطأ 1002 أو 422، يجب تحديث هذه المصفوفات من حسابك في VdoCipher!
             const o = ["20160313ver", "sASE3232VL", "Xae76EYm06", "x6fhpsT6hj", "ZvmOzcGbtX", "4rg8aaiaXZ", "ixb"];
             const p = ["eyJ2aWRlb0", "lkIjoiM2Ji", "M2RmYzUyZT", "ZjNDAwNDg5", "MTQyYmI4NW", "RkZmI5MzAi", "fQ=="];
             
@@ -461,8 +460,8 @@
                             <textarea id="req-reason" required rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-500 resize-none" placeholder="اكتب السبب هنا (50 كلمة على الأقل)..."></textarea>
                         </div>
                         
-                        <!-- اختبار Turnstile في النموذج -->
-                        <div class="cf-turnstile mt-4 flex justify-center" data-sitekey="0x4AAAAAADUSsOlnmdiTb_gG" data-theme="dark" data-callback="onTsFormSuccess" data-expired-callback="onTsFormExpired"></div>
+                        <!-- إضافة صندوق Cloudflare Turnstile هنا -->
+                        <div id="ts-form-container" class="mt-4 flex justify-center"></div>
 
                         <div class="flex gap-3 pt-2">
                             <button type="button" onclick="goToStep1()" class="w-1/3 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold text-sm border border-slate-700">رجوع</button>
@@ -487,8 +486,8 @@
                 
                 <input type="text" id="redeem-input" maxlength="12" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-center tracking-widest font-mono font-bold focus:outline-none focus:border-indigo-500 uppercase transition-all" placeholder="XXXXXXXXXXXX" dir="ltr">
                 
-                <!-- اختبار Turnstile في كود الفك -->
-                <div id="ts-redeem-container" class="cf-turnstile mt-4 flex justify-center" data-sitekey="0x4AAAAAADUSsOlnmdiTb_gG" data-theme="dark" data-callback="onTsRedeemSuccess" data-expired-callback="onTsRedeemExpired"></div>
+                <!-- إضافة صندوق Cloudflare Turnstile هنا -->
+                <div id="ts-redeem-container" class="mt-4 flex justify-center"></div>
 
                 <p id="redeem-error" class="text-xs text-red-400 mt-2 h-4 font-bold opacity-0 transition-opacity">كود خاطئ! انتظر <span id="penalty-timer">3</span> ثوانٍ.</p>
                 
@@ -505,17 +504,34 @@
         let isIntentionalDOMChange = false; 
         let userIP = "Unknown";
         
-        // متغيرات Turnstile
+        // إعدادات Turnstile
+        const SITE_KEY = "0x4AAAAAADUsSOlnmdiTb_qG";
         let tsFormToken = "";
         let tsRedeemToken = "";
+        let widgetFormId = null;
+        let widgetRedeemId = null;
 
-        // دوال رد الاتصال لـ Turnstile النموذج
-        function onTsFormSuccess(token) { tsFormToken = token; checkFormValidity(); }
-        function onTsFormExpired() { tsFormToken = ""; checkFormValidity(); }
+        // دالة إنشاء صندوق Turnstile في الطلب (Form)
+        function renderFormTurnstile() {
+            if (widgetFormId !== null) turnstile.remove(widgetFormId);
+            widgetFormId = turnstile.render('#ts-form-container', {
+                sitekey: SITE_KEY,
+                theme: 'dark',
+                callback: function(token) { tsFormToken = token; checkFormValidity(); },
+                'expired-callback': function() { tsFormToken = ""; checkFormValidity(); }
+            });
+        }
 
-        // دوال رد الاتصال لـ Turnstile كود التجاوز
-        function onTsRedeemSuccess(token) { tsRedeemToken = token; document.getElementById('redeem-btn').disabled = false; }
-        function onTsRedeemExpired() { tsRedeemToken = ""; document.getElementById('redeem-btn').disabled = true; }
+        // دالة إنشاء صندوق Turnstile في فك التشفير (Redeem)
+        function renderRedeemTurnstile() {
+            if (widgetRedeemId !== null) turnstile.remove(widgetRedeemId);
+            widgetRedeemId = turnstile.render('#ts-redeem-container', {
+                sitekey: SITE_KEY,
+                theme: 'dark',
+                callback: function(token) { tsRedeemToken = token; document.getElementById('redeem-btn').disabled = false; },
+                'expired-callback': function() { tsRedeemToken = ""; document.getElementById('redeem-btn').disabled = true; }
+            });
+        }
 
         // تحديد نظام التشغيل
         function detectOS() {
@@ -536,9 +552,17 @@
         // جلب الـ IP
         fetch('https://api.ipify.org?format=json').then(r => r.json()).then(data => { userIP = data.ip; }).catch(() => {});
 
-        function openExemptionModal() { document.getElementById('exemption-modal').classList.replace('hidden', 'flex'); }
+        function openExemptionModal() { 
+            document.getElementById('exemption-modal').classList.replace('hidden', 'flex');
+        }
         function closeExemptionModal() { document.getElementById('exemption-modal').classList.replace('flex', 'hidden'); resetForm(); }
-        function openRedeemModal() { closeExemptionModal(); document.getElementById('redeem-modal').classList.replace('hidden', 'flex'); document.getElementById('redeem-input').focus(); }
+        
+        function openRedeemModal() { 
+            closeExemptionModal(); 
+            document.getElementById('redeem-modal').classList.replace('hidden', 'flex'); 
+            document.getElementById('redeem-input').focus();
+            setTimeout(renderRedeemTurnstile, 100); // تفعيل الصندوق عند الفتح
+        }
         function closeRedeemModal() { document.getElementById('redeem-modal').classList.replace('flex', 'hidden'); }
         function switchToRedeemFromSuccess() { openRedeemModal(); }
 
@@ -574,6 +598,7 @@
             }
             document.getElementById('step-1').classList.replace('block', 'hidden');
             document.getElementById('step-2').classList.replace('hidden', 'block');
+            setTimeout(renderFormTurnstile, 100); // تفعيل الصندوق عند الوصول للخطوة 2
         }
         function goToStep1() {
             document.getElementById('step-2').classList.replace('block', 'hidden');
@@ -586,7 +611,7 @@
             wordCountDisplay.innerText = "0 / 50 كلمة";
             submitBtn.disabled = true;
             document.getElementById('form-success').classList.replace('flex', 'hidden');
-            if (window.turnstile) { turnstile.reset(); tsFormToken = ""; tsRedeemToken = ""; }
+            if (widgetFormId !== null) { turnstile.reset(widgetFormId); tsFormToken = ""; }
         }
 
         async function submitExemption(e) {
@@ -670,7 +695,7 @@
                 }, 2000);
             } else {
                 // عقوبة 3 ثواني مع إعادة تعيين الكابتشا
-                if (window.turnstile) { turnstile.reset(); tsRedeemToken = ""; }
+                if (widgetRedeemId !== null) { turnstile.reset(widgetRedeemId); tsRedeemToken = ""; }
                 
                 inputEl.classList.add('shake-animation', 'border-red-500');
                 errorEl.classList.replace('opacity-0', 'opacity-100');
@@ -710,8 +735,7 @@
                 });
 
                 if (tamperingDetected) {
-                    document.documentElement.innerHTML = "<head><title>حظر أمني</title></head><body style='background:#0B0F19;height:100vh;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'><i class='fa-solid fa-triangle-exclamation' style='font-size:50px;margin-bottom:15px;'></i><p>تم اكتشاف تلاعب في الهيكل الأساسي للصفحة. تم قفل الجلسة أمنياً.</p><p style='color:#94a3b8;font-size:14px;margin-top:10px;'>يرجى تحديث الصفحة يدوياً.</p></body>";
-                    // Avoid infinite freeze block if not necessary, but kept to comply with strict security
+                    document.documentElement.innerHTML = "<head><title>حظر أمني</title></head><body style='background:#0B0F19;height:100vh;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'><i class='fa-solid fa-triangle-exclamation' style='font-size:50px;margin-bottom:15px;'></i><p>تم اكتشاف تلاعب في الهيكل الأساسي للصفحة. تم قفل الجلسة أمنياً.</p><p style='color:#94a3b8;font-size:14px;margin-top:10px;'>أغلق أدوات المطورين، ثم قم بتحديث الصفحة يدوياً للعودة.</p></body>";
                 }
             });
             securityObserver.observe(document.body, { childList: true, subtree: true });
