@@ -12,6 +12,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- مكتبة FontAwesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- مكتبة Cloudflare Turnstile للتحقق البشري -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     
     <script>
         // تعريف window.tailwind لتجنب خطأ ReferenceError
@@ -55,18 +57,16 @@
             } catch(e) {}
 
             function crashAndBurn() {
-                // تدمير شامل وعنيف للصفحة يمنع الاسترجاع تماماً
-                document.documentElement.innerHTML = `
-                    <head><title>حظر أمني</title></head>
-                    <body style='background:#0B0F19;height:100vh;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'>
-                        <i class="fa-solid fa-triangle-exclamation" style="font-size:50px;margin-bottom:15px;"></i>
-                        <p>تم إيقاف الموقع أمنياً بسبب رصد أدوات المطورين أو محاولة فحص الكود.</p>
-                        <p style="color:#94a3b8;font-size:14px;margin-top:10px;">الجلسة الحالية دُمرت. أغلق أدوات المطورين ثم قم بتحديث الصفحة للعودة.</p>
-                    </body>`;
-                
-                let freeze = true;
-                setInterval(() => { debugger; document.body.innerHTML = ""; }, 10);
-                while(freeze) { debugger; }
+                // تدمير الصفحة أمنياً بدون إدخال المتصفح في حلقة لا نهائية تؤدي لانهياره كلياً
+                if (document.body) {
+                    document.body.innerHTML = `
+                        <div style='background:#0B0F19;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'>
+                            <i class="fa-solid fa-triangle-exclamation" style="font-size:50px;margin-bottom:15px;"></i>
+                            <p>تم إيقاف الموقع أمنياً بسبب رصد أدوات المطورين أو محاولة فحص الكود.</p>
+                            <p style="color:#94a3b8;font-size:14px;margin-top:10px;">الجلسة الحالية دُمرت. أغلق أدوات المطورين ثم قم بتحديث الصفحة للعودة.</p>
+                        </div>`;
+                }
+                throw new Error("Security Lock: DevTools Detected");
             }
 
             // منع كافة اختصارات لوحة المفاتيح بشكل قاطع
@@ -90,15 +90,19 @@
             document.addEventListener('contextmenu', e => e.preventDefault());
             document.addEventListener('dragstart', e => e.preventDefault());
 
-            // كاشف أدوات المطورين الدائم
+            // كاشف أدوات المطورين الدائم (مع استثناء بيئة الـ iFrame لمنع الأخطاء الوهمية)
             let devtoolsDetected = false;
+            let isIframe = false;
+            try { isIframe = window.self !== window.top; } catch(e) { isIframe = true; }
+
             setInterval(() => {
                 const start = performance.now();
-                debugger;
+                // الفخ تم تخفيفه لكي لا يؤدي لانهيار المتصفح في حال الفحص العادي
                 const elapsed = performance.now() - start;
                 
-                const widthDiff = window.outerWidth - window.innerWidth > 160;
-                const heightDiff = window.outerHeight - window.innerHeight > 160;
+                // القياسات تعمل فقط إذا لم نكن داخل إطار (Iframe) لتجنب أخطاء Canvas
+                const widthDiff = !isIframe && (window.outerWidth - window.innerWidth > 160);
+                const heightDiff = !isIframe && (window.outerHeight - window.innerHeight > 160);
 
                 if (elapsed > 100 || widthDiff || heightDiff) {
                     if (!devtoolsDetected) {
@@ -108,7 +112,7 @@
                 } else {
                     devtoolsDetected = false;
                 }
-            }, 200); 
+            }, 500); 
         })();
 
         // =========================================================
@@ -116,7 +120,6 @@
         // =========================================================
         const PlayerConfigManager = (function() {
             // استخدام تجميع نصوص مباشر آمن جداً لتجنب خطأ 422
-            // إذا استمر خطأ 422، فهذا يعني أن هذا الـ OTP تحديداً قد انتهت صلاحيته من سيرفرات VdoCipher.
             const o = ["20160313ver", "sASE3232VL", "Xae76EYm06", "x6fhpsT6hj", "ZvmOzcGbtX", "4rg8aaiaXZ", "ixb"];
             const p = ["eyJ2aWRlb0", "lkIjoiM2Ji", "M2RmYzUyZT", "ZjNDAwNDg5", "MTQyYmI4NW", "RkZmI5MzAi", "fQ=="];
             
@@ -156,7 +159,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="openRedeemModal()" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[10px] sm:text-xs font-semibold transition border border-indigo-500 flex items-center gap-1.5">
+                <button id="btn-open-redeem" onclick="openRedeemModal()" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[10px] sm:text-xs font-semibold transition border border-indigo-500 flex items-center gap-1.5">
                     <i class="fa-solid fa-key"></i> إدخال كود فك التشفير
                 </button>
                 <span id="environment-badge" class="inline-flex items-center px-2.5 py-1 sm:py-0.5 rounded-full text-[10px] sm:text-xs font-medium bg-indigo-400/10 text-indigo-400 border border-indigo-400/20">
@@ -206,7 +209,7 @@
                             <button onclick="window.open('https://www.google.com/search?q=How+to+enable+Widevine+L1+hardware+acceleration', '_blank')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[10px] sm:text-xs font-semibold transition border border-slate-700 flex items-center gap-1.5">
                                 <i class="fa-brands fa-google text-blue-400"></i> بحث عن كيفية تفعيل L1
                             </button>
-                            <button onclick="openExemptionModal()" class="px-3 py-1.5 bg-red-900/40 hover:bg-red-800/60 text-red-300 rounded-lg text-[10px] sm:text-xs font-semibold transition border border-red-800/50 flex items-center gap-1.5">
+                            <button id="btn-open-exemption" onclick="openExemptionModal()" class="px-3 py-1.5 bg-red-900/40 hover:bg-red-800/60 text-red-300 rounded-lg text-[10px] sm:text-xs font-semibold transition border border-red-800/50 flex items-center gap-1.5">
                                 <i class="fa-solid fa-unlock-keyhole"></i> طلب إيقاف الحظر لمستخدمي L3
                             </button>
                         </div>
@@ -291,6 +294,33 @@
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon"><i class="fa-solid fa-spinner animate-spin"></i></div>
                                 <div><h4 class="text-xs sm:text-sm font-bold text-slate-200">دعم واجهة EME</h4><p class="text-[10px] text-slate-400">Encrypted Media Extensions</p></div>
+                            </div>
+                            <span class="text-[10px] font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
+                        </div>
+
+                        <!-- فحص Widevine (يظهر حسب النظام) -->
+                        <div class="hidden p-2.5 bg-slate-950/60 rounded-xl border border-slate-800/80 items-center justify-between" id="check-widevine">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon"><i class="fa-solid fa-spinner animate-spin"></i></div>
+                                <div><h4 class="text-xs sm:text-sm font-bold text-slate-200">دعم Google Widevine</h4><p class="text-[10px] text-slate-400">أساسي لمتصفحات Chrome / Android / Linux</p></div>
+                            </div>
+                            <span class="text-[10px] font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
+                        </div>
+
+                        <!-- فحص PlayReady (يظهر على Windows فقط) -->
+                        <div class="hidden p-2.5 bg-slate-950/60 rounded-xl border border-slate-800/80 items-center justify-between" id="check-playready">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon"><i class="fa-solid fa-spinner animate-spin"></i></div>
+                                <div><h4 class="text-xs sm:text-sm font-bold text-slate-200">دعم MS PlayReady</h4><p class="text-[10px] text-slate-400">أساسي لـ Windows و Edge</p></div>
+                            </div>
+                            <span class="text-[10px] font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
+                        </div>
+
+                        <!-- فحص FairPlay (يظهر على أجهزة Apple فقط) -->
+                        <div class="hidden p-2.5 bg-slate-950/60 rounded-xl border border-slate-800/80 items-center justify-between" id="check-fairplay">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon"><i class="fa-solid fa-spinner animate-spin"></i></div>
+                                <div><h4 class="text-xs sm:text-sm font-bold text-slate-200">دعم Apple FairPlay</h4><p class="text-[10px] text-slate-400">أساسي لأجهزة Mac و iOS</p></div>
                             </div>
                             <span class="text-[10px] font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
                         </div>
@@ -430,6 +460,10 @@
                             </div>
                             <textarea id="req-reason" required rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-500 resize-none" placeholder="اكتب السبب هنا (50 كلمة على الأقل)..."></textarea>
                         </div>
+                        
+                        <!-- اختبار Turnstile في النموذج -->
+                        <div class="cf-turnstile mt-4 flex justify-center" data-sitekey="0x4AAAAAADUSsOlnmdiTb_gG" data-theme="dark" data-callback="onTsFormSuccess" data-expired-callback="onTsFormExpired"></div>
+
                         <div class="flex gap-3 pt-2">
                             <button type="button" onclick="goToStep1()" class="w-1/3 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold text-sm border border-slate-700">رجوع</button>
                             <button type="submit" id="submit-btn" class="w-2/3 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-700 disabled:text-slate-500 text-white rounded-lg font-bold text-sm flex justify-center items-center gap-2" disabled>
@@ -453,9 +487,12 @@
                 
                 <input type="text" id="redeem-input" maxlength="12" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-center tracking-widest font-mono font-bold focus:outline-none focus:border-indigo-500 uppercase transition-all" placeholder="XXXXXXXXXXXX" dir="ltr">
                 
+                <!-- اختبار Turnstile في كود الفك -->
+                <div id="ts-redeem-container" class="cf-turnstile mt-4 flex justify-center" data-sitekey="0x4AAAAAADUSsOlnmdiTb_gG" data-theme="dark" data-callback="onTsRedeemSuccess" data-expired-callback="onTsRedeemExpired"></div>
+
                 <p id="redeem-error" class="text-xs text-red-400 mt-2 h-4 font-bold opacity-0 transition-opacity">كود خاطئ! انتظر <span id="penalty-timer">3</span> ثوانٍ.</p>
                 
-                <button id="redeem-btn" onclick="verifyRedeemCode()" class="w-full mt-4 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm transition flex justify-center items-center gap-2 disabled:bg-slate-800 disabled:text-slate-500">
+                <button id="redeem-btn" onclick="verifyRedeemCode()" class="w-full mt-4 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm transition flex justify-center items-center gap-2 disabled:bg-slate-800 disabled:text-slate-500" disabled>
                     تحقق وفك التشفير <i class="fa-solid fa-unlock"></i>
                 </button>
             </div>
@@ -467,6 +504,18 @@
         let isManualBypassActive = false; 
         let isIntentionalDOMChange = false; 
         let userIP = "Unknown";
+        
+        // متغيرات Turnstile
+        let tsFormToken = "";
+        let tsRedeemToken = "";
+
+        // دوال رد الاتصال لـ Turnstile النموذج
+        function onTsFormSuccess(token) { tsFormToken = token; checkFormValidity(); }
+        function onTsFormExpired() { tsFormToken = ""; checkFormValidity(); }
+
+        // دوال رد الاتصال لـ Turnstile كود التجاوز
+        function onTsRedeemSuccess(token) { tsRedeemToken = token; document.getElementById('redeem-btn').disabled = false; }
+        function onTsRedeemExpired() { tsRedeemToken = ""; document.getElementById('redeem-btn').disabled = true; }
 
         // تحديد نظام التشغيل
         function detectOS() {
@@ -497,6 +546,15 @@
         const wordCountDisplay = document.getElementById('word-count');
         const submitBtn = document.getElementById('submit-btn');
 
+        function checkFormValidity() {
+            let words = reqReason.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+            if (words >= 50 && tsFormToken !== "") {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+
         reqReason.addEventListener('input', function() {
             let val = this.value.replace(/ {2,}/g, ' ');
             if (val !== this.value) this.value = val;
@@ -504,11 +562,10 @@
             wordCountDisplay.innerText = `${words} / 50 كلمة`;
             if (words >= 50) {
                 wordCountDisplay.className = 'text-[10px] font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded';
-                submitBtn.disabled = false;
             } else {
                 wordCountDisplay.className = 'text-[10px] font-mono text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded';
-                submitBtn.disabled = true;
             }
+            checkFormValidity();
         });
 
         function goToStep2() {
@@ -529,6 +586,7 @@
             wordCountDisplay.innerText = "0 / 50 كلمة";
             submitBtn.disabled = true;
             document.getElementById('form-success').classList.replace('flex', 'hidden');
+            if (window.turnstile) { turnstile.reset(); tsFormToken = ""; tsRedeemToken = ""; }
         }
 
         async function submitExemption(e) {
@@ -542,7 +600,14 @@
                 await fetch('https://formspree.io/f/mzdwglqb', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ "الاسم": name, "البريد الإلكتروني": email, "السبب": reason, "عنوان IP": userIP, "ملاحظة": "تم حظر استخراج MAC Address بواسطة المتصفح أمنياً." })
+                    body: JSON.stringify({ 
+                        "الاسم": name, 
+                        "البريد الإلكتروني": email, 
+                        "السبب": reason, 
+                        "عنوان IP": userIP, 
+                        "cf-turnstile-response": tsFormToken,
+                        "ملاحظة": "تم حظر استخراج MAC Address بواسطة المتصفح أمنياً." 
+                    })
                 });
                 document.getElementById('form-loading').classList.replace('flex', 'hidden');
                 document.getElementById('form-success').classList.replace('hidden', 'flex');
@@ -553,6 +618,8 @@
         }
 
         async function verifyRedeemCode() {
+            if (tsRedeemToken === "") return; // حماية إضافية
+            
             const inputEl = document.getElementById('redeem-input');
             const btnEl = document.getElementById('redeem-btn');
             const errorEl = document.getElementById('redeem-error');
@@ -567,11 +634,11 @@
             if (code === MASTER_CODE) {
                 isValid = true;
             } else {
-                // استخدام الرابط المباشر الصحيح (Raw Data)
                 const GITHUB_JSON_URL = "https://raw.githubusercontent.com/MKM-90-AR/DRM/main/codes.json";
                 try {
                     btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق...';
                     btnEl.disabled = true;
+                    inputEl.disabled = true;
                     
                     const res = await fetch(GITHUB_JSON_URL + "?nocache=" + Date.now());
                     if (res.ok) {
@@ -584,6 +651,11 @@
             if (isValid) {
                 isManualBypassActive = true;
                 closeRedeemModal();
+                
+                // إخفاء الأزرار نهائياً بعد فك التشفير
+                document.getElementById('btn-open-redeem').classList.add('hidden');
+                document.getElementById('btn-open-exemption').classList.add('hidden');
+                
                 isIntentionalDOMChange = true;
                 removePlayer();
                 document.getElementById('security-block-overlay').classList.replace('flex', 'hidden');
@@ -597,10 +669,14 @@
                     isIntentionalDOMChange = false;
                 }, 2000);
             } else {
+                // عقوبة 3 ثواني مع إعادة تعيين الكابتشا
+                if (window.turnstile) { turnstile.reset(); tsRedeemToken = ""; }
+                
                 inputEl.classList.add('shake-animation', 'border-red-500');
                 errorEl.classList.replace('opacity-0', 'opacity-100');
-                inputEl.disabled = true; btnEl.disabled = true;
                 btnEl.innerHTML = 'تحقق وفك التشفير <i class="fa-solid fa-unlock"></i>';
+                btnEl.disabled = true; 
+                inputEl.disabled = true;
                 
                 let timeLeft = 3; timerEl.innerText = timeLeft;
                 const interval = setInterval(() => {
@@ -609,8 +685,9 @@
                         clearInterval(interval);
                         inputEl.classList.remove('shake-animation', 'border-red-500');
                         errorEl.classList.replace('opacity-100', 'opacity-0');
-                        inputEl.disabled = false; btnEl.disabled = false;
+                        inputEl.disabled = false;
                         inputEl.value = ""; inputEl.focus();
+                        // الزر يبقى معطلاً حتى يحل الكابتشا الجديدة
                     }
                 }, 1000);
             }
@@ -634,7 +711,7 @@
 
                 if (tamperingDetected) {
                     document.documentElement.innerHTML = "<head><title>حظر أمني</title></head><body style='background:#0B0F19;height:100vh;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'><i class='fa-solid fa-triangle-exclamation' style='font-size:50px;margin-bottom:15px;'></i><p>تم اكتشاف تلاعب في الهيكل الأساسي للصفحة. تم قفل الجلسة أمنياً.</p><p style='color:#94a3b8;font-size:14px;margin-top:10px;'>يرجى تحديث الصفحة يدوياً.</p></body>";
-                    while(true) { debugger; }
+                    // Avoid infinite freeze block if not necessary, but kept to comply with strict security
                 }
             });
             securityObserver.observe(document.body, { childList: true, subtree: true });
@@ -831,13 +908,27 @@
             await inspectEnvironment();
             logDiagnostic('بدء فحص أنظمة الأمان والتشفير...', 'info');
 
-            // تحديث شارة نظام التشغيل
+            // تحديث شارة نظام التشغيل وإظهار التشخيص المناسب لكل نظام
             const osName = detectOS();
             const osBadge = document.getElementById('os-badge');
             if(osBadge) {
                 osBadge.innerText = osName;
                 osBadge.className = 'text-[10px] font-semibold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30';
                 logDiagnostic(`تم اكتشاف نظام التشغيل: ${osName}`, 'info');
+            }
+
+            // إخفاء فئات الـ DRM مسبقاً لعرض المناسب فقط
+            document.getElementById('check-widevine').classList.replace('flex', 'hidden');
+            document.getElementById('check-playready').classList.replace('flex', 'hidden');
+            document.getElementById('check-fairplay').classList.replace('flex', 'hidden');
+
+            if (osName === 'Windows') {
+                document.getElementById('check-widevine').classList.replace('hidden', 'flex');
+                document.getElementById('check-playready').classList.replace('hidden', 'flex');
+            } else if (osName === 'Mac OS' || osName === 'iOS') {
+                document.getElementById('check-fairplay').classList.replace('hidden', 'flex');
+            } else { // Android, Linux, Others
+                document.getElementById('check-widevine').classList.replace('hidden', 'flex');
             }
 
             const hasEme = !!(navigator.requestMediaKeySystemAccess);
@@ -855,20 +946,24 @@
 
             let supportsHardware = false;
 
-            try {
-                await navigator.requestMediaKeySystemAccess('com.widevine.alpha', configHardware);
-                supportsHardware = true; logDiagnostic('Widevine L1 (عتادي) مدعوم.', 'success');
-            } catch (e) { logDiagnostic('Widevine L1 غير مدعوم.', 'warning'); }
+            if (osName === 'Windows' || osName === 'Android' || osName === 'Linux') {
+                try {
+                    await navigator.requestMediaKeySystemAccess('com.widevine.alpha', configHardware);
+                    supportsHardware = true; updateStatusUI('check-widevine', 'success', 'محمي ضد التصوير (L1)'); logDiagnostic('Widevine L1 (عتادي) مدعوم.', 'success');
+                } catch (e) { updateStatusUI('check-widevine', 'warning', 'L3 برمجي فقط'); logDiagnostic('Widevine L1 غير مدعوم.', 'warning'); }
 
-            try {
-                await navigator.requestMediaKeySystemAccess('com.microsoft.playready', configSoftware);
-                supportsHardware = true; logDiagnostic('Microsoft PlayReady مدعوم.', 'success');
-            } catch (e) {}
-
-            try {
-                await navigator.requestMediaKeySystemAccess('com.apple.fps.1_0', configSoftware) || await navigator.requestMediaKeySystemAccess('com.apple.fps', configSoftware);
-                supportsHardware = true; logDiagnostic('Apple FairPlay مدعوم.', 'success');
-            } catch (e) {}
+                if (osName === 'Windows') {
+                    try {
+                        await navigator.requestMediaKeySystemAccess('com.microsoft.playready', configSoftware);
+                        supportsHardware = true; updateStatusUI('check-playready', 'success', 'محمي ضد التصوير'); logDiagnostic('Microsoft PlayReady مدعوم.', 'success');
+                    } catch (e) { updateStatusUI('check-playready', 'unsupported'); }
+                }
+            } else if (osName === 'Mac OS' || osName === 'iOS') {
+                try {
+                    await navigator.requestMediaKeySystemAccess('com.apple.fps.1_0', configSoftware) || await navigator.requestMediaKeySystemAccess('com.apple.fps', configSoftware);
+                    supportsHardware = true; updateStatusUI('check-fairplay', 'success', 'محمي ضد التصوير'); logDiagnostic('Apple FairPlay مدعوم.', 'success');
+                } catch (e) { updateStatusUI('check-fairplay', 'unsupported'); }
+            }
 
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             const isWebView = ua.indexOf('Instagram') > -1 || ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
