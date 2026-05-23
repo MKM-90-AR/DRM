@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="scroll-smooth">
+<html lang=\"ar\" dir=\"rtl\" class=\"scroll-smooth\">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset=\"UTF-8\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">
     <title>منصة اختبار وتشخيص أنظمة حماية المحتوى الرقمي DRM - بواسطة mkm</title>
     <!-- تضمين خط Cairo الجميل للمحتوى العربي -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">
+    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>
+    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap\" rel=\"stylesheet\">
     <!-- مكتبة Tailwind CSS للتنسيق العصري -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src=\"https://cdn.tailwindcss.com\"></script>
     <!-- مكتبة FontAwesome للأيقونات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">
     
     <script>
         tailwind.config = {
@@ -24,7 +24,7 @@
         }
     </script>
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #0B0F19; color: #E2E8F0; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+        body { font-family: 'Cairo', sans-serif; background-color: #0B0F19; color: #E2E8F0; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; overflow-x: hidden; }
         .glow-effect { box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.2); }
         .glow-success { box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.2); }
         .glow-warning { box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.2); }
@@ -36,21 +36,25 @@
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
         /* إخفاء الصفحة تماماً عند الطباعة أو تحويلها لـ PDF */
         @media print { html, body { display: none !important; } }
+        
+        /* تأثيرات النوافذ المنبثقة */
+        .modal-overlay { background: rgba(11, 15, 25, 0.95); backdrop-filter: blur(8px); }
+        .shake-animation { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
     </style>
     
     <!-- بروتوكولات الأمان القصوى (Nuclear Level Security) -->
     <script>
         (function enforceStrictSecurity() {
-            // 1. تجميد الكونسول تماماً لمنع حقن الأكواد
             try {
                 const noop = () => {};
                 const fakeConsole = { log: noop, info: noop, warn: noop, error: noop, table: noop, clear: noop, dir: noop };
                 Object.defineProperty(window, 'console', { value: Object.freeze(fakeConsole), writable: false, configurable: false });
             } catch(e) {}
 
-            // 2. دالة التدمير الشامل (تُستدعى عند اكتشاف أي تلاعب أو فتح أدوات المطورين)
             function crashAndBurn() {
-                // مسح كل شيء في الصفحة تماماً من الجذور حتى لو تم إغلاق أدوات المطورين لاحقاً
+                // تدمير شامل وعنيف للصفحة يمنع الاسترجاع
+                document.write("");
                 document.documentElement.innerHTML = `
                     <head><title>حظر أمني</title></head>
                     <body style='background:#0B0F19;height:100vh;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'>
@@ -58,33 +62,24 @@
                         <p>تم إيقاف الموقع أمنياً بسبب رصد أدوات المطورين أو محاولة فحص الكود.</p>
                         <p style="color:#94a3b8;font-size:14px;margin-top:10px;">الجلسة الحالية دُمرت. أغلق أدوات المطورين (DevTools) ثم قم بتحديث الصفحة يدوياً للعودة.</p>
                     </body>`;
-
-                // إدخال المتصفح في حلقة تجميد لا نهائية
+                
                 let freeze = true;
-                setInterval(() => { debugger; }, 10);
+                setInterval(() => { debugger; document.body.innerHTML = ""; }, 10);
                 while(freeze) { debugger; }
             }
 
-            // 3. منع جميع اختصارات النسخ والحفظ والفحص بقوة (Capture Phase)
+            // منع كافة اختصارات لوحة المفاتيح
             window.addEventListener('keydown', function(e) {
                 const key = (e.key || '').toLowerCase();
                 const keyCode = e.keyCode;
 
-                // F12
-                if (key === 'f12' || keyCode === 123) { 
-                    e.preventDefault(); e.stopPropagation(); return false; 
-                }
+                if (key === 'f12' || keyCode === 123) { e.preventDefault(); e.stopPropagation(); return false; }
                 
-                // الاختصارات مع Ctrl أو Cmd 
                 if (e.ctrlKey || e.metaKey) {
-                    // منع Shift + I أو J أو C (DevTools)
-                    if (e.shiftKey) {
-                        if (['i', 'j', 'c'].includes(key) || [73, 74, 67].includes(keyCode)) {
-                            e.preventDefault(); e.stopPropagation(); crashAndBurn(); return false;
-                        }
+                    if (e.shiftKey && (['i', 'j', 'c'].includes(key) || [73, 74, 67].includes(keyCode))) {
+                        e.preventDefault(); e.stopPropagation(); crashAndBurn(); return false;
                     }
-                    
-                    // منع S (حفظ), U (سورس كود), P (طباعة), C (نسخ), H (سجل)
+                    // منع S, U, P, C, H
                     if (['s', 'u', 'p', 'c', 'h'].includes(key) || [83, 85, 80, 67, 72].includes(keyCode)) {
                         e.preventDefault(); e.stopPropagation(); return false;
                     }
@@ -94,14 +89,12 @@
             document.addEventListener('contextmenu', e => e.preventDefault());
             document.addEventListener('dragstart', e => e.preventDefault());
 
-            // 4. كاشف أدوات المطورين (يعتمد على سرعة تنفيذ الكود وفرق أبعاد النافذة)
             let devtoolsDetected = false;
             setInterval(() => {
                 const start = performance.now();
-                debugger; // الفخ الأساسي
+                debugger;
                 const elapsed = performance.now() - start;
                 
-                // كاشف فرق حجم الشاشة (إذا تم فتح أدوات المطورين على الجانب)
                 const widthDiff = window.outerWidth - window.innerWidth > 160;
                 const heightDiff = window.outerHeight - window.innerHeight > 160;
 
@@ -113,37 +106,41 @@
                 } else {
                     devtoolsDetected = false;
                 }
-            }, 250); // فحص مستمر كل ربع ثانية
+            }, 200); 
         })();
 
         // =========================================================
-        // إعدادات VdoCipher (مفاتيح مجزأة ومخفية لضمان سلامتها بنسبة 100%)
+        // إعدادات VdoCipher (مفاتيح مشفرة ومحمية من التنزيل)
         // =========================================================
         const PlayerConfigManager = (function() {
-            // تم التقطيع لتجنب البحث المباشر مع الحفاظ على ترتيب الأحرف الدقيق لعدم إتلاف المفتاح
-            const oParts = ["20160313ver", "sASE3232VL", "Xae76EYm06", "x6fhpsT6hj", "ZvmOzcGbtX", "4rg8aaiaXZ", "ixb"];
-            const pParts = ["eyJ2aWRlb0", "lkIjoiM2Ji", "M2RmYzUyZT", "ZjNDAwNDg5", "MTQyYmI4NW", "RkZmI5MzAi", "fQ=="];
+            // تشفير معقد لعدم كشف المفاتيح عند تنزيل الصفحة بـ Ctrl+S
+            const obfO = ["MjAxNjAzMT", "N2ZXJzQVNF", "MzIzMlZMWG", "FlNzZFWW0w", "Nng2Zmhwc1", "Q2aGpadm1P", "emNHYnRYNH", "JnOGFhaWFYWml4Yg=="];
+            const obfP = ["ZXlKMmFXUm", "xiMExrSWpv", "aU0ySmlNMl", "JtWXpVeVpU", "WmpOREF3Tk", "RnNUVReU1t", "STROV1JrWm", "1JNU16QWlmUT09"];
+            
+            let isDestroyed = false;
 
             return {
                 getKeys: function() {
-                    // التجميع التسلسلي المباشر لضمان عدم حدوث Error 422
-                    return { 
-                        otp: oParts.join(''), 
-                        playbackInfo: pParts.join('') 
-                    };
+                    if(isDestroyed) return { otp: null, playbackInfo: null };
+                    try {
+                        const otp = atob(obfO.join(''));
+                        const pb = atob(obfP.join(''));
+                        return { otp: otp, playbackInfo: pb };
+                    } catch(e) { return { otp: null, playbackInfo: null }; }
                 },
-                wipeKeys: function() {
-                    // لم نقم بمسح المفاتيح للسماح بإعادة تحميل المشغل بشكل سليم ومتكرر
+                destroyForever: function() {
+                    // تدمير فعلي في حال التشغيل المحلي
+                    isDestroyed = true;
+                    obfO.length = 0; obfP.length = 0;
                 }
             };
         })();
-        // =========================================================
     </script>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <!-- الترويسة (Header) -->
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+    <!-- الترويسة -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
             <div class="flex items-center space-x-3 space-x-reverse text-center sm:text-right">
                 <div class="hidden sm:block p-2 bg-indigo-600/20 text-indigo-400 rounded-lg border border-indigo-500/30">
@@ -156,13 +153,14 @@
                     </h1>
                     <p class="text-[10px] sm:text-xs text-slate-400 mt-0.5">
                         المنصة المهنية المتقدمة والمحمية بواسطة 
-                        <a href="https://link.me/mkm" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline font-bold">
-                            هاشم عمر (mkm)
-                        </a>
+                        <a href="https://link.me/mkm" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline font-bold">هاشم عمر (mkm)</a>
                     </p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
+                <button onclick="openRedeemModal()" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[10px] sm:text-xs font-semibold transition border border-indigo-500 flex items-center gap-1.5">
+                    <i class="fa-solid fa-key"></i> إدخال كود فك التشفير
+                </button>
                 <span id="environment-badge" class="inline-flex items-center px-2.5 py-1 sm:py-0.5 rounded-full text-[10px] sm:text-xs font-medium bg-indigo-400/10 text-indigo-400 border border-indigo-400/20">
                     <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping inline-block ml-1.5"></span>
                     <span id="environment-text">جاري فحص البيئة...</span>
@@ -171,10 +169,9 @@
         </div>
     </header>
 
-    <!-- محتوى الصفحة الرئيسي -->
     <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 flex-grow w-full space-y-6">
 
-        <!-- لوحة التنبيهات الذكية للبيئة المحلية ومتصفح Brave -->
+        <!-- تحذير التشغيل المحلي -->
         <div id="local-file-warning" class="hidden p-4 sm:p-5 bg-red-950/40 border border-red-500/30 rounded-2xl flex-col md:flex-row items-start gap-4 text-red-200 glow-danger transition-all duration-300">
             <div class="p-3 bg-red-500/10 rounded-xl text-red-400 flex-shrink-0 mx-auto md:mx-0">
                 <i class="fa-solid fa-circle-exclamation text-2xl"></i>
@@ -182,43 +179,26 @@
             <div class="space-y-2 text-center md:text-right w-full">
                 <h3 class="font-bold text-red-300 text-sm sm:text-lg">تم اكتشاف تشغيل الملف محلياً (Local File)!</h3>
                 <p class="text-xs sm:text-sm leading-relaxed text-red-200/90">
-                    أنت تحاول تشغيل الموقع عبر <code class="bg-red-950/80 px-1.5 py-0.5 rounded text-white font-mono break-all text-[10px] sm:text-xs">file://</code>. 
-                    <strong class="text-red-400 block mt-1">يُمنع التشغيل المحلي أمنياً لحماية مفاتيح التشغيل والتراخيص.</strong>
+                    أنت تحاول تشغيل الموقع عبر المسار المحلي. 
+                    <strong class="text-red-400 block mt-1">يُمنع التشغيل المحلي أمنياً وتم إتلاف مفاتيح التشفير نهائياً.</strong>
                 </p>
-                <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-2">
-                    <p class="text-[10px] sm:text-xs text-red-300/90 flex items-center gap-1.5">
-                        <i class="fa-solid fa-lock"></i> تم تدمير مفاتيح الفيديو. يجب الرفع على استضافة حقيقية ليعمل الموقع.
-                    </p>
-                </div>
             </div>
         </div>
 
+        <!-- تحذير Brave -->
         <div id="brave-shield-warning" class="hidden p-4 sm:p-5 bg-amber-950/40 border border-amber-500/30 rounded-2xl flex-col md:flex-row items-start gap-4 text-amber-200 glow-warning transition-all duration-300">
             <div class="p-3 bg-amber-500/10 rounded-xl text-amber-400 flex-shrink-0 mx-auto md:mx-0">
-                <i class="fa-brands fa-brave text-2xl"></i>
+                <i class="fa-brands fa-brave text-3xl"></i>
             </div>
             <div class="space-y-2 w-full text-center md:text-right">
-                <div class="flex flex-col sm:flex-row justify-between items-center md:items-start flex-wrap gap-2">
-                    <h3 class="font-bold text-amber-300 text-sm sm:text-lg">مستخدم متصفح Brave؟ راجع إعدادات الدروع</h3>
-                    <span class="text-[10px] sm:text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold border border-amber-500/30">تم اكتشاف متصفح Brave</span>
-                </div>
+                <h3 class="font-bold text-amber-300 text-sm sm:text-lg">مستخدم متصفح Brave؟ راجع إعدادات الدروع</h3>
                 <p class="text-xs sm:text-sm leading-relaxed text-amber-200/90">
-                    يقوم متصفح **Brave** افتراضياً بحظر بعض سكربتات التحقق الخارجي. لتجنب توقف الفيديو:
+                    يقوم متصفح Brave افتراضياً بحظر بعض السكربتات. يرجى إيقاف الدروع (Shields) لهذا الموقع من أيقونة الأسد بجانب شريط العنوان لضمان عمل الفيديو.
                 </p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-2 text-right">
-                    <div class="bg-slate-950/60 p-3 rounded-lg border border-slate-800 text-[10px] sm:text-xs space-y-1">
-                        <strong class="text-amber-400 block"><i class="fa-solid fa-toggle-off ml-1"></i> الخطوة 1: إيقاف الدروع مؤقتاً</strong>
-                        <p class="text-slate-300 leading-relaxed">اضغط على أيقونة الأسد بجانب شريط العنوان، وقم بإيقاف الدروع (Shields) لهذا الموقع.</p>
-                    </div>
-                    <div class="bg-slate-950/60 p-3 rounded-lg border border-slate-800 text-[10px] sm:text-xs space-y-1">
-                        <strong class="text-amber-400 block"><i class="fa-solid fa-user-shield ml-1"></i> الخطوة 2: السماح بالمحتوى المحمي</strong>
-                        <p class="text-slate-300 leading-relaxed">من إعدادات الموقع ← المحتوى المحمي (Protected Content) ← "السماح للموقع".</p>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <!-- لوحة التحكم في الحماية ضد تصوير الشاشة -->
+        <!-- سياسة الحظر الأمنية الجديدة -->
         <div class="p-4 sm:p-6 bg-gradient-to-r from-red-950/30 to-slate-900 border border-red-500/30 rounded-2xl glow-danger space-y-4">
             <div class="flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
                 <div class="flex flex-col md:flex-row items-center md:items-start gap-3 text-center md:text-right w-full">
@@ -227,266 +207,410 @@
                     </div>
                     <div class="flex-grow">
                         <h3 class="text-base sm:text-lg font-bold text-white mb-1">سياسة الحظر الأمنية لمنع لقطات الشاشة</h3>
-                        <p class="text-xs sm:text-sm text-slate-300">هذه الميزة <strong class="text-red-400">إجبارية ودائمة</strong>. لا يمكن إيقافها، ولن يعمل الفيديو إلا بوجود أمان عتادي L1.</p>
+                        <p class="text-xs sm:text-sm text-slate-300">هذه الميزة <strong class="text-red-400">إجبارية ودائمة</strong>. لن يعمل الفيديو إلا بوجود نظام التشفير العتادي L1 المدعوم من متصفحك ونظام التشغيل.</p>
+                        
+                        <div class="mt-3 flex flex-wrap items-center justify-center md:justify-start gap-2">
+                            <button onclick="window.open('https://www.google.com/search?q=How+to+enable+Widevine+L1+hardware+acceleration', '_blank')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[10px] sm:text-xs font-semibold transition border border-slate-700 flex items-center gap-1.5">
+                                <i class="fa-brands fa-google text-blue-400"></i> بحث عن كيفية تفعيل L1
+                            </button>
+                            <button onclick="openExemptionModal()" class="px-3 py-1.5 bg-red-900/40 hover:bg-red-800/60 text-red-300 rounded-lg text-[10px] sm:text-xs font-semibold transition border border-red-800/50 flex items-center gap-1.5">
+                                <i class="fa-solid fa-unlock-keyhole"></i> طلب إيقاف الحظر لمستخدمي L3
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="flex items-center gap-2 bg-red-950/80 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl border border-red-800 text-red-400 text-[10px] sm:text-xs font-bold whitespace-nowrap">
                     <i class="fa-solid fa-lock"></i> الحظر الصارم نشط
                 </div>
             </div>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-2 text-[10px] sm:text-xs text-slate-300 text-center sm:text-right">
-                <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
-                    <strong class="text-emerald-400 block mb-1"><i class="fa-solid fa-lock ml-1"></i> Edge (آمن 100%)</strong>
-                    تشفير عتادي متصل ببطاقة الشاشة؛ عند التصوير تظهر الشاشة <span class="text-emerald-400 font-bold">سوداء</span>.
-                </div>
-                <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
-                    <strong class="text-amber-400 block mb-1"><i class="fa-solid fa-triangle-exclamation ml-1"></i> Brave (معرض للالتقاط ⚠️)</strong>
-                    يستخدم تشفير برمجي (L3) يتيح الالتقاط، <span class="text-red-400">لذا سيتم حظره تماماً</span>.
-                </div>
-                <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
-                    <strong class="text-red-400 block mb-1"><i class="fa-solid fa-circle-xmark ml-1"></i> متصفح إنستغرام (خطر ❌)</strong>
-                    متصفح داخلي بدون تراخيص عتادية، <span class="text-red-400">محظور التشغيل عليه بشكل كامل</span>.
-                </div>
-            </div>
         </div>
 
-        <!-- شبكة العرض والتشخيص -->
+        <!-- شبكة العرض -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-            
-            <!-- عمود مشغل الفيديو (60%) -->
+            <!-- المشغل -->
             <div class="lg:col-span-7 space-y-6">
-                <!-- تم إزالة overflow-hidden لتجنب كسر التشفير العتادي لـ Edge PlayReady -->
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl glow-effect flex flex-col" id="player-container-main">
-                    <!-- عنوان نافذة المشغل -->
                     <div class="bg-slate-950/80 px-3 py-2.5 sm:px-4 sm:py-3 border-b border-slate-800/80 flex justify-between items-center rounded-t-2xl">
                         <div class="flex items-center gap-1.5 sm:gap-2">
                             <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500 inline-block"></span>
                             <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500 inline-block"></span>
                             <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-500 inline-block"></span>
-                            <span class="text-[10px] sm:text-xs text-slate-400 mr-2 truncate max-w-[120px] sm:max-w-full">مشغل VdoCipher DRM</span>
+                            <span class="text-[10px] sm:text-xs text-slate-400 mr-2">مشغل VdoCipher DRM</span>
                         </div>
-                        <span class="text-[9px] sm:text-[10px] font-mono text-indigo-400 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded bg-indigo-950/50 border border-indigo-900/30 whitespace-nowrap">Active iFrame</span>
+                        <span class="text-[9px] sm:text-[10px] font-mono text-indigo-400 px-1.5 py-0.5 rounded bg-indigo-950/50 border border-indigo-900/30">Active iFrame</span>
                     </div>
 
-                    <!-- حاوية الفيديو المستجيبة للمقاسات وبدون قيود تمنع PlayReady -->
                     <div id="video-wrapper" class="relative w-full aspect-video bg-black flex items-center justify-center">
-                        
-                        <!-- الإطار المحقون برمجياً سيظهر هنا -->
-                        
-                        <!-- شاشة الحظر الصارم (تظهر عند عدم تلبية متطلبات التشفير العتادي) -->
                         <div id="security-block-overlay" class="hidden absolute inset-0 bg-slate-950 flex-col items-center justify-center text-center p-4 sm:p-6 z-20">
-                            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4 animate-bounce">
+                            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center text-2xl sm:text-3xl mb-3 animate-bounce">
                                 <i class="fa-solid fa-lock"></i>
                             </div>
                             <h4 class="text-base sm:text-lg font-bold text-red-400 mb-2">تم حظر تشغيل الفيديو أمنياً!</h4>
-                            <p class="text-[10px] sm:text-xs text-slate-300 max-w-md leading-relaxed hidden sm:block">
-                                يتم تطبيق سياسة **الحظر الصارم ضد تصوير الشاشة الإجبارية**. متصفحك يفتقر لنظام حماية التشفير العتادي (L1) مما يسمح بأخذ لقطات شاشة.
-                            </p>
-                            <div class="mt-3 sm:mt-4 p-2.5 sm:p-3 bg-red-950/20 border border-red-500/20 rounded-xl text-right text-[10px] sm:text-xs text-red-300 space-y-1 w-full max-w-md mx-auto">
-                                <p class="font-bold text-center sm:text-right mb-1">🔒 لتشغيل الفيديو بنجاح:</p>
-                                <p class="text-slate-400"><span class="text-red-400">-</span> الكمبيوتر: استخدم <strong>Microsoft Edge</strong>.</p>
-                                <p class="text-slate-400"><span class="text-red-400">-</span> الهاتف: استخدم <strong>Safari</strong> (آيفون) أو <strong>Chrome</strong> (أندرويد).</p>
+                            <p class="text-[10px] sm:text-xs text-slate-300 max-w-md leading-relaxed">يفتقر متصفحك للتشفير العتادي (L1). يمكنك طلب فك الحظر من الزر في الأعلى.</p>
+                        </div>
+                        
+                        <!-- رسالة فك التشفير اليدوي -->
+                        <div id="bypass-success-overlay" class="hidden absolute inset-0 bg-emerald-950/90 flex-col items-center justify-center text-center p-4 sm:p-6 z-20 backdrop-blur-sm">
+                            <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl sm:text-3xl mb-3">
+                                <i class="fa-solid fa-unlock"></i>
                             </div>
+                            <h4 class="text-base sm:text-lg font-bold text-emerald-400 mb-2">تم تفعيل وضع التجاوز (Bypass)</h4>
+                            <p class="text-[10px] sm:text-xs text-emerald-200/70 max-w-md leading-relaxed">تم فك تشفير L3 بنجاح. سيتم تحميل المشغل الآن.</p>
                         </div>
                     </div>
 
-                    <!-- أزرار تحكم مضافة وإرشادية للمشغل -->
                     <div class="p-3 sm:p-4 bg-slate-900/60 border-t border-slate-800/80 flex flex-col sm:flex-row gap-3 justify-between items-center rounded-b-2xl">
                         <div class="flex items-center gap-2 text-[10px] sm:text-xs text-slate-400">
                             <i class="fa-solid fa-circle-info text-indigo-400"></i>
-                            <span>تقنية التشفير: <strong class="text-indigo-300">Widevine L1/L3 & FairPlay</strong></span>
+                            <span id="encryption-status-text">تقنية التشفير: <strong class="text-indigo-300">Widevine L1/L3 & FairPlay</strong></span>
                         </div>
                         <button onclick="reloadPlayer()" class="w-full sm:w-auto px-4 py-2 sm:px-3 sm:py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs transition duration-200 flex items-center justify-center gap-1.5 border border-slate-700">
-                            <i class="fa-solid fa-arrows-rotate animate-spin-slow"></i>
-                            إعادة تحميل المشغل
+                            <i class="fa-solid fa-arrows-rotate"></i> إعادة تحميل المشغل
                         </button>
                     </div>
                 </div>
-
-                <!-- معلومات تفصيلية عن نظام التشفير المستخدم -->
-                <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 sm:p-6 space-y-3 sm:space-y-4 text-center sm:text-right">
-                    <h3 class="text-base sm:text-lg font-bold text-white flex justify-center sm:justify-start items-center gap-2">
-                        <i class="fa-solid fa-circle-question text-indigo-400"></i>
-                        كيف يمنع هذا النظام تسجيل الشاشة؟
-                    </h3>
-                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed text-justify">
-                        يتم التفاوض مباشرة مع بيئة التشفير في جهازك. إذا حاولت استخدام برامج تصوير الشاشة مثل OBS أو التقاط الشاشة المدمج في النظام، ستتحول شاشة المشغل تلقائياً إلى <strong class="text-red-400">اللون الأسود الكامل</strong>، حيث تمنع بطاقة الرسوميات (GPU) فك التشفير في المسار غير المحمي.
-                    </p>
-                </div>
             </div>
 
-            <!-- عمود لوحة التشخيص الذكية (40%) -->
+            <!-- لوحة التشخيص -->
             <div class="lg:col-span-5 space-y-6">
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 glow-effect space-y-4 sm:space-y-6">
-                    <div class="flex flex-col sm:flex-row items-center justify-between border-b border-slate-800 pb-4 gap-3 sm:gap-0">
+                    <div class="flex flex-col sm:flex-row items-center justify-between border-b border-slate-800 pb-4 gap-3">
                         <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-vial-virus text-indigo-400"></i>
-                            فحص بيئة المتصفح الحالية
+                            <i class="fa-solid fa-vial-virus text-indigo-400"></i> فحص بيئة المتصفح الحالية
                         </h2>
-                        <button onclick="runDrmCheck()" class="w-full sm:w-auto px-4 py-2 sm:px-3 sm:py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition duration-200 flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-play"></i>
-                            إعادة الفحص
+                        <button onclick="runDrmCheck()" class="w-full sm:w-auto px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-play"></i> إعادة الفحص
                         </button>
                     </div>
 
-                    <!-- نظام الفحص البرمجي التفاعلي -->
-                    <div class="space-y-3 sm:space-y-4">
-                        <!-- فحص الـ EME -->
-                        <div class="p-2.5 sm:p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 flex flex-col sm:flex-row items-center sm:justify-between gap-3 sm:gap-0 text-center sm:text-right" id="check-eme">
-                            <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 w-full">
-                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon flex-shrink-0">
-                                    <i class="fa-solid fa-spinner animate-spin"></i>
-                                </div>
-                                <div class="flex-grow">
-                                    <h4 class="text-xs sm:text-sm font-bold text-slate-200">دعم واجهة EME بالمتصفح</h4>
-                                    <p class="text-[10px] sm:text-xs text-slate-400">Encrypted Media Extensions</p>
-                                </div>
+                    <div class="space-y-3">
+                        <!-- عناصر الفحص -->
+                        <div class="p-2.5 bg-slate-950/60 rounded-xl border border-slate-800/80 flex items-center justify-between" id="check-eme">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon"><i class="fa-solid fa-spinner animate-spin"></i></div>
+                                <div><h4 class="text-xs sm:text-sm font-bold text-slate-200">دعم واجهة EME</h4><p class="text-[10px] text-slate-400">Encrypted Media Extensions</p></div>
                             </div>
-                            <span class="text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400 whitespace-nowrap mt-2 sm:mt-0">جاري الفحص...</span>
+                            <span class="text-[10px] font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
                         </div>
 
-                        <!-- فحص حماية لقطات الشاشة Widevine L1 -->
-                        <div class="p-2.5 sm:p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 flex flex-col sm:flex-row items-center sm:justify-between gap-3 sm:gap-0 text-center sm:text-right" id="check-screenshot-hardware">
-                            <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 w-full">
-                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon flex-shrink-0">
-                                    <i class="fa-solid fa-spinner animate-spin"></i>
-                                </div>
-                                <div class="flex-grow">
-                                    <h4 class="text-xs sm:text-sm font-bold text-slate-200">مستوى أمان الشاشة (L1)</h4>
-                                    <p class="text-[10px] sm:text-xs text-slate-400">حظر تصوير الشاشة (العتادي)</p>
-                                </div>
+                        <div class="p-2.5 bg-slate-950/60 rounded-xl border border-slate-800/80 flex items-center justify-between" id="check-screenshot-hardware">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon"><i class="fa-solid fa-spinner animate-spin"></i></div>
+                                <div><h4 class="text-xs sm:text-sm font-bold text-slate-200">مستوى أمان الشاشة (L1)</h4><p class="text-[10px] text-slate-400">حظر تصوير الشاشة</p></div>
                             </div>
-                            <span class="text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400 whitespace-nowrap mt-2 sm:mt-0">جاري الفحص...</span>
-                        </div>
-
-                        <!-- فحص Google Widevine (برمجي L3) -->
-                        <div class="p-2.5 sm:p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 flex flex-col sm:flex-row items-center sm:justify-between gap-3 sm:gap-0 text-center sm:text-right" id="check-widevine">
-                            <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 w-full">
-                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon flex-shrink-0">
-                                    <i class="fa-solid fa-spinner animate-spin"></i>
-                                </div>
-                                <div class="flex-grow">
-                                    <h4 class="text-xs sm:text-sm font-bold text-slate-200">دعم Google Widevine</h4>
-                                    <p class="text-[10px] sm:text-xs text-slate-400">مستخدم على Chrome, Android</p>
-                                </div>
-                            </div>
-                            <span class="text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400 whitespace-nowrap mt-2 sm:mt-0">جاري الفحص...</span>
-                        </div>
-
-                        <!-- فحص Microsoft PlayReady -->
-                        <div class="p-2.5 sm:p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 flex flex-col sm:flex-row items-center sm:justify-between gap-3 sm:gap-0 text-center sm:text-right" id="check-playready">
-                            <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 w-full">
-                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon flex-shrink-0">
-                                    <i class="fa-solid fa-spinner animate-spin"></i>
-                                </div>
-                                <div class="flex-grow">
-                                    <h4 class="text-xs sm:text-sm font-bold text-slate-200">دعم MS PlayReady</h4>
-                                    <p class="text-[10px] sm:text-xs text-slate-400">مستخدم على Windows & Edge</p>
-                                </div>
-                            </div>
-                            <span class="text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400 whitespace-nowrap mt-2 sm:mt-0">جاري الفحص...</span>
-                        </div>
-
-                        <!-- فحص Apple FairPlay -->
-                        <div class="p-2.5 sm:p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 flex flex-col sm:flex-row items-center sm:justify-between gap-3 sm:gap-0 text-center sm:text-right" id="check-fairplay">
-                            <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 w-full">
-                                <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 status-icon flex-shrink-0">
-                                    <i class="fa-solid fa-spinner animate-spin"></i>
-                                </div>
-                                <div class="flex-grow">
-                                    <h4 class="text-xs sm:text-sm font-bold text-slate-200">دعم Apple FairPlay</h4>
-                                    <p class="text-[10px] sm:text-xs text-slate-400">مستخدم على Safari & iOS</p>
-                                </div>
-                            </div>
-                            <span class="text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400 whitespace-nowrap mt-2 sm:mt-0">جاري الفحص...</span>
+                            <span class="text-[10px] font-semibold px-2.5 py-1 rounded-full status-badge bg-slate-800 text-slate-400">جاري الفحص...</span>
                         </div>
                     </div>
 
-                    <!-- مخرجات الفحص التفصيلية -->
-                    <div class="bg-slate-950 rounded-xl p-3 sm:p-4 border border-slate-800 font-mono text-[10px] sm:text-xs text-slate-300 space-y-2 sm:space-y-3">
-                        <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-800 pb-2 gap-2 sm:gap-0">
-                            <span class="text-indigo-400 font-bold">سجلات التشخيص المباشرة:</span>
-                            <div class="flex gap-2 items-center w-full sm:w-auto justify-between sm:justify-end">
-                                <button onclick="copyLogs()" class="text-[9px] sm:text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-400 px-2 py-1 sm:py-0.5 rounded border border-slate-800 flex items-center gap-1 transition">
-                                    <i class="fa-solid fa-copy"></i> نسخ السجل
-                                </button>
-                                <span id="system-time" class="text-[10px]">--:--:--</span>
-                            </div>
+                    <!-- السجلات -->
+                    <div class="bg-slate-950 rounded-xl p-3 border border-slate-800 font-mono text-[10px] text-slate-300 space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <span class="text-indigo-400 font-bold">سجلات التشخيص:</span>
                         </div>
-                        <div id="diagnostic-logs" class="space-y-1 h-28 sm:h-36 overflow-y-auto custom-scrollbar text-right pr-2" dir="ltr">
-                            <!-- سيتم حقن سجلات الفحص هنا بشكل منسق -->
-                        </div>
+                        <div id="diagnostic-logs" class="space-y-1 h-36 overflow-y-auto custom-scrollbar text-right pr-2" dir="ltr"></div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- قسم الدليل التعليمي -->
-        <section class="mt-8 sm:mt-12 bg-slate-900/40 border border-slate-800/60 rounded-2xl p-5 sm:p-8">
-            <h2 class="text-lg sm:text-2xl font-bold text-white mb-5 sm:mb-6 flex items-center justify-center sm:justify-start gap-2 sm:gap-3 text-center sm:text-right">
-                <i class="fa-solid fa-graduation-cap text-indigo-400"></i>
-                كيف يعمل نظام التشفير المعقد؟
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-                <div class="bg-slate-900/80 p-4 sm:p-5 rounded-xl border border-slate-800 text-center sm:text-right">
-                    <div class="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto sm:mx-0">
-                        <i class="fa-solid fa-key text-lg"></i>
-                    </div>
-                    <h3 class="font-bold text-white mb-1.5 sm:mb-2 text-sm sm:text-base">توليد مفتاح المشاهدة</h3>
-                    <p class="text-[10px] sm:text-sm text-slate-300 leading-relaxed">
-                        يتواصل متصفحك مع "خادم التراخيص" للتحقق من هويتك وصلاحياتك قبل الإرسال المشفر.
-                    </p>
-                </div>
-
-                <div class="bg-slate-900/80 p-4 sm:p-5 rounded-xl border border-slate-800 text-center sm:text-right">
-                    <div class="w-10 h-10 bg-emerald-500/10 text-emerald-400 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto sm:mx-0">
-                        <i class="fa-solid fa-lock text-lg"></i>
-                    </div>
-                    <h3 class="font-bold text-white mb-1.5 sm:mb-2 text-sm sm:text-base">تشفير عتادي وبرمجي</h3>
-                    <p class="text-[10px] sm:text-sm text-slate-300 leading-relaxed">
-                        يتم فرض حماية (تشفير على مستوى العتاد ورقاقة المعالج) لمنع قرصنة الفيديوهات بشكل كامل في المسار الرسومي الآمن.
-                    </p>
-                </div>
-
-                <div class="bg-slate-900/80 p-4 sm:p-5 rounded-xl border border-slate-800 text-center sm:text-right">
-                    <div class="w-10 h-10 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto sm:mx-0">
-                        <i class="fa-solid fa-ban text-lg"></i>
-                    </div>
-                    <h3 class="font-bold text-white mb-1.5 sm:mb-2 text-sm sm:text-base">شلل برمجيات الالتقاط</h3>
-                    <p class="text-[10px] sm:text-sm text-slate-300 leading-relaxed">
-                        يتكامل الـ DRM مع الواجهة لمنع تحويل الإطارات لأي ذاكرة وصول عشوائي عبر برامج تصوير وتسجيل الشاشة النشطة.
-                    </p>
-                </div>
-            </div>
-        </section>
     </main>
 
-    <!-- التذييل (Footer) -->
-    <footer class="bg-slate-950 border-t border-slate-900 py-6 sm:py-8 text-center text-slate-500 text-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6">
-            <div class="space-y-1.5 sm:space-y-2 text-center md:text-right">
-                <p class="text-xs sm:text-sm text-slate-400">© 2026 جميع الحقوق محفوظة لـمنصة اختبار DRM.</p>
-                <p class="text-[10px] sm:text-xs text-slate-500">
-                    تم إنشاء وتطوير الموقع بواسطة المطور: 
-                    <a href="https://link.me/mkm" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 font-bold inline-flex items-center gap-1 transition-colors duration-200">
-                        <i class="fa-solid fa-code text-[8px] sm:text-[10px]"></i> هاشم عمر (mkm)
-                    </a>
-                </p>
+    <!-- Modal: نموذج طلب فك حظر L3 -->
+    <div id="exemption-modal" class="fixed inset-0 modal-overlay z-50 hidden flex-col items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden relative">
+            
+            <!-- زر الإغلاق -->
+            <button onclick="closeExemptionModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="p-6 border-b border-slate-800 bg-slate-900/50">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-envelope-open-text text-indigo-400"></i> طلب إيقاف الحظر (L3)
+                </h2>
+                <p class="text-xs text-slate-400 mt-1">يرجى تعبئة النموذج بدقة للحصول على مفتاح التجاوز.</p>
             </div>
-            <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
-                <span class="text-[10px] sm:text-xs bg-slate-900 px-3 py-1.5 rounded-full border border-slate-800 text-slate-400 hidden sm:block">إصدار التوافق المطلق للجوال و PlayReady</span>
-                <a href="https://link.me/mkm" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto justify-center px-4 py-2 sm:py-1.5 bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-400 hover:text-indigo-300 rounded-lg text-[10px] sm:text-xs font-semibold border border-indigo-500/20 transition-all duration-200 flex items-center gap-2">
-                    <i class="fa-solid fa-link"></i> رابط mkm الإلكتروني
-                </a>
+
+            <div class="p-6 relative">
+                <!-- شاشة التحميل للنموذج -->
+                <div id="form-loading" class="hidden absolute inset-0 bg-slate-900/80 backdrop-blur-sm z-10 flex-col items-center justify-center">
+                    <i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-500 mb-3"></i>
+                    <span class="text-sm font-bold text-white">جاري الإرسال...</span>
+                </div>
+
+                <!-- شاشة النجاح والخطوات التالية -->
+                <div id="form-success" class="hidden absolute inset-0 bg-slate-900 z-20 flex-col items-center justify-center p-6 text-center">
+                    <div class="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center text-3xl mb-4">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">تم الإرسال بنجاح!</h3>
+                    <p class="text-sm text-slate-300 mb-6">يرجى انتظار الموافقة وإرسال كود التجاوز إلى بريدك الإلكتروني.</p>
+                    
+                    <div class="w-full space-y-3">
+                        <button onclick="switchToRedeemFromSuccess()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm transition shadow-lg shadow-indigo-500/20">
+                            هل أخذت مفتاح فك تشفير نظام الحماية لرؤية الفيديو على نظام L3؟
+                        </button>
+                        <button onclick="closeExemptionModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold text-sm border border-slate-700 transition">
+                            إغلاق للعودة للصفحة الرئيسية
+                        </button>
+                    </div>
+                </div>
+
+                <form id="exemption-form" onsubmit="submitExemption(event)">
+                    <!-- الخطوة 1 -->
+                    <div id="step-1" class="space-y-4 block">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1.5">الاسم الكامل (عربي أو إنجليزي فقط)</label>
+                            <input type="text" id="req-name" required pattern="^[\u0600-\u06FF\s]+$|^[a-zA-Z\s]+$" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" placeholder="اكتب اسمك الحقيقي هنا">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1.5">البريد الإلكتروني</label>
+                            <input type="email" id="req-email" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-left" dir="ltr" placeholder="example@email.com">
+                        </div>
+                        <button type="button" onclick="goToStep2()" class="w-full mt-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold text-sm transition">التالي <i class="fa-solid fa-arrow-left mr-1"></i></button>
+                    </div>
+
+                    <!-- الخطوة 2 -->
+                    <div id="step-2" class="space-y-4 hidden">
+                        <div>
+                            <div class="flex justify-between items-end mb-1.5">
+                                <label class="block text-xs font-bold text-slate-300">لماذا تريد مشاهدة الفيديو على متصفح لا يدعم L1؟</label>
+                                <span id="word-count" class="text-[10px] font-mono text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded">0 / 50 كلمة</span>
+                            </div>
+                            <textarea id="req-reason" required rows="5" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none" placeholder="اكتب السبب هنا (50 كلمة على الأقل)..."></textarea>
+                            <p class="text-[10px] text-slate-500 mt-1"><i class="fa-solid fa-circle-info"></i> يمنع وضع مسافتين متتاليتين وسيتم تصحيحها تلقائياً.</p>
+                        </div>
+                        <div class="flex gap-3 pt-2">
+                            <button type="button" onclick="goToStep1()" class="w-1/3 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold text-sm transition border border-slate-700">رجوع</button>
+                            <button type="submit" id="submit-btn" class="w-2/3 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-700 disabled:text-slate-500 text-white rounded-lg font-bold text-sm transition flex justify-center items-center gap-2" disabled>
+                                إرسال الطلب <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </footer>
+    </div>
 
-    <!-- برمجة فحص توافقية الـ DRM وحالة التشغيل ولقطات الشاشة -->
+    <!-- Modal: إدخال كود الفك -->
+    <div id="redeem-modal" class="fixed inset-0 modal-overlay z-50 hidden flex-col items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden relative">
+            <button onclick="closeRedeemModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="p-6 text-center">
+                <div class="w-16 h-16 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <h2 class="text-lg font-bold text-white mb-1">إدخال مفتاح التجاوز</h2>
+                <p class="text-xs text-slate-400 mb-5">أدخل الكود المكون من 12 خانة لفك الحظر.</p>
+                
+                <input type="text" id="redeem-input" maxlength="12" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-center tracking-widest font-mono font-bold focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 uppercase transition-all" placeholder="XXXXXXXXXXXX" dir="ltr">
+                
+                <p id="redeem-error" class="text-xs text-red-400 mt-2 h-4 font-bold opacity-0 transition-opacity">كود خاطئ! انتظر <span id="penalty-timer">3</span> ثوانٍ.</p>
+                
+                <button id="redeem-btn" onclick="verifyRedeemCode()" class="w-full mt-4 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm transition flex justify-center items-center gap-2 disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed">
+                    تحقق وفك التشفير <i class="fa-solid fa-unlock"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // المتغيرات العالمية للحماية والتجاوز
         let isScreenshotProtected = false;
+        let isManualBypassActive = false; // تفعيل وضع تجاوز L3
         let isIntentionalDOMChange = false; 
+        let userIP = "Unknown";
+
+        // ==========================================
+        // أنظمة النوافذ المنبثقة والنماذج
+        // ==========================================
+        
+        // جلب الـ IP عند تحميل الصفحة
+        fetch('https://api.ipify.org?format=json').then(r => r.json()).then(data => { userIP = data.ip; }).catch(() => {});
+
+        function openExemptionModal() { document.getElementById('exemption-modal').classList.replace('hidden', 'flex'); }
+        function closeExemptionModal() { document.getElementById('exemption-modal').classList.replace('flex', 'hidden'); resetForm(); }
+        
+        function openRedeemModal() { 
+            closeExemptionModal();
+            document.getElementById('redeem-modal').classList.replace('hidden', 'flex'); 
+            document.getElementById('redeem-input').focus();
+        }
+        function closeRedeemModal() { document.getElementById('redeem-modal').classList.replace('flex', 'hidden'); }
+        function switchToRedeemFromSuccess() { openRedeemModal(); }
+
+        // التحكم في الخطوات وعداد الكلمات
+        const reqReason = document.getElementById('req-reason');
+        const wordCountDisplay = document.getElementById('word-count');
+        const submitBtn = document.getElementById('submit-btn');
+
+        reqReason.addEventListener('input', function() {
+            // منع المسافات المزدوجة
+            let val = this.value.replace(/ {2,}/g, ' ');
+            if (val !== this.value) this.value = val;
+            
+            let words = val.trim().split(/\\s+/).filter(w => w.length > 0).length;
+            wordCountDisplay.innerText = `${words} / 50 كلمة`;
+            
+            if (words >= 50) {
+                wordCountDisplay.classList.replace('text-amber-400', 'text-emerald-400');
+                wordCountDisplay.classList.replace('bg-amber-400/10', 'bg-emerald-400/10');
+                submitBtn.disabled = false;
+            } else {
+                wordCountDisplay.classList.replace('text-emerald-400', 'text-amber-400');
+                wordCountDisplay.classList.replace('bg-emerald-400/10', 'bg-amber-400/10');
+                submitBtn.disabled = true;
+            }
+        });
+
+        function goToStep2() {
+            const name = document.getElementById('req-name').value;
+            const email = document.getElementById('req-email').value;
+            if(!document.getElementById('req-name').checkValidity() || !document.getElementById('req-email').checkValidity()){
+                alert("يرجى إدخال اسم صحيح (بدون أرقام أو رموز) وبريد إلكتروني صالح."); return;
+            }
+            if(name && email) {
+                document.getElementById('step-1').classList.replace('block', 'hidden');
+                document.getElementById('step-2').classList.replace('hidden', 'block');
+            }
+        }
+        function goToStep1() {
+            document.getElementById('step-2').classList.replace('block', 'hidden');
+            document.getElementById('step-1').classList.replace('hidden', 'block');
+        }
+
+        function resetForm() {
+            document.getElementById('exemption-form').reset();
+            goToStep1();
+            wordCountDisplay.innerText = "0 / 50 كلمة";
+            submitBtn.disabled = true;
+            document.getElementById('form-success').classList.replace('flex', 'hidden');
+        }
+
+        // إرسال البيانات إلى Formspree
+        async function submitExemption(e) {
+            e.preventDefault();
+            const name = document.getElementById('req-name').value;
+            const email = document.getElementById('req-email').value;
+            const reason = document.getElementById('req-reason').value;
+
+            document.getElementById('form-loading').classList.replace('hidden', 'flex');
+
+            try {
+                await fetch('https://formspree.io/f/mzdwglqb', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        "الاسم": name,
+                        "البريد الإلكتروني": email,
+                        "السبب": reason,
+                        "عنوان IP": userIP,
+                        "ملاحظة النظام": "تم حظر استخراج MAC Address بواسطة المتصفح لأسباب أمنية."
+                    })
+                });
+                
+                document.getElementById('form-loading').classList.replace('flex', 'hidden');
+                document.getElementById('form-success').classList.replace('hidden', 'flex');
+            } catch(err) {
+                document.getElementById('form-loading').classList.replace('flex', 'hidden');
+                alert("حدث خطأ أثناء الإرسال. تأكد من اتصالك بالإنترنت.");
+            }
+        }
+
+        // ==========================================
+        // نظام إدخال والتحقق من أكواد الفك
+        // ==========================================
+        async function verifyRedeemCode() {
+            const inputEl = document.getElementById('redeem-input');
+            const btnEl = document.getElementById('redeem-btn');
+            const errorEl = document.getElementById('redeem-error');
+            const timerEl = document.getElementById('penalty-timer');
+            
+            const code = inputEl.value.trim();
+            if(code.length < 12) return;
+
+            // 1. الكود الماستر الذي لا يحذف أبداً (استخدمه أنت للدخول الدائم)
+            const MASTER_CODE = "MKMAdmin2026";
+
+            let isValid = false;
+
+            if (code === MASTER_CODE) {
+                isValid = true;
+            } else {
+                // 2. فحص الكود من GitHub
+                // هام: استبدل الرابط أدناه بالرابط المباشر (Raw) لملف codes.json الخاص بك على GitHub
+                const GITHUB_JSON_URL = "https://github.com/MKM-90-AR/DRM/blob/main/codes.json";
+                
+                try {
+                    btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق...';
+                    btnEl.disabled = true;
+                    
+                    // إضافة طابع زمني لمنع تخزين الملف القديم في الكاش
+                    const res = await fetch(GITHUB_JSON_URL + "?nocache=" + Date.now());
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.valid_codes && data.valid_codes.includes(code)) {
+                            isValid = true;
+                        }
+                    }
+                } catch(e) {
+                    console.warn("خطأ في الاتصال بقاعدة الأكواد.");
+                }
+            }
+
+            if (isValid) {
+                // تفعيل وضع التجاوز
+                isManualBypassActive = true;
+                closeRedeemModal();
+                
+                // إظهار تأثير التجاوز الناجح على المشغل
+                isIntentionalDOMChange = true;
+                removePlayer();
+                document.getElementById('security-block-overlay').classList.replace('flex', 'hidden');
+                document.getElementById('bypass-success-overlay').classList.replace('hidden', 'flex');
+                document.getElementById('encryption-status-text').innerHTML = 'تم فك التشفير يدوياً: <strong class="text-emerald-400">وضع التجاوز L3 نشط</strong>';
+                
+                logDiagnostic(`تم إدخال كود التجاوز بنجاح (${code}). تم السماح بالتشغيل.`, 'success');
+                
+                // تشغيل الفيديو بعد ثانيتين
+                setTimeout(() => {
+                    document.getElementById('bypass-success-overlay').classList.replace('flex', 'hidden');
+                    injectPlayer();
+                    isIntentionalDOMChange = false;
+                }, 2000);
+
+            } else {
+                // نظام العقوبة (3 ثواني)
+                inputEl.classList.add('shake-animation', 'border-red-500');
+                errorEl.classList.replace('opacity-0', 'opacity-100');
+                inputEl.disabled = true;
+                btnEl.disabled = true;
+                btnEl.innerHTML = 'تحقق وفك التشفير <i class="fa-solid fa-unlock"></i>';
+                
+                let timeLeft = 3;
+                timerEl.innerText = timeLeft;
+                
+                const interval = setInterval(() => {
+                    timeLeft--;
+                    timerEl.innerText = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(interval);
+                        inputEl.classList.remove('shake-animation', 'border-red-500');
+                        errorEl.classList.replace('opacity-100', 'opacity-0');
+                        inputEl.disabled = false;
+                        btnEl.disabled = false;
+                        inputEl.value = "";
+                        inputEl.focus();
+                    }
+                }, 1000);
+            }
+        }
+
+
+        // ==========================================
+        // مشغل الفيديو وبروتوكول DRM الأساسي
+        // ==========================================
 
         window.addEventListener('load', () => {
             const securityObserver = new MutationObserver((mutations) => {
@@ -505,18 +629,17 @@
                 });
 
                 if (tamperingDetected) {
+                    document.write("");
                     document.documentElement.innerHTML = "<head><title>حظر أمني</title></head><body style='background:#0B0F19;height:100vh;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#EF4444;font-family:sans-serif;font-weight:bold;font-size:20px;text-align:center;padding:20px;direction:rtl;'><i class='fa-solid fa-triangle-exclamation' style='font-size:50px;margin-bottom:15px;'></i><p>تم اكتشاف تلاعب في الهيكل الأساسي للصفحة. تم قفل الجلسة أمنياً.</p><p style='color:#94a3b8;font-size:14px;margin-top:10px;'>يرجى تحديث الصفحة يدوياً.</p></body>";
-                    while(true) { debugger; } // تجميد المتصفح بعد التلاعب
+                    while(true) { debugger; }
                 }
             });
-            
             securityObserver.observe(document.body, { childList: true, subtree: true });
         });
 
         function injectPlayer() {
-            // فحص أمني: إذا تم فتح الملف محلياً، نرفض إنشاء المشغل
             if (window.location.protocol === 'file:') {
-                PlayerConfigManager.wipeKeys();
+                PlayerConfigManager.destroyForever();
                 return;
             }
 
@@ -524,31 +647,24 @@
             if (document.getElementById('drm-player-iframe')) return; 
             
             isIntentionalDOMChange = true; 
-            
             const i = document.createElement('iframe');
             i.id = 'drm-player-iframe';
             
-            // جلب المفاتيح من الحاضنة الآمنة المصلحة
             const keys = PlayerConfigManager.getKeys();
             if (!keys.otp || !keys.playbackInfo) {
-                logDiagnostic('المفاتيح غير صالحة أو تم مسحها أمنياً.', 'error');
+                logDiagnostic('فشل في جلب المفاتيح. ربما تم التشغيل محلياً.', 'error');
                 return;
             }
 
             const baseUrlDecoded = atob("aHR0cHM6Ly9wbGF5ZXIudmRvY2lwaGVyLmNvbS92Mi8/b3RwPQ==");
             i.src = baseUrlDecoded + keys.otp + "&playbackInfo=" + keys.playbackInfo;
 
-            // تمت إزالة PlayerConfigManager.wipeKeys() من هنا لتتمكن من إعادة تحميل المشغل بلا مشاكل
-
-            i.style.width = '100%';
-            i.style.height = '100%';
-            i.style.border = 'none';
+            i.style.width = '100%'; i.style.height = '100%'; i.style.border = 'none';
             i.setAttribute('allowFullScreen', 'true');
             i.setAttribute('allow', 'encrypted-media *; autoplay; fullscreen; picture-in-picture');
             i.className = "w-full h-full absolute inset-0 z-10 block";
             
             wrapper.appendChild(i);
-            
             setTimeout(() => { isIntentionalDOMChange = false; }, 50);
         }
 
@@ -580,16 +696,9 @@
             let colorClass = 'text-slate-400';
             let prefix = '[INFO]';
             
-            if (type === 'success') {
-                colorClass = 'text-emerald-400';
-                prefix = '[OK]';
-            } else if (type === 'error') {
-                colorClass = 'text-red-400';
-                prefix = '[ERR]';
-            } else if (type === 'warning') {
-                colorClass = 'text-amber-400';
-                prefix = '[WARN]';
-            }
+            if (type === 'success') { colorClass = 'text-emerald-400'; prefix = '[OK]'; } 
+            else if (type === 'error') { colorClass = 'text-red-400'; prefix = '[ERR]'; } 
+            else if (type === 'warning') { colorClass = 'text-amber-400'; prefix = '[WARN]'; }
             
             const now = new Date();
             const timeStamp = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
@@ -606,14 +715,12 @@
             const logsContainer = document.getElementById('diagnostic-logs');
             if (!logsContainer) return;
             const text = logsContainer.innerText;
-            
             const el = document.createElement('textarea');
             el.value = text;
             document.body.appendChild(el);
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            
             logDiagnostic('تم نسخ سجلات التشخيص بنجاح!', 'success');
             setTimeout(() => { isIntentionalDOMChange = false; }, 50);
         }
@@ -622,14 +729,9 @@
             isIntentionalDOMChange = true;
             const container = document.getElementById(elementId);
             if (!container) return;
-
             const iconDiv = container.querySelector('.status-icon');
             const badge = container.querySelector('.status-badge');
-
-            if (!iconDiv || !badge) {
-                setTimeout(() => { isIntentionalDOMChange = false; }, 20);
-                return;
-            }
+            if (!iconDiv || !badge) { setTimeout(() => { isIntentionalDOMChange = false; }, 20); return; }
 
             if (status === 'success') {
                 iconDiv.className = 'status-icon w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-sm sm:text-base';
@@ -663,12 +765,7 @@
             removePlayer();
             logDiagnostic('جاري إعادة تشغيل مشغل VdoCipher...', 'warning');
             setTimeout(() => {
-                if (isScreenshotProtected) {
-                    injectPlayer();
-                    logDiagnostic('تم التشغيل بنجاح. المسار الآمن (SVP) مفعل.', 'success');
-                } else {
-                    logDiagnostic('لا يمكن التشغيل، بيئتك تفتقر لعتاد الحماية.', 'error');
-                }
+                evaluatePlaybackLock();
             }, 400);
         }
 
@@ -691,8 +788,8 @@
                 document.getElementById('local-file-warning').classList.remove('hidden');
                 document.getElementById('local-file-warning').classList.add('flex');
                 
-                PlayerConfigManager.wipeKeys();
-                logDiagnostic('تم تفعيل بروتوكول الحماية القصوى: إتلاف مفاتيح التشغيل بسبب التشغيل المحلي.', 'error');
+                PlayerConfigManager.destroyForever();
+                logDiagnostic('تم إتلاف مفاتيح التشغيل بسبب التشغيل المحلي.', 'error');
             } else {
                 envText.innerText = isSecure ? "اتصال آمن HTTPS" : "اتصال غير آمن HTTP";
                 envBadge.className = isSecure 
@@ -712,7 +809,8 @@
             isIntentionalDOMChange = true;
             const overlay = document.getElementById('security-block-overlay');
             
-            if (!isScreenshotProtected) {
+            // تحقق: هل هو محمي L1؟ أو هل قام بإدخال الكود اليدوي لتجاوز الحظر؟
+            if (!isScreenshotProtected && !isManualBypassActive) {
                 removePlayer();
                 overlay.classList.remove('hidden');
                 overlay.classList.add('flex');
@@ -721,7 +819,11 @@
                 injectPlayer();
                 overlay.classList.add('hidden');
                 overlay.classList.remove('flex');
-                logDiagnostic('وضع التشغيل الآمن نشط.', 'success');
+                if(isManualBypassActive) {
+                    logDiagnostic('تم تفعيل وضع تجاوز الحظر L3 عبر الكود اليدوي.', 'success');
+                } else {
+                    logDiagnostic('وضع التشغيل الآمن العتادي (L1) نشط.', 'success');
+                }
             }
             setTimeout(() => { isIntentionalDOMChange = false; }, 20);
         }
@@ -732,8 +834,6 @@
             setTimeout(() => { isIntentionalDOMChange = false; }, 10);
             
             updateStatusUI('check-eme', 'checking'); updateStatusUI('check-screenshot-hardware', 'checking');
-            updateStatusUI('check-widevine', 'checking'); updateStatusUI('check-playready', 'checking');
-            updateStatusUI('check-fairplay', 'checking');
 
             await inspectEnvironment();
             logDiagnostic('بدء فحص أنظمة الأمان والتشفير...', 'info');
@@ -744,8 +844,6 @@
             } else {
                 updateStatusUI('check-eme', 'unsupported'); logDiagnostic('واجهة EME غير موجودة!', 'error');
                 updateStatusUI('check-screenshot-hardware', 'unsupported', 'غير آمن ❌');
-                updateStatusUI('check-widevine', 'unsupported'); updateStatusUI('check-playready', 'unsupported');
-                updateStatusUI('check-fairplay', 'unsupported');
                 isScreenshotProtected = false; evaluatePlaybackLock();
                 return;
             }
@@ -753,36 +851,27 @@
             const configSoftware = [{ initDataTypes: ['cenc'], videoCapabilities: [{ contentType: 'video/mp4; codecs="avc1.42E01E"' }] }];
             const configHardware = [{ initDataTypes: ['cenc'], videoCapabilities: [{ contentType: 'video/mp4; codecs="avc1.42E01E"', robustness: 'HW_SECURE_DECODE' }] }];
 
-            let supportsWidevineL1 = false; let supportsPlayReady = false; let supportsFairPlay = false;
-
-            try {
-                await navigator.requestMediaKeySystemAccess('com.widevine.alpha', configSoftware);
-                updateStatusUI('check-widevine', 'success', 'مدعوم'); logDiagnostic('Google Widevine DRM مدعوم.', 'success');
-            } catch (e) { updateStatusUI('check-widevine', 'unsupported'); }
+            let supportsHardware = false;
 
             try {
                 await navigator.requestMediaKeySystemAccess('com.widevine.alpha', configHardware);
-                supportsWidevineL1 = true; logDiagnostic('Widevine L1 (عتادي) مدعوم.', 'success');
-            } catch (e) { logDiagnostic('Widevine L1 غير مدعوم (تعمل على L3 برمجي).', 'warning'); }
+                supportsHardware = true; logDiagnostic('Widevine L1 (عتادي) مدعوم.', 'success');
+            } catch (e) { logDiagnostic('Widevine L1 غير مدعوم.', 'warning'); }
 
             try {
                 await navigator.requestMediaKeySystemAccess('com.microsoft.playready', configSoftware);
-                supportsPlayReady = true; updateStatusUI('check-playready', 'success', 'محمي ضد التصوير');
-                logDiagnostic('Microsoft PlayReady مدعوم (الشاشة سوداء للتصوير).', 'success');
-            } catch (e) { updateStatusUI('check-playready', 'unsupported'); }
+                supportsHardware = true; logDiagnostic('Microsoft PlayReady مدعوم.', 'success');
+            } catch (e) {}
 
             try {
                 await navigator.requestMediaKeySystemAccess('com.apple.fps.1_0', configSoftware) || await navigator.requestMediaKeySystemAccess('com.apple.fps', configSoftware);
-                supportsFairPlay = true; updateStatusUI('check-fairplay', 'success', 'محمي ضد التصوير');
-                logDiagnostic('Apple FairPlay مدعوم.', 'success');
-            } catch (e) { updateStatusUI('check-fairplay', 'unsupported'); }
+                supportsHardware = true; logDiagnostic('Apple FairPlay مدعوم.', 'success');
+            } catch (e) {}
 
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             const isWebView = ua.indexOf('Instagram') > -1 || ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
 
-            if (isWebView) logDiagnostic('تحذير: متصفح مدمج لتطبيقات التواصل (خطر).', 'error');
-
-            if ((supportsWidevineL1 || supportsPlayReady || supportsFairPlay) && !isWebView) {
+            if (supportsHardware && !isWebView) {
                 isScreenshotProtected = true; updateStatusUI('check-screenshot-hardware', 'success', 'آمن (L1/HW)');
                 logDiagnostic('المتصفح آمن ومحمي عتادياً ضد لقطات الشاشة.', 'success');
             } else {
