@@ -1,8 +1,11 @@
 {
   "valid_codes": [
-    "zu5D1yKmtYW6",
+    "Aa1Bb2Cc3Dd4",
     "tDu2GFE2Vp79",
     "Vv7Ww8Xx9Yy0",
-    "MKM90Test123"
+    "Mkm90Test123"
+  ],
+  "admin_codes": [
+    "MyAdminCode1"
   ]
 }
