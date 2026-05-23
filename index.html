@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang=\"ar\" dir=\"rtl\" class=\"scroll-smooth\">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
-    <meta charset=\"UTF-8\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>منصة اختبار وتشخيص أنظمة حماية المحتوى الرقمي DRM - بواسطة mkm</title>
     <!-- تضمين خط Cairo الجميل للمحتوى العربي -->
-    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">
-    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>
-    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap\" rel=\"stylesheet\">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <!-- مكتبة Tailwind CSS للتنسيق العصري -->
-    <script src=\"https://cdn.tailwindcss.com\"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- مكتبة FontAwesome للأيقونات -->
-    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
-        tailwind.config = {
+        // تعريف window.tailwind لتجنب خطأ ReferenceError إذا تأخر تحميل المكتبة
+        window.tailwind = window.tailwind || {};
+        window.tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Cairo', 'sans-serif'] },
@@ -450,7 +452,7 @@
             let val = this.value.replace(/ {2,}/g, ' ');
             if (val !== this.value) this.value = val;
             
-            let words = val.trim().split(/\\s+/).filter(w => w.length > 0).length;
+            let words = val.trim().split(/\s+/).filter(w => w.length > 0).length;
             wordCountDisplay.innerText = `${words} / 50 كلمة`;
             
             if (words >= 50) {
